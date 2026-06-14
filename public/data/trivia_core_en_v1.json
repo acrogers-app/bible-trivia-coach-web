@@ -1,0 +1,1251 @@
+{
+  "id": "core_en_v1",
+  "questions": [
+    {
+      "id": "mk1_q1",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 1, what were Simon and Andrew doing when Jesus called them?",
+      "options": [
+        "Launching a fish-themed podcast",
+        "Fishing",
+        "Farming",
+        "Collecting taxes"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mark says they were casting a net into the sea; they were fishermen.",
+      "refStart": "Mark 1:16",
+      "refEnd": "Mark 1:20"
+    },
+    {
+      "id": "mk1_q2",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "True or False: In Mark 1, Jesus was baptized by John.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark records Jesus being baptized by John in the Jordan.",
+      "refStart": "Mark 1:9",
+      "refEnd": "Mark 1:11"
+    },
+    {
+      "id": "mk1_q3",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 1, where did Jesus teach and cast out an unclean spirit?",
+      "options": [
+        "A synagogue in Capernaum",
+        "The temple in Jerusalem",
+        "A drive-thru in Nazareth",
+        "A house in Bethany"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark places this event in the synagogue at Capernaum.",
+      "refStart": "Mark 1:21",
+      "refEnd": "Mark 1:28"
+    },
+    {
+      "id": "mk1_q4",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 1, when did people bring the sick to Jesus at Simon’s house?",
+      "options": [
+        "At sunrise with coffee and bagels",
+        "At noon",
+        "In the evening after sunset",
+        "At midnight"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mark says it was at evening, when the sun had set.",
+      "refStart": "Mark 1:32",
+      "refEnd": "Mark 1:34"
+    },
+    {
+      "id": "mk1_q5",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "True or False: In Mark 1, Jesus healed Simon’s mother-in-law of a fever.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 0,
+      "explanation": "Jesus took her by the hand and the fever left her.",
+      "refStart": "Mark 1:29",
+      "refEnd": "Mark 1:31"
+    },
+    {
+      "id": "mk1_q6",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 1, what did Jesus say to the man with leprosy before healing him?",
+      "options": [
+        "Be quiet and go away",
+        "I am willing; be cleansed",
+        "Your faith has made you well",
+        "Rise and walk"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus said, “I am willing. Be made clean.”",
+      "refStart": "Mark 1:40",
+      "refEnd": "Mark 1:42"
+    },
+    {
+      "id": "mk1_q7",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 1, where did Jesus go early in the morning to pray?",
+      "options": [
+        "To the sea",
+        "To a solitary place",
+        "To the synagogue",
+        "To Herod’s palace"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mark says Jesus went out to a solitary place and prayed.",
+      "refStart": "Mark 1:35",
+      "refEnd": "Mark 1:35"
+    },
+    {
+      "id": "mk1_q8",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "True or False: After cleansing the man with leprosy, Jesus told him to tell everyone immediately.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus told him to say nothing and to show himself to the priest.",
+      "refStart": "Mark 1:43",
+      "refEnd": "Mark 1:44"
+    },
+    {
+      "id": "mk2_q1",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 2, how was the paralyzed man brought to Jesus?",
+      "options": [
+        "Through the gift shop",
+        "Through the roof",
+        "On a donkey",
+        "By boat"
+      ],
+      "correctIndex": 1,
+      "explanation": "They opened the roof above Jesus and lowered the mat.",
+      "refStart": "Mark 2:3",
+      "refEnd": "Mark 2:4"
+    },
+    {
+      "id": "mk2_q2",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 2, what did Jesus say first to the paralyzed man?",
+      "options": [
+        "Be healed",
+        "Your sins are forgiven",
+        "Stand up",
+        "Go and sin no more"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus said, “Son, your sins are forgiven.”",
+      "refStart": "Mark 2:5",
+      "refEnd": "Mark 2:5"
+    },
+    {
+      "id": "mk2_q3",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 2, who did Jesus call while he was sitting at the tax booth?",
+      "options": [
+        "Zacchaeus",
+        "Levi",
+        "Filing paperwork... forever",
+        "Nicodemus"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mark says Jesus called Levi and he followed him.",
+      "refStart": "Mark 2:14",
+      "refEnd": "Mark 2:14"
+    },
+    {
+      "id": "mk2_q4",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "True or False: In Mark 2, Jesus said, “Those who are well have no need of a physician.”",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 0,
+      "explanation": "Jesus used this saying while speaking about calling sinners.",
+      "refStart": "Mark 2:17",
+      "refEnd": "Mark 2:17"
+    },
+    {
+      "id": "mk2_q5",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 2, what illustration did Jesus use to explain why his disciples did not fast?",
+      "options": [
+        "A farmer and seed",
+        "A wedding bridegroom",
+        "A shepherd and sheep",
+        "A judge in court"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus compared it to wedding guests with the bridegroom.",
+      "refStart": "Mark 2:18",
+      "refEnd": "Mark 2:20"
+    },
+    {
+      "id": "mk2_q6",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 2, what were the disciples doing on the Sabbath that led to questions?",
+      "options": [
+        "Fishing",
+        "Picking heads of grain",
+        "Writing a 50-page Sabbath rulebook",
+        "Buying and selling"
+      ],
+      "correctIndex": 1,
+      "explanation": "They began to pluck heads of grain as they went.",
+      "refStart": "Mark 2:23",
+      "refEnd": "Mark 2:24"
+    },
+    {
+      "id": "mk2_q7",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "True or False: In Mark 2, Jesus said, “The Sabbath was made for man, not man for the Sabbath.”",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 0,
+      "explanation": "This saying is recorded in Mark’s Sabbath discussion.",
+      "refStart": "Mark 2:27",
+      "refEnd": "Mark 2:27"
+    },
+    {
+      "id": "mk3_q1",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 3, what did Jesus tell the man with the withered hand to do?",
+      "options": [
+        "Run to the door",
+        "Stretch out your hand",
+        "Bow down",
+        "Go wash in the river"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus told him, “Stretch out your hand,” and it was restored.",
+      "refStart": "Mark 3:5",
+      "refEnd": "Mark 3:5"
+    },
+    {
+      "id": "mk3_q2",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 3, who went out and plotted with the Herodians against Jesus?",
+      "options": [
+        "Sadducees",
+        "Pharisees",
+        "Scribes",
+        "Disciples"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mark says the Pharisees went out and took counsel with the Herodians.",
+      "refStart": "Mark 3:6",
+      "refEnd": "Mark 3:6"
+    },
+    {
+      "id": "mk3_q3",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 3, how many did Jesus appoint to be with him and to be sent out?",
+      "options": [
+        "7",
+        "11",
+        "12",
+        "70"
+      ],
+      "correctIndex": 2,
+      "explanation": "Mark says Jesus appointed twelve.",
+      "refStart": "Mark 3:13",
+      "refEnd": "Mark 3:15"
+    },
+    {
+      "id": "mk3_q4",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "True or False: In Mark 3, Jesus warned about blasphemy against the Holy Spirit.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark records Jesus warning about an eternal sin in this context.",
+      "refStart": "Mark 3:28",
+      "refEnd": "Mark 3:30"
+    },
+    {
+      "id": "mk3_q5",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "text": "In Mark 3, who did Jesus say are his brother and sister and mother?",
+      "options": [
+        "People who bring snacks",
+        "Those who do the will of God",
+        "The leaders of the synagogue",
+        "Those who bring offerings"
+      ],
+      "correctIndex": 1,
+      "explanation": "Jesus said whoever does the will of God is his family.",
+      "refStart": "Mark 3:33",
+      "refEnd": "Mark 3:35"
+    },
+    {
+      "id": "basic_66_total",
+      "difficulty": "easy",
+      "category": "Bible Basics",
+      "text": "In the Protestant Bible, how many books are there total?",
+      "options": [
+        "66",
+        "73",
+        "27",
+        "39"
+      ],
+      "correctIndex": 0,
+      "explanation": "This app uses the 66-book Protestant canon (39 OT + 27 NT).",
+      "refStart": "2 Timothy 3:16",
+      "refEnd": "2 Timothy 3:17"
+    },
+    {
+      "id": "basic_ot_count",
+      "difficulty": "easy",
+      "category": "Bible Basics",
+      "text": "In the Protestant Bible, how many books are in the Old Testament?",
+      "options": [
+        "39",
+        "27",
+        "40",
+        "66"
+      ],
+      "correctIndex": 0,
+      "explanation": "This app uses the 66-book Protestant canon: 39 OT books and 27 NT books.",
+      "refStart": "Luke 24:44",
+      "refEnd": "Luke 24:44"
+    },
+    {
+      "id": "basic_nt_count",
+      "difficulty": "easy",
+      "category": "Bible Basics",
+      "text": "In the Protestant Bible, how many books are in the New Testament?",
+      "options": [
+        "27",
+        "39",
+        "12",
+        "66"
+      ],
+      "correctIndex": 0,
+      "explanation": "This app uses the 66-book Protestant canon: 27 NT books.",
+      "refStart": "2 Timothy 3:16",
+      "refEnd": "2 Timothy 3:17"
+    },
+    {
+      "id": "gen_first_people",
+      "difficulty": "easy",
+      "category": "Genesis",
+      "text": "According to Genesis, who were the first two people?",
+      "options": [
+        "Adam and Eve",
+        "Abraham and Sarah",
+        "Moses and Miriam",
+        "Noah and Naamah"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis describes God creating Adam and then Eve.",
+      "refStart": "Genesis 2:7",
+      "refEnd": "Genesis 2:22"
+    },
+    {
+      "id": "gen_light_day1",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 1, what did God say that brought light into existence?",
+      "options": [
+        "“Let there be light”",
+        "“Let there be stars”",
+        "“Let there be fire”",
+        "“Let there be Wi‑Fi”"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 1:3 records God saying, “Let there be light.”",
+      "refStart": "Genesis 1:3",
+      "refEnd": "Genesis 1:3",
+      "playful": true
+    },
+    {
+      "id": "gen_fall_eaten",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 3, what did Eve do with the fruit after taking it?",
+      "options": [
+        "She gave it to Adam and he ate",
+        "She threw it away immediately",
+        "She planted the seeds",
+        "She made fruit salad"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis says she gave it to her husband with her, and he ate.",
+      "refStart": "Genesis 3:6",
+      "refEnd": "Genesis 3:6"
+    },
+    {
+      "id": "gen_cain_abel",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 4, who killed Abel?",
+      "options": [
+        "Cain",
+        "Lamech",
+        "Esau",
+        "A mysterious giant"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 4:8 says Cain rose up against Abel and killed him.",
+      "refStart": "Genesis 4:8",
+      "refEnd": "Genesis 4:8"
+    },
+    {
+      "id": "gen_rainbow_sign",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 9, what sign did God set in the cloud as a covenant reminder?",
+      "options": [
+        "A rainbow",
+        "A comet",
+        "A mountain of fire",
+        "A neon sign that said “COVENANT”"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis says God set the rainbow in the cloud as a sign of the covenant.",
+      "refStart": "Genesis 9:13",
+      "refEnd": "Genesis 9:16"
+    },
+    {
+      "id": "gen_jacob_israel",
+      "difficulty": "hard",
+      "category": "Genesis",
+      "text": "In Genesis 32, what new name was given to Jacob?",
+      "options": [
+        "Israel",
+        "Judah",
+        "Joseph",
+        "Wall‑Builder"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 32:28 says his name would be called Israel.",
+      "refStart": "Genesis 32:28",
+      "refEnd": "Genesis 32:28",
+      "playful": true
+    },
+    {
+      "id": "neh_job",
+      "difficulty": "medium",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 1, what job did Nehemiah have in the king’s court?",
+      "options": [
+        "Cupbearer",
+        "General",
+        "Ship captain",
+        "Official snack‑tester"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah says he was cupbearer to the king.",
+      "refStart": "Nehemiah 1:11",
+      "refEnd": "Nehemiah 2:1"
+    },
+    {
+      "id": "neh_enemies_named",
+      "difficulty": "hard",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 2, which set of names matches the opponents who mocked the work?",
+      "options": [
+        "Sanballat, Tobiah, and Geshem",
+        "Pharaoh, Balaam, and Goliath",
+        "Herod, Pilate, and Caiaphas",
+        "Shrek, Donkey, and Dragon"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 2:19 names Sanballat, Tobiah, and Geshem.",
+      "refStart": "Nehemiah 2:19",
+      "refEnd": "Nehemiah 2:19"
+    },
+    {
+      "id": "neh_ono",
+      "difficulty": "hard",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 6, where did the enemies ask Nehemiah to meet (a trap)?",
+      "options": [
+        "The plain of Ono",
+        "Jerusalem temple courts",
+        "Mount Sinai",
+        "At the city food court"
+      ],
+      "correctIndex": 0,
+      "explanation": "They asked him to meet in the plain of Ono (Nehemiah refused).",
+      "refStart": "Nehemiah 6:2",
+      "refEnd": "Nehemiah 6:3"
+    },
+    {
+      "id": "neh_52_days",
+      "difficulty": "medium",
+      "category": "Nehemiah",
+      "text": "According to Nehemiah 6, how long did it take to finish the wall?",
+      "options": [
+        "52 days",
+        "7 years",
+        "40 days",
+        "52 weeks"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 6:15 says the wall was finished in 52 days.",
+      "refStart": "Nehemiah 6:15",
+      "refEnd": "Nehemiah 6:15",
+      "playful": true
+    },
+    {
+      "id": "neh_fight_for_family",
+      "difficulty": "medium",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 4, what did Nehemiah tell the people to fight for?",
+      "options": [
+        "Their brothers, sons, daughters, wives, and houses",
+        "A bigger palace",
+        "New sandals for everyone",
+        "A lifetime supply of olives"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah urged them to fight for their families and homes.",
+      "refStart": "Nehemiah 4:14",
+      "refEnd": "Nehemiah 4:14"
+    },
+    {
+      "id": "neh_joy_strength",
+      "difficulty": "hard",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 8, what phrase is given as a reason not to grieve?",
+      "options": [
+        "“The joy of the LORD is your strength.”",
+        "“You only live once.”",
+        "“Keep calm and carry on.”",
+        "“No walls, no rules.”"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 8:10 contains this line.",
+      "refStart": "Nehemiah 8:10",
+      "refEnd": "Nehemiah 8:10"
+    },
+    {
+      "id": "gen_day4_created",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 1, what did God make on the fourth day?",
+      "options": [
+        "The lights in the sky",
+        "Sea creatures",
+        "Animals and mankind",
+        "The rainbow"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis says God made lights in the expanse of the sky on the fourth day.",
+      "refStart": "Genesis 1:14",
+      "refEnd": "Genesis 1:19"
+    },
+    {
+      "id": "gen_day7",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 2, what did God do on the seventh day?",
+      "options": [
+        "Rested from all his work",
+        "Created the sea",
+        "Confused languages at Babel",
+        "Called Abram out of Ur"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis says God rested on the seventh day.",
+      "refStart": "Genesis 2:2",
+      "refEnd": "Genesis 2:3"
+    },
+    {
+      "id": "gen_babel_why",
+      "difficulty": "medium",
+      "category": "Genesis",
+      "text": "In Genesis 11, why did the LORD confuse the people’s language?",
+      "options": [
+        "So they wouldn’t understand one another’s speech and be scattered",
+        "So they could build faster",
+        "So they could rule Egypt",
+        "So they would find the ark"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 11 says God confused their language and scattered them.",
+      "refStart": "Genesis 11:7",
+      "refEnd": "Genesis 11:9"
+    },
+    {
+      "id": "mark_john_wore",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Mark 1, what did John the Baptizer wear?",
+      "options": [
+        "Camel’s hair and a leather belt",
+        "Priestly robes and a crown",
+        "A soldier’s uniform",
+        "A bright purple cloak"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark describes John’s clothing as camel’s hair with a leather belt.",
+      "refStart": "Mark 1:6",
+      "refEnd": "Mark 1:6"
+    },
+    {
+      "id": "mark_john_ate",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Mark 1, what did John the Baptizer eat?",
+      "options": [
+        "Locusts and wild honey",
+        "Bread and fish",
+        "Grapes and figs",
+        "Only olives"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark 1:6 says his food was locusts and wild honey.",
+      "refStart": "Mark 1:6",
+      "refEnd": "Mark 1:6"
+    },
+    {
+      "id": "mark_demon_called",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Mark 1, what did the unclean spirit call Jesus?",
+      "options": [
+        "The Holy One of God",
+        "A carpenter from Nazareth",
+        "A prophet like Elijah",
+        "The wall-builder of Israel"
+      ],
+      "correctIndex": 0,
+      "explanation": "Mark 1:24 records the spirit saying, “I know who you are: the Holy One of God.”",
+      "refStart": "Mark 1:24",
+      "refEnd": "Mark 1:24"
+    },
+    {
+      "id": "matt_name_jesus",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Matthew 1, what name did the angel tell Joseph to give Mary’s child?",
+      "options": [
+        "Jesus",
+        "John",
+        "Samuel",
+        "Isaac"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew 1:21 says, “You shall call his name Jesus.”",
+      "refStart": "Matthew 1:21",
+      "refEnd": "Matthew 1:21"
+    },
+    {
+      "id": "matt_immanuel_meaning",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Matthew 1, what does the name “Immanuel” mean?",
+      "options": [
+        "God with us",
+        "Prince of peace",
+        "The LORD saves",
+        "Light of the world"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew explains Immanuel as “God with us.”",
+      "refStart": "Matthew 1:23",
+      "refEnd": "Matthew 1:23"
+    },
+    {
+      "id": "luke_shepherds_sign",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Luke 2, what sign did the angels give the shepherds?",
+      "options": [
+        "A baby wrapped in cloths and lying in a manger",
+        "A star over Bethlehem",
+        "A scroll in the temple",
+        "A crown on a throne"
+      ],
+      "correctIndex": 0,
+      "explanation": "Luke 2:12 gives this sign to the shepherds.",
+      "refStart": "Luke 2:12",
+      "refEnd": "Luke 2:12"
+    },
+    {
+      "id": "neh_prayed_and_set_guard",
+      "difficulty": "medium",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 4, what did the people do in response to the threat?",
+      "options": [
+        "Prayed to God and set a guard day and night",
+        "Stopped building completely",
+        "Moved to another city",
+        "Asked the king to rebuild for them"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah says they prayed and set a watch.",
+      "refStart": "Nehemiah 4:9",
+      "refEnd": "Nehemiah 4:9"
+    },
+    {
+      "id": "neh_reading_time",
+      "difficulty": "medium",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 8, from when until when was the Book of the Law read to the people?",
+      "options": [
+        "From early morning until midday",
+        "From midnight until sunrise",
+        "For exactly one hour",
+        "For forty days"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 8:3 says it was read from early morning until midday.",
+      "refStart": "Nehemiah 8:3",
+      "refEnd": "Nehemiah 8:3"
+    },
+    {
+      "id": "esther_hadassah",
+      "difficulty": "hard",
+      "category": "Esther",
+      "text": "In Esther 2:7, what was Esther’s original name?",
+      "options": [
+        "Hadassah",
+        "Hannah",
+        "Deborah",
+        "Ester"
+      ],
+      "correctIndex": 0,
+      "explanation": "Esther 2:7 says her name was Hadassah.",
+      "refStart": "Esther 2:7",
+      "refEnd": "Esther 2:7"
+    },
+    {
+      "id": "esther_fast_3days",
+      "difficulty": "hard",
+      "category": "Esther",
+      "text": "In Esther 4, how long did Esther ask the Jews to fast?",
+      "options": [
+        "Three days, night or day",
+        "Seven days",
+        "One day",
+        "Fifty-two days"
+      ],
+      "correctIndex": 0,
+      "explanation": "Esther 4:16 asks for a three-day fast.",
+      "refStart": "Esther 4:16",
+      "refEnd": "Esther 4:16"
+    },
+    {
+      "id": "esther_golden_scepter",
+      "difficulty": "hard",
+      "category": "Esther",
+      "text": "In Esther 5, what did the king extend to Esther when she approached?",
+      "options": [
+        "The golden scepter",
+        "A royal ring",
+        "A sealed decree",
+        "A bouquet of lilies"
+      ],
+      "correctIndex": 0,
+      "explanation": "Esther 5:2 says the king held out the golden scepter.",
+      "refStart": "Esther 5:2",
+      "refEnd": "Esther 5:2"
+    },
+    {
+      "id": "esther_gallows_50_cubits",
+      "difficulty": "hard",
+      "category": "Esther",
+      "text": "In Esther 5:14, how tall was the gallows Haman prepared for Mordecai?",
+      "options": [
+        "50 cubits",
+        "7 cubits",
+        "12 cubits",
+        "100 cubits"
+      ],
+      "correctIndex": 0,
+      "explanation": "Esther 5:14 states it was fifty cubits high.",
+      "refStart": "Esther 5:14",
+      "refEnd": "Esther 5:14"
+    },
+    {
+      "id": "gen_abram_age_depart",
+      "difficulty": "hard",
+      "category": "Genesis",
+      "text": "In Genesis 12, how old was Abram when he departed from Haran?",
+      "options": [
+        "75",
+        "100",
+        "40",
+        "120"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 12:4 says Abram was 75 years old when he departed from Haran.",
+      "refStart": "Genesis 12:4",
+      "refEnd": "Genesis 12:4"
+    },
+    {
+      "id": "gen_joseph_11_stars",
+      "difficulty": "hard",
+      "category": "Genesis",
+      "text": "In Genesis 37, in Joseph’s dream, how many stars bowed down to him?",
+      "options": [
+        "11",
+        "10",
+        "12",
+        "7"
+      ],
+      "correctIndex": 0,
+      "explanation": "Genesis 37:9 mentions the sun, moon, and eleven stars bowing down.",
+      "refStart": "Genesis 37:9",
+      "refEnd": "Genesis 37:9"
+    },
+    {
+      "id": "neh_one_hand_weapon",
+      "difficulty": "hard",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 4, how did the builders work while staying ready to defend?",
+      "options": [
+        "They worked with one hand and held a weapon with the other",
+        "They only worked at night",
+        "They stopped building",
+        "They sent everyone away"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 4:17 describes this exact detail.",
+      "refStart": "Nehemiah 4:17",
+      "refEnd": "Nehemiah 4:17"
+    },
+    {
+      "id": "neh_opponents_full",
+      "difficulty": "hard",
+      "category": "Nehemiah",
+      "text": "In Nehemiah 2:19, which names are listed as opponents who mocked the work?",
+      "options": [
+        "Sanballat, Tobiah, and Geshem",
+        "Pharaoh, Balaam, and Goliath",
+        "Herod, Pilate, and Caiaphas",
+        "Shrek, Donkey, and Dragon"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah 2:19 names Sanballat, Tobiah, and Geshem.",
+      "refStart": "Nehemiah 2:19",
+      "refEnd": "Nehemiah 2:19",
+      "playful": true
+    },
+    {
+      "id": "john_1_1",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "text": "In John 1:1, what does the verse say about the Word?",
+      "options": [
+        "The Word was with God, and the Word was God",
+        "The Word was created by angels",
+        "The Word was only a prophet",
+        "The Word was a song in the temple"
+      ],
+      "correctIndex": 0,
+      "explanation": "John 1:1 states the Word was with God and was God.",
+      "refStart": "John 1:1",
+      "refEnd": "John 1:1"
+    },
+    {
+      "id": "magi_value_not_stated",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "text": "Does Matthew state the monetary value of the wise men’s gifts?",
+      "options": [
+        "No, the value is not stated",
+        "Yes, it gives an exact number",
+        "Yes, it lists the market price",
+        "Yes, it gives the value in denarii"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew lists the gifts, but does not state a monetary value.",
+      "refStart": "Matthew 2:11",
+      "refEnd": "Matthew 2:11",
+      "playful": true
+    },
+    {
+      "id": "hist_intertestamental_name",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "text": "The period often called the “400 years” between the Old and New Testaments is commonly known as what?",
+      "options": [
+        "The Intertestamental Period",
+        "The Wilderness Period",
+        "The Babylonian Captivity",
+        "The Apostolic Age"
+      ],
+      "correctIndex": 0,
+      "explanation": "Many call it the Intertestamental Period (a historical term).",
+      "learnMore": "This label is a historical term; it isn’t a Bible book title.",
+      "sources": [
+        "General Bible history term: Intertestamental period"
+      ],
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_nt_language",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "text": "Most of the New Testament was originally written in what language?",
+      "options": [
+        "Koine Greek",
+        "Classical Latin",
+        "Hebrew only",
+        "Old English"
+      ],
+      "correctIndex": 0,
+      "explanation": "Most NT books were written in Koine Greek.",
+      "learnMore": "A few phrases/words are Aramaic/Hebrew, but manuscripts are mainly Greek.",
+      "sources": [
+        "Standard NT intro: Koine Greek"
+      ],
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_christ_meaning",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "text": "The title “Christ” is related to which meaning?",
+      "options": [
+        "Anointed One",
+        "Carpenter",
+        "King of Rome",
+        "Temple Guard"
+      ],
+      "correctIndex": 0,
+      "explanation": "Christ comes from Greek “Christos,” meaning “anointed.”",
+      "learnMore": "It parallels the Hebrew concept behind “Messiah.”",
+      "sources": [
+        "Greek term: Christos = anointed"
+      ],
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_jesus_greek_form",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "text": "In Greek New Testament manuscripts, the name “Jesus” is commonly written as what?",
+      "options": [
+        "Iēsous",
+        "Yeshua",
+        "YHWH",
+        "Paulos"
+      ],
+      "correctIndex": 0,
+      "explanation": "A common Greek form is Ἰησοῦς (Iēsous).",
+      "learnMore": "This is a linguistic history fact rather than a single-verse statement.",
+      "sources": [
+        "Greek NT onomastics: Ἰησοῦς"
+      ],
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_tetragrammaton",
+      "difficulty": "hard",
+      "category": "Bible History",
+      "sourceType": "history",
+      "text": "In Hebrew studies, “YHWH” is often called what?",
+      "options": [
+        "The Tetragrammaton",
+        "The Pentateuch",
+        "The Septuagint",
+        "The Vulgate"
+      ],
+      "correctIndex": 0,
+      "explanation": "YHWH is commonly called the Tetragrammaton (“four letters”).",
+      "learnMore": "This is a linguistic term used in Hebrew studies.",
+      "sources": [
+        "Hebrew terminology: Tetragrammaton"
+      ],
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_extra_001",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "In 586 BC the Babylonian Empire destroyed Jerusalem and the temple, taking many people from Judah into exile.",
+      "sources": [
+        "2 Kings 25; Jeremiah 25"
+      ],
+      "text": "Which empire destroyed Jerusalem and the temple in 586 BC?",
+      "options": [
+        "Babylonian Empire",
+        "Assyrian Empire",
+        "Persian Empire",
+        "Roman Empire"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Babylonian Empire under King Nebuchadnezzar destroyed Jerusalem in 586 BC and carried many people from Judah into exile.",
+      "refStart": "2 Kings 25:1-10",
+      "refEnd": "2 Kings 25:11-21"
+    },
+    {
+      "id": "hist_extra_002",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "Daniel was a young man from Judah taken to Babylon, where he served in the royal court and remained faithful to God.",
+      "sources": [
+        "Daniel 1"
+      ],
+      "text": "Which prophet was taken to Babylon and served in the royal court during the exile?",
+      "options": [
+        "Daniel",
+        "Isaiah",
+        "Ezekiel",
+        "Nehemiah"
+      ],
+      "correctIndex": 0,
+      "explanation": "Daniel was taken to Babylon along with other young men from Judah and served in the royal court there.",
+      "refStart": "Daniel 1:1-6",
+      "refEnd": "Daniel 1:19-21"
+    },
+    {
+      "id": "hist_extra_003",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "The Persian Empire under Cyrus the Great conquered Babylon and allowed Jewish exiles to return and rebuild.",
+      "sources": [
+        "Ezra 1"
+      ],
+      "text": "Which empire defeated Babylon and allowed many Jewish exiles to return home?",
+      "options": [
+        "Persian Empire",
+        "Egyptian Empire",
+        "Greek Empire",
+        "Roman Empire"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Persians conquered Babylon and King Cyrus allowed Jewish exiles to return to their land.",
+      "refStart": "Ezra 1:1-4",
+      "refEnd": "Ezra 1:5-11"
+    },
+    {
+      "id": "hist_extra_004",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "Nehemiah led the effort to rebuild the walls of Jerusalem after the exile, working despite strong opposition.",
+      "sources": [
+        "Nehemiah 1–6"
+      ],
+      "text": "Who led the rebuilding of Jerusalem's walls after the exile?",
+      "options": [
+        "Nehemiah",
+        "Ezra",
+        "Zerubbabel",
+        "Joshua the high priest"
+      ],
+      "correctIndex": 0,
+      "explanation": "Nehemiah, a cupbearer to the Persian king, returned to Jerusalem and led the rebuilding of the city's walls.",
+      "refStart": "Nehemiah 2:11-18",
+      "refEnd": "Nehemiah 6:15-16"
+    },
+    {
+      "id": "hist_extra_005",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "Caesar Augustus ordered a census of the Roman world, which brought Joseph and Mary to Bethlehem.",
+      "sources": [
+        "Luke 2"
+      ],
+      "text": "Which ruler ordered the census that brought Joseph and Mary to Bethlehem?",
+      "options": [
+        "Caesar Augustus",
+        "Herod Antipas",
+        "Pontius Pilate",
+        "Tiberius Caesar"
+      ],
+      "correctIndex": 0,
+      "explanation": "Luke records that Caesar Augustus ordered a census, causing Joseph and Mary to travel to Bethlehem.",
+      "refStart": "Luke 2:1-5",
+      "refEnd": "Luke 2:6-7"
+    },
+    {
+      "id": "hist_extra_006",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "Many historians speak of about four hundred silent years between the final Old Testament writings and the coming of Christ.",
+      "sources": [
+        "General Bible history term: Intertestamental period"
+      ],
+      "text": "Roughly how many years are often said to lie between the Old and New Testaments (the Intertestamental Period)?",
+      "options": [
+        "About 400 years",
+        "About 40 years",
+        "About 1400 years",
+        "About 4 years"
+      ],
+      "correctIndex": 0,
+      "explanation": "The period between the last Old Testament writings and the coming of Christ is often rounded to about four hundred years.",
+      "refStart": "Malachi 4:5-6",
+      "refEnd": "Matthew 1:1"
+    },
+    {
+      "id": "hist_extra_007",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "The Maccabean family led a revolt against Seleucid rule, which is remembered in the celebration of Hanukkah.",
+      "sources": [
+        "Intertestamental history"
+      ],
+      "text": "Which Jewish family led a revolt that is remembered in the celebration of Hanukkah?",
+      "options": [
+        "The Maccabees",
+        "The Levites",
+        "The Herodians",
+        "The Zealots"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Maccabees led a revolt against oppressive rule in the second century BC, an event connected with Hanukkah.",
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_extra_008",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "By the time of the New Testament, Koine Greek was widely used around the eastern Mediterranean and became the language of the New Testament.",
+      "sources": [
+        "General New Testament background"
+      ],
+      "text": "Which language became widely used around the eastern Mediterranean and is the main language of the New Testament?",
+      "options": [
+        "Greek",
+        "Latin",
+        "Hebrew",
+        "Aramaic"
+      ],
+      "correctIndex": 0,
+      "explanation": "The New Testament was written mainly in Koine Greek, the common Greek of the eastern Roman world.",
+      "refStart": "",
+      "refEnd": ""
+    },
+    {
+      "id": "hist_extra_009",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "The Pharisees were a Jewish group in Jesus' day known for strict attention to the law and to oral traditions.",
+      "sources": [
+        "Gospel background on Pharisees"
+      ],
+      "text": "Which Jewish group in Jesus' day was known for strict attention to the law and to traditions of the elders?",
+      "options": [
+        "Pharisees",
+        "Sadducees",
+        "Zealots",
+        "Essenes"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Pharisees emphasized careful observance of the law and traditions, often appearing in the Gospels in debates with Jesus.",
+      "refStart": "Mark 7:1-8",
+      "refEnd": "Matthew 23:1-5"
+    },
+    {
+      "id": "hist_extra_010",
+      "difficulty": "easy",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "During Jesus' earthly ministry, Judea and Galilee were under the control of the Roman Empire.",
+      "sources": [
+        "Gospel background on Rome"
+      ],
+      "text": "Which empire ruled over Judea during Jesus' earthly ministry?",
+      "options": [
+        "Roman Empire",
+        "Persian Empire",
+        "Greek Empire",
+        "Babylonian Empire"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Roman Empire controlled Judea in the first century, with local rulers such as Herod and Roman governors like Pilate.",
+      "refStart": "Luke 3:1",
+      "refEnd": "John 19:10-11"
+    },
+    {
+      "id": "hist_extra_011",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "Antioch became an important center of early Christian mission, and it was here that believers were first called Christians.",
+      "sources": [
+        "Acts 11; Acts 13"
+      ],
+      "text": "In which city were followers of Jesus first called 'Christians'?",
+      "options": [
+        "Antioch",
+        "Jerusalem",
+        "Rome",
+        "Corinth"
+      ],
+      "correctIndex": 0,
+      "explanation": "Acts records that the disciples were first called Christians in Antioch.",
+      "refStart": "Acts 11:25-26",
+      "refEnd": "Acts 13:1-3"
+    },
+    {
+      "id": "hist_extra_012",
+      "difficulty": "medium",
+      "category": "Bible History",
+      "sourceType": "history",
+      "learnMore": "In AD 70 the Romans destroyed Jerusalem and the temple, a major turning point in Jewish and early Christian history.",
+      "sources": [
+        "General history of AD 70; Luke 21"
+      ],
+      "text": "Around what year did the Romans destroy Jerusalem and its temple?",
+      "options": [
+        "AD 70",
+        "AD 30",
+        "AD 120",
+        "AD 45"
+      ],
+      "correctIndex": 0,
+      "explanation": "The Roman army destroyed Jerusalem and the temple in AD 70.",
+      "refStart": "Luke 21:5-6",
+      "refEnd": ""
+    }
+  ]
+}
