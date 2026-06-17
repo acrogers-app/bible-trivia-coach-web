@@ -1245,7 +1245,7 @@ function DailyReadingScreen(props: {
         setActiveWordIdx(0);
       };
 
-      utter.onboundary = (event: unknown) => {
+      utter.onboundary = (event: SpeechSynthesisEvent) => {
         const charIndex =
           typeof event.charIndex === 'number' ? event.charIndex : 0;
         if (!boundaries.length) return;
@@ -1737,7 +1737,7 @@ function PassageInline(props: {
         setActiveWordIdx(0);
       };
 
-      utter.onboundary = (event: unknown) => {
+      utter.onboundary = (event: SpeechSynthesisEvent) => {
         const charIndex =
           typeof event.charIndex === 'number' ? event.charIndex : 0;
         if (!boundaries.length) return;
