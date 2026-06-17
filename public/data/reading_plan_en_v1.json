@@ -1,0 +1,48 @@
+{
+  "id": "through_bible_en_sample_v1",
+  "name": "Through the Bible (Sample, first 7 days)",
+  "days": [
+    {
+      "day": 1,
+      "title": "Genesis 1",
+      "start": "Genesis 1:1",
+      "end": "Genesis 1:31"
+    },
+    {
+      "day": 2,
+      "title": "Genesis 2",
+      "start": "Genesis 2:1",
+      "end": "Genesis 2:25"
+    },
+    {
+      "day": 3,
+      "title": "Genesis 3",
+      "start": "Genesis 3:1",
+      "end": "Genesis 3:24"
+    },
+    {
+      "day": 4,
+      "title": "Psalm 1",
+      "start": "Psalm 1:1",
+      "end": "Psalm 1:6"
+    },
+    {
+      "day": 5,
+      "title": "Matthew 1",
+      "start": "Matthew 1:1",
+      "end": "Matthew 1:25"
+    },
+    {
+      "day": 6,
+      "title": "Mark 1",
+      "start": "Mark 1:1",
+      "end": "Mark 1:45"
+    },
+    {
+      "day": 7,
+      "title": "John 1:1–18",
+      "start": "John 1:1",
+      "end": "John 1:18"
+    }
+  ]
+}

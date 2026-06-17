@@ -1,0 +1,19 @@
+{
+  "planId": "gospels_30",
+  "days": [
+    {
+      "day": 1,
+      "label": "Quiz on Mark 1",
+      "questionIds": [
+        "mk1_q1",
+        "mk1_q2",
+        "mk1_q3",
+        "mk1_q4",
+        "mk1_q5",
+        "mk1_q6",
+        "mk1_q7",
+        "mk1_q8"
+        ]
+    }
+  ]
+}

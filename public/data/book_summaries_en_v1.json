@@ -1,0 +1,909 @@
+{
+  "Genesis": {
+    "title": "Genesis",
+    "summary": "Genesis tells the story of God's good creation, humanity's fall into sin, and God's covenant promises to rescue and bless the world through the family of Abraham.",
+    "keyThemes": [
+      "Creation and God's goodness",
+      "Sin, judgment, and mercy",
+      "Covenant promises to Abraham and his descendants"
+    ],
+    "keyVerses": [
+      "Genesis 1:1",
+      "Genesis 12:1-3",
+      "Genesis 50:20"
+    ]
+  },
+  "Mark": {
+    "title": "Gospel of Mark",
+    "summary": "Mark presents Jesus as the suffering Servant and Son of God, moving quickly through His ministry with a focus on what He does and His journey to the cross.",
+    "keyThemes": [
+      "Jesus as Servant and King",
+      "The urgency of repentance and faith",
+      "The cost of following Jesus"
+    ],
+    "keyVerses": [
+      "Mark 1:1",
+      "Mark 8:34-35",
+      "Mark 10:45"
+    ]
+  },
+  "Exodus": {
+    "title": "Exodus",
+    "summary": "Exodus tells the story of how God's people, the Israelites, were enslaved in Egypt and how God used Moses to lead them to freedom. It shows how God made a covenant with His people and gave them the Ten Commandments. The book highlights God's power, faithfulness, and desire for His people to live according to His laws.",
+    "keyThemes": [
+      "Freedom and deliverance",
+      "Covenant and law",
+      "God's presence"
+    ],
+    "keyVerses": [
+      "Exodus 3:14",
+      "Exodus 20:1-17"
+    ]
+  },
+  "Leviticus": {
+    "title": "Leviticus",
+    "summary": "Leviticus is a book that explains the laws and rules given to the Israelites for worshipping God and living holy lives. It focuses on offerings, priesthood, purity, and how to maintain a right relationship with God. The book emphasizes the importance of obedience and holiness among God's people.",
+    "keyThemes": [
+      "Holiness and purity",
+      "Sacrificial worship",
+      "God's commandments"
+    ],
+    "keyVerses": [
+      "Leviticus 1:1",
+      "Leviticus 19:2",
+      "Leviticus 11:45"
+    ]
+  },
+  "Numbers": {
+    "title": "Numbers",
+    "summary": "Numbers tells the story of the Israelites’ journey from Mount Sinai to the Promised Land. It includes censuses, laws, and stories of their challenges and faithfulness. The book shows how God guided and tested His people along the way.",
+    "keyThemes": [
+      "God's guidance",
+      " obedience and trust",
+      "journey and wilderness"
+    ],
+    "keyVerses": [
+      "Numbers 6:24-26",
+      "Numbers 14:21"
+    ]
+  },
+  "Deuteronomy": {
+    "title": "Deuteronomy",
+    "summary": "Deuteronomy is a book where Moses reminds the Israelites of God's laws and promises before they enter the land of Canaan. It emphasizes obedience to God and staying faithful to His commandments. The book serves as a call to follow God's ways and trust in His guidance for the future.",
+    "keyThemes": [
+      "Obedience to God",
+      "Covenant Renewal",
+      "Promises and Blessings"
+    ],
+    "keyVerses": [
+      "Deuteronomy 6:4-5",
+      "Deuteronomy 28:1-2",
+      "Deuteronomy 30:19"
+    ]
+  },
+  "Joshua": {
+    "title": "Joshua",
+    "summary": "The Book of Joshua tells how the Israelites, led by Joshua, entered and settled in the land of Canaan after Moses' death. It shows God's guidance and promises as they take cities and establish their nation. The book emphasizes faith, obedience, and God's faithfulness to His people.",
+    "keyThemes": [
+      "Leadership and faith",
+      "God's promises",
+      "Conquest and settlement"
+    ],
+    "keyVerses": [
+      "Joshua 1:9",
+      "Joshua 24:15"
+    ]
+  },
+  "Judges": {
+    "title": "Judges",
+    "summary": "The book of Judges recounts the history of Israel from the time after Joshua’s leadership until they had kings. It shows a cycle where the people turn away from God, face difficulties, cry out for help, and then are delivered by leaders called judges. The book highlights both God's mercy and the consequences of turning away from Him.",
+    "keyThemes": [
+      "Cycle of sin and repentance",
+      "Leadership and deliverance",
+      "Faithfulness and disobedience"
+    ],
+    "keyVerses": [
+      "Judges 2:16",
+      "Judges 21:25"
+    ]
+  },
+  "Ruth": {
+    "title": "Ruth",
+    "summary": "The Book of Ruth tells the story of a woman named Ruth who shows loyalty and faithfulness to her mother-in-law Naomi and to God. It highlights themes of kindness, loyalty, and God's provision. Ruth’s story ultimately leads to her becoming part of the lineage of King David and Jesus.",
+    "keyThemes": [
+      "Loyalty and devotion",
+      "God's provision",
+      "Faithfulness in difficult times"
+    ],
+    "keyVerses": [
+      "Ruth 1:16",
+      "Ruth 4:14",
+      "Ruth 2:12"
+    ]
+  },
+  "1 Samuel": {
+    "title": "1 Samuel",
+    "summary": "1 Samuel tells the story of how Israel's leadership changed from the prophet Samuel to King Saul, and then to David. It shows important lessons about trusting God's guidance and the consequences of disobedience. The book highlights God's plans for leadership and His relationship with His people.",
+    "keyThemes": [
+      "God's chosen leaders",
+      "Obedience and disobedience",
+      "God's guidance"
+    ],
+    "keyVerses": [
+      "1 Samuel 3:10",
+      "1 Samuel 15:22",
+      "1 Samuel 16:7"
+    ]
+  },
+  "2 Samuel": {
+    "title": "2 Samuel",
+    "summary": "2 Samuel tells the story of King David's reign over Israel, including his successes and struggles. It highlights his victories in battle, his leadership, and the challenges he faced within his family and nation. The book shows both David's faith in God and the consequences of his actions.",
+    "keyThemes": [
+      "King David's leadership",
+      "God's promises and faithfulness",
+      "Moral and family challenges"
+    ],
+    "keyVerses": [
+      "2 Samuel 7:16",
+      "2 Samuel 11:27",
+      "2 Samuel 24:15"
+    ]
+  },
+  "1 Kings": {
+    "title": "1 Kings",
+    "summary": "1 Kings tells the story of Israel's history after King David, focusing on Solomon's reign and the division of the kingdom into Israel and Judah. It highlights both the wise decisions and the mistakes made by the kings. The book shows how faithfulness or turning away from God affected the nation.",
+    "keyThemes": [
+      "Wisdom and leadership",
+      "Faithfulness to God",
+      "Consequences of choices"
+    ],
+    "keyVerses": [
+      "1 Kings 3:9",
+      "1 Kings 11:13",
+      "1 Kings 18:21",
+      "1 Kings 8:23"
+    ]
+  },
+  "2 Kings": {
+    "title": "2 Kings",
+    "summary": "2 Kings tells the story of the history of Israel and Judah after King David, focusing on the reigns of several kings and the prophets who guided them. It highlights how faithfulness to God leads to blessings, while disobedience often brings disaster. The book ends with the fall of Israel and Judah, showing the consequences of turning away from God.",
+    "keyThemes": [
+      "Faithfulness and obedience",
+      "Consequences of sin",
+      "God's guidance through prophets"
+    ],
+    "keyVerses": [
+      "2 Kings 17:7-8",
+      "2 Kings 23:25"
+    ]
+  },
+  "1 Chronicles": {
+    "title": "1 Chronicles",
+    "summary": "1 Chronicles is a book that traces the history of Israel, focusing on King David and efforts to organize worship and leadership. It emphasizes God's promises, the importance of worship, and God's plan through Jerusalem and David’s line. The book encourages faithfulness and remembrance of Israel's history.",
+    "keyThemes": [
+      "God's promises",
+      "Worship and praise",
+      "Leadership and kingship"
+    ],
+    "keyVerses": [
+      "1 Chronicles 17:14",
+      "1 Chronicles 29:11-12",
+      "1 Chronicles 16:34"
+    ]
+  },
+  "2 Chronicles": {
+    "title": "2 Chronicles",
+    "summary": "2 Chronicles continues the history of Israel, focusing on the southern kingdom of Judah. It highlights the importance of trusting God, following His commands, and the role of kings and priests in leading the people. The book encourages faithfulness to God to receive His blessings and avoid judgment.",
+    "keyThemes": [
+      "Faithfulness to God",
+      "Importance of worship",
+      "Leadership and obedience"
+    ],
+    "keyVerses": []
+  },
+  "Ezra": {
+    "title": "Ezra",
+    "summary": "Ezra tells the story of how the Israelites returned from exile in Babylon and began to rebuild Jerusalem and restore their worship. It emphasizes faithfulness to God's laws and renewing their identity as God's people. The book highlights the importance of obedience and community in following God's plan.",
+    "keyThemes": [
+      "Rebuilding Jerusalem",
+      "Restoring worship",
+      "Faithfulness to God's law"
+    ],
+    "keyVerses": [
+      "Ezra 1:1",
+      "Ezra 7:10",
+      "Ezra 10:11"
+    ]
+  },
+  "Nehemiah": {
+    "title": "Nehemiah",
+    "summary": "The Book of Nehemiah tells the story of how the Jewish people rebuild the walls of Jerusalem after returning from exile. Nehemiah leads the effort, showing strong leadership and faith in God. The book highlights the importance of prayer, teamwork, and trusting God during difficult times.",
+    "keyThemes": [
+      "Rebuilding Jerusalem",
+      "Leadership and faith",
+      "Restoring God's law"
+    ],
+    "keyVerses": [
+      "Nehemiah 2:17-18",
+      "Nehemiah 8:10"
+    ]
+  },
+  "Esther": {
+    "title": "Esther",
+    "summary": "The Book of Esther tells the story of a Jewish woman named Esther who becomes queen of Persia. When her people are in danger from a plots to destroy them, Esther bravely intervenes to save them. The book highlights themes of bravery, God's protection, and standing up for what is right.",
+    "keyThemes": [
+      "Courage and bravery",
+      "God's protection",
+      "Standing up for others"
+    ],
+    "keyVerses": [
+      "Esther 4:14",
+      "Esther 7:3-4"
+    ]
+  },
+  "Job": {
+    "title": "Job",
+    "summary": "The Book of Job tells the story of a man who experiences great suffering and questions why bad things happen to good people. It explores themes of faith, hardship, and God's justice. In the end, Job learns more about God's wisdom and his own trust in Him.",
+    "keyThemes": [
+      "suffering and faith",
+      "trusting God's plan",
+      "God's justice and wisdom"
+    ],
+    "keyVerses": [
+      "Job 1:21",
+      "Job 42:2-3"
+    ]
+  },
+  "Psalms": {
+    "title": "Psalms",
+    "summary": "Psalms is a collection of poems and songs that express a wide range of emotions, from joy and thanks to sadness and asking for help. It helps readers connect with God through prayers, praise, and reflections on life. These writings have been used in worship and personal devotion for thousands of years.",
+    "keyThemes": [
+      "Praise and worship",
+      "Prayer and trust",
+      "Seeking God's guidance"
+    ],
+    "keyVerses": [
+      "Psalm 23:1",
+      "Psalm 46:1",
+      "Psalm 119:105"
+    ]
+  },
+  "Proverbs": {
+    "title": "Proverbs",
+    "summary": "Proverbs is a book filled with wise sayings and advice for living a good life. It teaches how to be smart, kind, and respectful, emphasizing the importance of making wise choices. The book helps us understand how to act wisely in our daily lives and stay close to God.",
+    "keyThemes": [
+      "Wisdom and understanding",
+      "Living responsibly",
+      "Respecting God"
+    ],
+    "keyVerses": [
+      "Proverbs 1:7",
+      "Proverbs 3:5-6",
+      "Proverbs 4:7",
+      "Proverbs 9:10"
+    ]
+  },
+  "Ecclesiastes": {
+    "title": "Ecclesiastes",
+    "summary": "Ecclesiastes is a book that explores the meaning of life and the things people often chase after to find happiness. The author reflects on the fleeting nature of wealth, pleasure, and success, and emphasizes the importance of trusting God. It encourages readers to find purpose in a life lived for Him.",
+    "keyThemes": [
+      "Search for purpose",
+      "Futility of worldly pursuits",
+      "Trusting in God"
+    ],
+    "keyVerses": [
+      "Ecclesiastes 1:2",
+      "Ecclesiastes 12:13"
+    ]
+  },
+  "Song of Solomon": {
+    "title": "Song of Solomon",
+    "summary": "The Song of Solomon is a poetic book that celebrates love and the beauty of romantic relationship. It highlights the joy, attraction, and affection between a bride and her bridegroom, often seen as an allegory for God's love for His people. The book uses vivid imagery to express desire and admiration.",
+    "keyThemes": [
+      "Love and romance",
+      "Beauty of creation",
+      "God's love for His people"
+    ],
+    "keyVerses": [
+      "Song of Solomon 1:1",
+      "Song of Solomon 2:1",
+      "Song of Solomon 8:6-7"
+    ]
+  },
+  "Isaiah": {
+    "title": "Isaiah",
+    "summary": "Isaiah is a book that contains the words of the prophet Isaiah, who delivered messages from God to the people of Judah. It includes warnings about turning away from God and promises of hope and salvation. The book emphasizes God's holiness, justice, and plan for redemption through the coming Messiah.",
+    "keyThemes": [
+      "God's holiness",
+      "Coming of the Messiah",
+      "Hope for redemption"
+    ],
+    "keyVerses": [
+      "Isaiah 6:3",
+      "Isaiah 9:6",
+      "Isaiah 53:5"
+    ]
+  },
+  "Jeremiah": {
+    "title": "Jeremiah",
+    "summary": "Jeremiah was a prophet who delivered God's messages to the people of Judah, warning them about their sins and the coming destruction if they did not turn back to God. Despite the difficult messages, Jeremiah also shared God's promises of hope and a future renewed by Him. The book shows the importance of faithfulness and trusting God's plans even in tough times.",
+    "keyThemes": [
+      "faithfulness to God",
+      "warning and repentance",
+      "hope and restoration"
+    ],
+    "keyVerses": [
+      "Jeremiah 1:5",
+      "Jeremiah 29:11"
+    ]
+  },
+  "Lamentations": {
+    "title": "Lamentations",
+    "summary": "Lamentations is a poetic book that expresses deep sorrow over the destruction of Jerusalem and the suffering of God's people. It acknowledges pain but also hopes for God's mercy and future restoration. The book reminds us that even in difficult times, God's compassion remains constant.",
+    "keyThemes": [
+      "Grief and loss",
+      "God's mercy",
+      "Hope for restoration"
+    ],
+    "keyVerses": [
+      "Lamentations 3:22-23",
+      "Lamentations 1:16",
+      "Lamentations 3:25",
+      "Lamentations 5:21"
+    ]
+  },
+  "Ezekiel": {
+    "title": "Ezekiel",
+    "summary": "Ezekiel is a book filled with visions and messages from God given to the prophet Ezekiel during the time when the Israelites were in exile. It emphasizes God's holiness, judgment, and the hope of restoration for His people. The book encourages faithfulness and trust in God's plan even in difficult times.",
+    "keyThemes": [
+      "God's holiness",
+      "Judgment and justice",
+      "Hope and restoration"
+    ],
+    "keyVerses": [
+      "Ezekiel 18:32",
+      "Ezekiel 36:26",
+      "Ezekiel 37:14"
+    ]
+  },
+  "Daniel": {
+    "title": "Daniel",
+    "summary": "The Book of Daniel tells the story of a Jewish young man who remains faithful to God while living in a foreign empire. It includes stories of faithfulness, dreams, and visions of future world events. The book encourages trust in God's plan even during difficult times.",
+    "keyThemes": [
+      "Faithfulness to God",
+      "God's sovereignty",
+      "Hope for the future"
+    ],
+    "keyVerses": [
+      "Daniel 1:8",
+      "Daniel 6:22",
+      "Daniel 7:14"
+    ]
+  },
+  "Hosea": {
+    "title": "Hosea",
+    "summary": "Hosea is about God's love for His people, Israel, even when they turn away from Him. The book uses Hosea's own marriage as a symbol of Israel's unfaithfulness, showing God's desire to forgive and restore those who turn back to Him. It encourages people to return to God's love and mercy.",
+    "keyThemes": [
+      "God's steadfast love",
+      "Faithfulness and unfaithfulness",
+      "Restoration and forgiveness"
+    ],
+    "keyVerses": [
+      "Hosea 6:6",
+      "Hosea 4:1",
+      "Hosea 14:4"
+    ]
+  },
+  "Joel": {
+    "title": "Joel",
+    "summary": "The Book of Joel encourages God's people to turn back to Him and trust in His mercy during times of trouble. It speaks about a coming judgment, as well as the hope of renewal and blessing if they repent. The book emphasizes God's sovereignty and His desire for His people to seek Him sincerely.",
+    "keyThemes": [
+      "Repentance and mercy",
+      "God’s sovereignty",
+      "Hope for restoration"
+    ],
+    "keyVerses": [
+      "Joel 2:12-13",
+      "Joel 2:28-29"
+    ]
+  },
+  "Amos": {
+    "title": "Amos",
+    "summary": "Amos was a prophet who spoke out against the injustice and corruption of the people of Israel and surrounding nations. He called for repentance and justice, warning of God's judgment if they did not turn back to Him. Despite this, Amos also shared God's hope for a future where people would seek Him and live righteously.",
+    "keyThemes": [
+      "Justice and righteousness",
+      "God’s judgment",
+      "Repentance and hope"
+    ],
+    "keyVerses": [
+      "Amos 5:24",
+      "Amos 4:13"
+    ]
+  },
+  "Obadiah": {
+    "title": "Obadiah",
+    "summary": "Obadiah is a short book that talks about God's judgment against Edom, a nation that was proud and did wrong to Israel. It emphasizes that God's justice will happen and that everyone should live humbly before Him. The book also reminds us that God's plans include restoring His people after judgment.",
+    "keyThemes": [
+      "God's justice",
+      "Humility vs. pride",
+      "Restoration and hope"
+    ],
+    "keyVerses": [
+      "Obadiah 1:3-4",
+      "Obadiah 1:15",
+      "Obadiah 1:21"
+    ]
+  },
+  "Jonah": {
+    "title": "Jonah",
+    "summary": "The Book of Jonah tells the story of a prophet who tries to run away from God's command to go to the city of Nineveh and warn its people. Instead of escaping, Jonah is swallowed by a great fish and learns important lessons about God's mercy and compassion. In the end, Jonah understands that God's love extends to all people, even those who seem undeserving.",
+    "keyThemes": [
+      "God's mercy",
+      "Obedience and faith",
+      "God's compassion for all"
+    ],
+    "keyVerses": [
+      "Jonah 1:1-3",
+      "Jonah 2:1-2",
+      "Jonah 3:10",
+      "Jonah 4:11"
+    ]
+  },
+  "Micah": {
+    "title": "Micah",
+    "summary": "Micah is a prophetic book that calls for justice and warns about the consequences of corruption and injustice. It emphasizes God's desire for kindness, justice, and humility among His people. Despite warnings of judgment, it also offers hope for a future where God's plan will be fulfilled.",
+    "keyThemes": [
+      "Justice and Mercy",
+      "God's Judgment",
+      "Hope for the Future"
+    ],
+    "keyVerses": [
+      "Micah 6:8",
+      "Micah 7:18-20"
+    ]
+  },
+  "Nahum": {
+    "title": "Nahum",
+    "summary": "Nahum is a short book in the Bible that predicts the fall of the city of Nineveh, the capital of Assyria, because of its cruelty and wickedness. It emphasizes God's justice and swears that evil will be punished. The book offers hope to God's people by showing that God's justice will ultimately prevail.",
+    "keyThemes": [
+      "God's justice",
+      "Judgment on Nineveh",
+      "Hope for the oppressed"
+    ],
+    "keyVerses": [
+      "Nahum 1:7",
+      "Nahum 1:15",
+      "Nahum 2:13"
+    ]
+  },
+  "Habakkuk": {
+    "title": "Habakkuk",
+    "summary": "Habakkuk is a small book where the prophet asks God tough questions about justice and why evil seems to go unpunished. God responds by showing that He has a plan, even if it’s hard to understand. The book encourages trusting God’s wisdom and faithfulness during difficult times.",
+    "keyThemes": [
+      "Trusting God in tough times",
+      "God’s justice and faithfulness",
+      "Faith in His plans"
+    ],
+    "keyVerses": [
+      "Habakkuk 1:5",
+      "Habakkuk 2:4",
+      "Habakkuk 3:17-19"
+    ]
+  },
+  "Zephaniah": {
+    "title": "Zephaniah",
+    "summary": "Zephaniah is a prophetic book that warns about God's coming judgment on Judah and other nations due to their wickedness. It also offers hope for those who turn back to God and trust in His mercy. The book encourages repentance and reminds readers of God's desire to restore and bless His people.",
+    "keyThemes": [
+      "Judgment and Mercy",
+      "Call to Repentance",
+      "Hope for Restoration"
+    ],
+    "keyVerses": [
+      "Zephaniah 1:7",
+      "Zephaniah 3:17",
+      "Zephaniah 2:3"
+    ]
+  },
+  "Haggai": {
+    "title": "Haggai",
+    "summary": "Haggai is a short book where the prophet encourages the people to rebuild the Jerusalem temple after returning from exile. It reminds them to prioritize God's house and trust in His promises. The book shows how obeying God can lead to blessings and His presence among His people.",
+    "keyThemes": [
+      "Rebuilding the temple",
+      "Obedience to God",
+      "God's promise of blessing"
+    ],
+    "keyVerses": [
+      "Haggai 1:8",
+      "Haggai 2:4-5"
+    ]
+  },
+  "Zechariah": {
+    "title": "Zechariah",
+    "summary": "Zechariah is a book that contains visions and messages from God, delivered through the prophet Zechariah. It focuses on encouraging the Israelites to rebuild Jerusalem and stay faithful to God’s promises. The book also looks forward to a future Messianic king who will bring peace and salvation.",
+    "keyThemes": [
+      "Rebuilding Jerusalem",
+      "God’s promises",
+      "Messianic hope"
+    ],
+    "keyVerses": [
+      "Zechariah 4:6",
+      "Zechariah 9:9",
+      "Zechariah 14:9"
+    ]
+  },
+  "Malachi": {
+    "title": "Malachi",
+    "summary": "Malachi is the last book of the Old Testament and serves as a message from God to the people of Israel. It calls them to return to sincere worship, faithfulness, and proper attitudes toward God. The book also predicts the coming of a messenger who will prepare the way for the Lord.",
+    "keyThemes": [
+      "Faithfulness to God",
+      "Proper worship",
+      "Messianic prophecy"
+    ],
+    "keyVerses": [
+      "Malachi 1:2",
+      "Malachi 3:1",
+      "Malachi 4:5-6"
+    ]
+  },
+  "Matthew": {
+    "title": "Gospel of Matthew",
+    "summary": "The Gospel of Matthew tells the story of Jesus Christ’s life, teachings, death, and resurrection. It emphasizes that Jesus is the promised Messiah who fulfills Old Testament prophecies. The book also encourages readers to follow Jesus’ teachings and live righteously.",
+    "keyThemes": [
+      "Jesus as the Messiah",
+      "Teachings of Jesus",
+      "Fulfillment of Prophecy"
+    ],
+    "keyVerses": [
+      "Matthew 1:22-23",
+      "Matthew 5:16",
+      "Matthew 28:19-20"
+    ]
+  },
+  "Luke": {
+    "title": "Gospel of Luke",
+    "summary": "The Gospel of Luke tells the story of Jesus Christ’s life, teachings, death, and resurrection. It emphasizes Jesus’ compassion, mercy, and the importance of caring for others. The book also highlights the role of women and the marginalized in Jesus’ ministry.",
+    "keyThemes": [
+      "Jesus’ compassion",
+      "Salvation for all",
+      "The Holy Spirit’s work"
+    ],
+    "keyVerses": [
+      "Luke 1:31",
+      "Luke 15:7",
+      "Luke 24:6-7"
+    ]
+  },
+  "John": {
+    "title": "Gospel of John",
+    "summary": "The Gospel of John tells the story of Jesus' life, teachings, death, and resurrection, emphasizing His divine nature as the Son of God. It highlights the importance of believing in Jesus to have eternal life. This book encourages readers to trust in Jesus and understand His love for the world.",
+    "keyThemes": [
+      "Jesus is the Son of God",
+      "Faith and eternal life",
+      "Love and truth"
+    ],
+    "keyVerses": [
+      "John 3:16",
+      "John 14:6",
+      "John 1:1",
+      "John 10:28"
+    ]
+  },
+  "Acts": {
+    "title": "Acts",
+    "summary": "The book of Acts tells the story of the early Christian church after Jesus' resurrection. It describes how the apostles spread the message of Jesus and how the church grew despite challenges. Acts shows the work of the Holy Spirit guiding believers everywhere.",
+    "keyThemes": [
+      "Spread of the Gospel",
+      "Guidance of the Holy Spirit",
+      "Growth of the Church"
+    ],
+    "keyVerses": [
+      "Acts 1:8",
+      "Acts 2:4",
+      "Acts 9:15"
+    ]
+  },
+  "Romans": {
+    "title": "Romans",
+    "summary": "Romans is a letter that explains how people can be made right with God through faith in Jesus Christ. It teaches about God's grace, the importance of trusting Him, and how believers should live. The book emphasizes that salvation is available to everyone, no matter who they are.",
+    "keyThemes": [
+      "Justification by faith",
+      "God's grace and mercy",
+      "Living a Christian life"
+    ],
+    "keyVerses": [
+      "Romans 3:23",
+      "Romans 5:8",
+      "Romans 6:23",
+      "Romans 10:9"
+    ]
+  },
+  "1 Corinthians": {
+    "title": "1 Corinthians",
+    "summary": "1 Corinthians is a letter from the Apostle Paul to the church in Corinth. It offers guidance on how Christians should live, worship, and work together in unity. The book addresses both spiritual practices and everyday issues faced by believers.",
+    "keyThemes": [
+      "Unity in Christ",
+      "Love and Charity",
+      "Resurrection Hope"
+    ],
+    "keyVerses": [
+      "1 Corinthians 13:1-13",
+      "1 Corinthians 15:20-22"
+    ]
+  },
+  "2 Corinthians": {
+    "title": "2 Corinthians",
+    "summary": "2 Corinthians is a letter from the Apostle Paul to the church in Corinth, where he encourages them to stay strong in faith and trust God's grace. Paul also talks about his own challenges and the importance of living sincerely as followers of Jesus. The book emphasizes forgiveness, generosity, and the hope that comes from God's love.",
+    "keyThemes": [
+      "God's grace",
+      "Forgiveness and reconciliation",
+      "Christian giving and generosity"
+    ],
+    "keyVerses": [
+      "2 Corinthians 5:7",
+      "2 Corinthians 12:9",
+      "2 Corinthians 9:7"
+    ]
+  },
+  "Galatians": {
+    "title": "Galatians",
+    "summary": "Galatians is a letter where Paul writes to early Christians to remind them that faith in Jesus, not obeying the law, is what saves us. He encourages believers to live by the Spirit and not by trying to earn God's approval through rules. The book emphasizes freedom in Christ and loving one another.",
+    "keyThemes": [
+      "Faith in Jesus",
+      "Freedom in Christ",
+      "Living by the Spirit"
+    ],
+    "keyVerses": [
+      "Galatians 2:20",
+      "Galatians 5:1",
+      "Galatians 3:28"
+    ]
+  },
+  "Ephesians": {
+    "title": "Ephesians",
+    "summary": "Ephesians was written by the Apostle Paul to encourage believers in how to live a life that reflects God's love and grace. It emphasizes that believers are part of God's plan and should walk in unity, love, and holiness. The book also reminds Christians of their identity in Christ and the spiritual blessings they have received.",
+    "keyThemes": [
+      "Unity in Christ",
+      "Grace and Salvation",
+      "Living a Holy Life"
+    ],
+    "keyVerses": [
+      "Ephesians 1:3",
+      "Ephesians 2:8-9",
+      "Ephesians 4:1-3"
+    ]
+  },
+  "Philippians": {
+    "title": "Philippians",
+    "summary": "Philippians is a letter from the Apostle Paul to the church in Philippi, encouraging believers to find joy in their faith regardless of their circumstances. It emphasizes the importance of humility, unity, and rejoicing in Christ. The book highlights how a strong relationship with Jesus can bring peace and happiness.",
+    "keyThemes": [
+      "Joy in Christ",
+      "Humility and Service",
+      "Rejoicing Always"
+    ],
+    "keyVerses": [
+      "Philippians 1:21",
+      "Philippians 2:3-4",
+      "Philippians 4:13"
+    ]
+  },
+  "Colossians": {
+    "title": "Colossians",
+    "summary": "The Book of Colossians was written by the Apostle Paul to encourage the believers in Colossae to stay rooted in their faith in Jesus Christ. It emphasizes Christ’s supremacy and the importance of living a life that reflects His teachings. The letter also offers guidance on avoiding false teachings and spiritual deception.",
+    "keyThemes": [
+      "Christ's Supremacy",
+      "Living a Christ-Centered Life",
+      "Warnings Against False Teachings"
+    ],
+    "keyVerses": [
+      "Colossians 1:15-20",
+      "Colossians 2:6-7",
+      "Colossians 3:16"
+    ]
+  },
+  "1 Thessalonians": {
+    "title": "1 Thessalonians",
+    "summary": "1 Thessalonians is a letter from the Apostle Paul encouraging the church in Thessalonica. He praises their faith and love, and reminds them to stay strong and hopeful as they wait for Jesus to return. Paul also gives guidance on living a Christian life and supporting each other.",
+    "keyThemes": [
+      "Faith and Love",
+      "Hope in Jesus",
+      "Living Worthy of God"
+    ],
+    "keyVerses": [
+      "1 Thessalonians 4:16-17",
+      "1 Thessalonians 5:11"
+    ]
+  },
+  "2 Thessalonians": {
+    "title": "2 Thessalonians",
+    "summary": "2 Thessalonians is a letter from the Apostle Paul to encourage the church in Thessalonica. He reminds believers to stay faithful, work hard, and remain hopeful for Jesus' return. Paul also warns against false teachings and encourages prayer and perseverance.",
+    "keyThemes": [
+      "Faith and perseverance",
+      "Second coming of Jesus",
+      "Warning against false teachings"
+    ],
+    "keyVerses": [
+      "2 Thessalonians 1:3",
+      "2 Thessalonians 2:3-4"
+    ]
+  },
+  "1 Timothy": {
+    "title": "1 Timothy",
+    "summary": "1 Timothy is a letter from the Apostle Paul to Timothy, offering guidance on how to lead and manage churches. It provides instructions on church leadership, proper behavior, and staying faithful to Christian teachings. The book emphasizes the importance of living a godly life and remaining committed to Jesus.",
+    "keyThemes": [
+      "Church leadership",
+      "Living a godly life",
+      "Maintaining faith"
+    ],
+    "keyVerses": [
+      "1 Timothy 3:1",
+      "1 Timothy 4:12",
+      "1 Timothy 6:11"
+    ]
+  },
+  "2 Timothy": {
+    "title": "2 Timothy",
+    "summary": "2 Timothy is a letter from the Apostle Paul to his friend Timothy. In it, Paul encourages Timothy to stay faithful to Jesus, even when things are difficult. He reminds him to keep teaching the truth and live a life that shows his faith.",
+    "keyThemes": [
+      "Faithfulness",
+      "Perseverance",
+      "Truth"
+    ],
+    "keyVerses": [
+      "2 Timothy 1:7",
+      "2 Timothy 3:16-17",
+      "2 Timothy 4:7"
+    ]
+  },
+  "Titus": {
+    "title": "Titus",
+    "summary": "The Book of Titus is a letter from the Apostle Paul to a young church leader named Titus. It offers instructions on church leadership, proper behavior, and the importance of living a good example of faith. The letter emphasizes grace, sound teaching, and living a Christ-centered life.",
+    "keyThemes": [
+      "church leadership",
+      "good behavior",
+      "grace and truth"
+    ],
+    "keyVerses": [
+      "Titus 1:5",
+      "Titus 2:11-12",
+      "Titus 3:5"
+    ]
+  },
+  "Philemon": {
+    "title": "Philemon",
+    "summary": "The Book of Philemon is a letter from the Apostle Paul that appeals to a Christian brother, Philemon, to forgive and accept Onesimus, a former slave, as a brother in Christ. It emphasizes forgiveness, reconciliation, and the value of every person in God's eyes. Paul encourages Philemon to show love and kindness, reflecting Christ's love for all believers.",
+    "keyThemes": [
+      "Forgiveness",
+      "Reconciliation",
+      "Christian love"
+    ],
+    "keyVerses": [
+      "Philemon 1:6",
+      "Philemon 1:17"
+    ]
+  },
+  "Hebrews": {
+    "title": "Hebrews",
+    "summary": "Hebrews encourages believers to trust in Jesus Christ as the ultimate and perfect way to connect with God. It explains that Jesus is greater than all previous ways God revealed Himself and calls believers to stay faithful. The book emphasizes perseverance and faith in Jesus amid challenges.",
+    "keyThemes": [
+      "Jesus as our High Priest",
+      "Faith and perseverance",
+      "The new covenant"
+    ],
+    "keyVerses": [
+      "Hebrews 4:14",
+      "Hebrews 11:1",
+      "Hebrews 12:1-2"
+    ]
+  },
+  "James": {
+    "title": "James",
+    "summary": "The Book of James encourages Christians to live out their faith through good works, wisdom, and perseverance. It emphasizes the importance of controlling the tongue, caring for others, and staying faithful during tough times. Overall, it calls believers to demonstrate their faith through actions.",
+    "keyThemes": [
+      "Faith in action",
+      "Wisdom and patience",
+      "Controlling the tongue"
+    ],
+    "keyVerses": [
+      "James 1:2-4",
+      "James 1:19",
+      "James 2:17",
+      "James 3:9-10"
+    ]
+  },
+  "1 Peter": {
+    "title": "1 Peter",
+    "summary": "1 Peter encourages Christians to remain strong in their faith despite facing suffering and opposition. It teaches about living a holy life, trusting in God's grace, and remaining hopeful for eternal salvation. The book offers comfort and guidance for believers to stay faithful in difficult times.",
+    "keyThemes": [
+      "Suffering and perseverance",
+      "Living a holy life",
+      "Hope in God's promises"
+    ],
+    "keyVerses": [
+      "1 Peter 1:3-4",
+      "1 Peter 5:7",
+      "1 Peter 2:9"
+    ]
+  },
+  "2 Peter": {
+    "title": "2 Peter",
+    "summary": "2 Peter encourages believers to remain faithful and watchful for false teachings that can threaten their faith. The book reminds Christians of the importance of growing in knowledge of Jesus and living holy lives. It also warns about the consequences of turning away from the truth.",
+    "keyThemes": [
+      "Watchfulness against false teachers",
+      "Growing in faith and knowledge",
+      "Living a holy life"
+    ],
+    "keyVerses": [
+      "2 Peter 1:3",
+      "2 Peter 2:1-3",
+      "2 Peter 3:10"
+    ]
+  },
+  "1 John": {
+    "title": "1 John",
+    "summary": "1 John is a letter that encourages believers to live in love and truth, emphasizing the importance of knowing Jesus Christ. It helps Christians understand how to grow in faith and stay faithful to God's teachings. The book also warns against false teachings and reminds believers of the importance of loving one another.",
+    "keyThemes": [
+      "Love one another",
+      "Knowing Jesus",
+      "Staying faithful"
+    ],
+    "keyVerses": [
+      "1 John 4:7-8",
+      "1 John 5:13",
+      "1 John 1:9",
+      "1 John 2:15-16"
+    ]
+  },
+  "2 John": {
+    "title": "2 John",
+    "summary": "2 John is a short letter where the author encourages believers to live in love and truth. It warns against false teachers who might lead people away from the core teachings of Jesus. The letter also emphasizes the importance of staying true to the message of Christ as we show love to each other.",
+    "keyThemes": [
+      "Love and truth",
+      "Warning against false teachers",
+      "Remaining faithful to Jesus"
+    ],
+    "keyVerses": [
+      "2 John 1:6",
+      "2 John 1:8"
+    ]
+  },
+  "3 John": {
+    "title": "3 John",
+    "summary": "3 John is a short letter from the Apostle John that encourages believers to show hospitality and support faithful teachers. It warns against harmful behavior and promotes kindness and truth. The main focus is on living in love and standing for what is right.",
+    "keyThemes": [
+      "hospitality",
+      "truth and love",
+      "warning against false teachers"
+    ],
+    "keyVerses": [
+      "3 John 1:2",
+      "3 John 1:11"
+    ]
+  },
+  "Jude": {
+    "title": "Jude",
+    "summary": "Jude is a short letter that warns believers to stay true to their faith and be careful of false teachers who can lead people away from God. It encourages Christians to remain strong and God-focused. The book emphasizes the importance of good deeds and trusting God's judgment.",
+    "keyThemes": [
+      "Warning against false teachers",
+      "Faithfulness to God",
+      "God's judgment"
+    ],
+    "keyVerses": [
+      "Jude 1:3",
+      "Jude 1:24-25"
+    ]
+  },
+  "Revelation": {
+    "title": "Revelation",
+    "summary": "Revelation is the last book of the Bible and describes visions of the future, including the final victory of good over evil. It offers hope and encouragement to Christians facing struggles, reminding them that God’s plan will ultimately be fulfilled. The book uses vivid imagery and symbolism to show God’s sovereignty and the promise of eternal life with Him.",
+    "keyThemes": [
+      "God’s sovereignty",
+      "Final judgment",
+      "Hope and victory"
+    ],
+    "keyVerses": [
+      "Revelation 1:8",
+      "Revelation 21:4",
+      "Revelation 22:20"
+    ]
+  }
+}
