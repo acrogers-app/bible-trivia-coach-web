@@ -8,7 +8,7 @@ export default function HomePage() {
           wiring up the full experience, but you can preview the quiz content now.
         </p>
         <a
-          href="/dev"
+          href="/play"
           className="inline-flex items-center justify-center px-5 py-3 rounded-full bg-emerald-600 text-white font-semibold shadow-md hover:bg-emerald-700 transition"
         >
           Open quiz preview
