@@ -53,3 +53,4 @@ public/data/*.before-*.json
 # Local /play page snapshots
 src/app/play/page.*.tsx
 src/app/play/*.backup.tsx
+play_backups/
