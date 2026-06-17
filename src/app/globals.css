@@ -24,3 +24,93 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Bible Trivia Coach layout */
+.btc-root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.5rem 0.75rem;
+  background-color: #020617; /* slate-950 */
+}
+
+.btc-card {
+  width: 100%;
+  max-width: 560px;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  padding: 1.75rem 1.75rem 2.25rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.75);
+}
+
+/* Phone: full-screen card */
+@media (max-width: 480px) {
+  .btc-root {
+    padding: 0;
+  }
+
+  .btc-card {
+    max-width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    padding: 1.25rem 1rem 1.75rem;
+    box-shadow: none;
+  }
+}
+
+/* Bible Trivia Coach typography tokens */
+:root {
+  --btc-font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+
+  --btc-text-main: #0f172a;   /* very dark text */
+  --btc-text-muted: #6b7280;  /* secondary text */
+
+  --btc-heading-xl: 1.75rem;  /* main app title */
+  --btc-heading-lg: 1.4rem;   /* section / page titles */
+  --btc-heading-md: 1.1rem;   /* question text / subheadings */
+
+  --btc-body-size: 0.95rem;   /* normal body text */
+  --btc-caption-size: 0.8rem; /* small labels, verse numbers */
+}
+
+/* Global base font */
+body {
+  font-family: var(--btc-font-family);
+  color: var(--btc-text-main);
+  font-size: var(--btc-body-size);
+  line-height: 1.5;
+}
+
+/* Typography inside Bible Trivia Coach card */
+.btc-card h1 {
+  font-size: var(--btc-heading-xl) !important;
+  font-weight: 800 !important;
+  color: var(--btc-text-main) !important;
+}
+
+.btc-card h2 {
+  font-size: var(--btc-heading-lg) !important;
+  font-weight: 800 !important;
+  color: var(--btc-text-main) !important;
+}
+
+.btc-card h3 {
+  font-size: var(--btc-heading-md) !important;
+  font-weight: 700 !important;
+  color: var(--btc-text-main) !important;
+}
+
+/* Utility classes for text */
+.btc-text-muted {
+  color: var(--btc-text-muted) !important;
+}
+
+.btc-body {
+  font-size: var(--btc-body-size) !important;
+}
+
+.btc-caption {
+  font-size: var(--btc-caption-size) !important;
+  color: var(--btc-text-muted) !important;
+}

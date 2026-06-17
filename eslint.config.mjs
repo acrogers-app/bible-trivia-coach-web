@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local backup / snapshot files we do not want to lint:
+    "src/app/play.page.before-fix.tsx",
+    "src/app/play/page.before-*.tsx",
+    "src/app/play/page.broken-summary-backup.tsx",
+    "src/app/play/page.tts_scroll_backup.tsx"
   ]),
 ]);
 

@@ -68,7 +68,7 @@ export function randomQuestions(params: {
     ...seriousQs.slice(0, Math.max(0, maxCount - targetPlayful)),
   );
 
-  let remaining = maxCount - chosen.length;
+  const remaining = maxCount - chosen.length;
   if (remaining > 0) {
     chosen.push(
       ...playfulQs.slice(0, Math.min(targetPlayful, remaining)),
