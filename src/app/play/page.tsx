@@ -86,7 +86,8 @@ function normalizeBookKey(name: string): string {
   return name.toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
-function parseRef(input: string): Ref | null {
+function parseRef(input: string | undefined): Ref | null {
+  if (!input) return null;
   const trimmed = input.trim();
   const pattern = /^\s*(.+?)\s+(\d+):(\d+)\s*$/;
   const match = trimmed.match(pattern);
