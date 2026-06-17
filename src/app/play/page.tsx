@@ -1478,7 +1478,7 @@ function QuizScreen(props: {
         q.refEnd &&
         q.refStart.trim() !== '' &&
         q.refEnd.trim() !== '';
-      if (hasRef if (hasRef) {if (hasRef) { q.refStart if (hasRef) {if (hasRef) { q.refEnd) {
+            if (hasRef if (hasRef if (hasRef) {if (hasRef) { q.refStart if (hasRef) {if (hasRef) { q.refEnd) {if (hasRef if (hasRef) {if (hasRef) { q.refStart if (hasRef) {if (hasRef) { q.refEnd) { q.refStart if (hasRef if (hasRef) {if (hasRef) { q.refStart if (hasRef) {if (hasRef) { q.refEnd) {if (hasRef if (hasRef) {if (hasRef) { q.refStart if (hasRef) {if (hasRef) { q.refEnd) { q.refEnd) {
         setPassageRef({ start: q.refStart, end: q.refEnd });
         setShowPassage(true);
       }
