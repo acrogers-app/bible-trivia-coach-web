@@ -1,0 +1,34 @@
+<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Bible Trivia Coach illustration</title>
+  <desc id="desc">An open Bible with a bookmark and soft colored background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#bfdbfe"/>
+      <stop offset="1" stop-color="#bbf7d0"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="288" height="188" rx="24" fill="url(#bg)" />
+  <rect x="60" y="44" width="200" height="132" rx="16" fill="#f9fafb" stroke="#e5e7eb" stroke-width="2"/>
+  <path d="M160 44v132" stroke="#e5e7eb" stroke-width="2"/>
+  <!-- left page lines -->
+  <g stroke="#cbd5f5" stroke-width="2" stroke-linecap="round">
+    <line x1="76" y1="64" x2="144" y2="64"/>
+    <line x1="76" y1="80" x2="144" y2="80"/>
+    <line x1="76" y1="96" x2="144" y2="96"/>
+    <line x1="76" y1="112" x2="144" y2="112"/>
+    <line x1="76" y1="128" x2="144" y2="128"/>
+  </g>
+  <!-- right page lines -->
+  <g stroke="#cbd5f5" stroke-width="2" stroke-linecap="round">
+    <line x1="176" y1="64" x2="244" y2="64"/>
+    <line x1="176" y1="80" x2="244" y2="80"/>
+    <line x1="176" y1="96" x2="244" y2="96"/>
+    <line x1="176" y1="112" x2="244" y2="112"/>
+    <line x1="176" y1="128" x2="228" y2="128"/>
+  </g>
+  <!-- cross -->
+  <rect x="149" y="70" width="22" height="54" rx="4" fill="#facc15"/>
+  <rect x="142" y="82" width="36" height="10" rx="4" fill="#facc15"/>
+  <!-- bookmark -->
+  <path d="M190 44h16v52l-8-6-8 6z" fill="#22c55e"/>
+</svg>
