@@ -1269,7 +1269,7 @@ function HomeScreen(props: {
           <Row
             title={`Easy (${easyCount} available)`}
             subtitle="Fast and friendly."
-            onClick={() => props.onStartLevelQuiz('easy', easyCount)}
+            onClick={() => props.onStartLevelQuiz('easy', Math.min(10, easyCount))}
           />
         ) : (
           <DisabledRow title="Easy (coming soon)" />
@@ -1279,7 +1279,7 @@ function HomeScreen(props: {
           <Row
             title={`Medium (${medCount} available)`}
             subtitle="A little deeper."
-            onClick={() => props.onStartLevelQuiz('medium', medCount)}
+            onClick={() => props.onStartLevelQuiz('medium', Math.min(10, medCount))}
           />
         ) : (
           <DisabledRow title="Medium (coming soon)" />
@@ -1289,7 +1289,7 @@ function HomeScreen(props: {
           <Row
             title={`Hard (${hardCount} available)`}
             subtitle="Challenge mode."
-            onClick={() => props.onStartLevelQuiz('hard', hardCount)}
+            onClick={() => props.onStartLevelQuiz('hard', Math.min(10, hardCount))}
           />
         ) : (
           <DisabledRow title="Hard (coming soon)" />
@@ -1299,7 +1299,7 @@ function HomeScreen(props: {
           <Row
             title={`Mixed (${mixedCount} available)`}
             subtitle="A mix of everything."
-            onClick={() => props.onStartLevelQuiz('mixed', mixedCount)}
+            onClick={() => props.onStartLevelQuiz('mixed', Math.min(10, mixedCount))}
           />
         )}
       </Section>
