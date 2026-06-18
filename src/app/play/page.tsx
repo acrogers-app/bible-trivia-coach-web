@@ -632,7 +632,6 @@ const hasFiredRef = useRef(false);
       </p>
 
       <div style={{ position: 'relative', marginBottom: 16 }}>
-        {isPerfect && <PerfectConfetti />}
         <div style={cardStyle}>
           <div
             style={{
@@ -697,49 +696,6 @@ const hasFiredRef = useRef(false);
   );
 }
 
-function PerfectConfetti() {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        inset: -8,
-        pointerEvents: 'none',
-        overflow: 'hidden',
-      }}
-    >
-      {/* top-left burst */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: 8,
-          height: 12,
-          borderRadius: 3,
-          backgroundColor: '#f97316',
-          boxShadow:
-            '24px 6px #22c55e, 64px -8px #facc15, 120px 4px #38bdf8, 180px -10px #ec4899, 230px 2px #a855f7',
-        }}
-      />
-      {/* bottom-right burst */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: -4,
-          right: -8,
-          width: 8,
-          height: 12,
-          borderRadius: 3,
-          backgroundColor: '#22c55e',
-          transform: 'rotate(18deg)',
-          boxShadow:
-            '-24px -8px #facc15, -70px 4px #38bdf8, -130px -12px #ec4899, -190px 6px #a855f7',
-        }}
-      />
-    </div>
-  );
-}
 
 // ---- Root page ----
 
