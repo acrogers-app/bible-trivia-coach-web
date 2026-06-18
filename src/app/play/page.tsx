@@ -553,7 +553,7 @@ function FixedSummaryScreen(props: {
   const rawTotal = typeof props.total === 'number' ? props.total : 0;
 
   const total = Math.max(rawCorrect, rawTotal);
-  const correct = Math.min(rawCorrect, rawTotal);
+  const correct = Math.min(rawCorrect, total);
   const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
   const isPerfect = percent === 100;
 
@@ -564,7 +564,6 @@ function FixedSummaryScreen(props: {
         background:
           'linear-gradient(135deg, rgba(34,197,94,0.98), rgba(16,185,129,0.98))',
         color: 'white',
-        marginBottom: 16,
         boxShadow:
           '0 25px 35px rgba(22,163,74,0.45), 0 10px 10px rgba(22,163,74,0.45)',
         border: '1px solid rgba(22,163,74,0.9)',
@@ -574,7 +573,6 @@ function FixedSummaryScreen(props: {
         borderRadius: 16,
         backgroundColor: '#f3f4f6',
         border: '1px solid #e5e7eb',
-        marginBottom: 16,
         color: '#111827',
       };
 
@@ -597,46 +595,50 @@ function FixedSummaryScreen(props: {
         {props.title}
       </p>
 
-      <div style={cardStyle}>
-        <div
-          style={{
-            fontSize: 32,
-            fontWeight: 800,
-            marginBottom: 4,
-          }}
-        >
-          {correct}/{total}
-        </div>
-        <div
-          style={{
-            fontSize: 18,
-            fontWeight: 700,
-            marginBottom: 6,
-          }}
-        >
-          {percent}% correct
-        </div>
-        {isPerfect ? (
-          <>
-            <div style={{ fontSize: 16, marginBottom: 6 }}>
-              Perfect score! Beautiful work—every answer was spot on.
-            </div>
-            <div style={{ fontSize: 13 }}>
-              Keep planting God&apos;s Word deeply in your heart—He rewards
-              those who diligently seek Him (Hebrews 11:6).
-            </div>
-          </>
-        ) : (
+      <div style={{ position: 'relative', marginBottom: 16 }}>
+        {isPerfect && <PerfectConfetti />}
+        <div style={cardStyle}>
           <div
             style={{
-              fontSize: 14,
-              color: '#374151',
+              fontSize: 32,
+              fontWeight: 800,
+              marginBottom: 4,
             }}
           >
-            Every question is another seed of Scripture planted—keep going! Nice
-            progress! God rewards those who diligently seek Him (Hebrews 11:6).
+            {correct}/{total}
           </div>
-        )}
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              marginBottom: 6,
+            }}
+          >
+            {percent}% correct
+          </div>
+          {isPerfect ? (
+            <>
+              <div style={{ fontSize: 16, marginBottom: 6 }}>
+                Perfect score! Beautiful work—every answer was spot on.
+              </div>
+              <div style={{ fontSize: 13 }}>
+                Keep planting God&apos;s Word deeply in your heart—He rewards
+                those who diligently seek Him (Hebrews 11:6).
+              </div>
+            </>
+          ) : (
+            <div
+              style={{
+                fontSize: 14,
+                color: '#374151',
+              }}
+            >
+              Every question is another seed of Scripture planted—keep going!
+              Nice progress! God rewards those who diligently seek Him
+              (Hebrews 11:6).
+            </div>
+          )}
+        </div>
       </div>
 
       <SummaryExtras quizTitle={props.title} />
@@ -659,6 +661,49 @@ function FixedSummaryScreen(props: {
   );
 }
 
+function PerfectConfetti() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        inset: -8,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+      }}
+    >
+      {/* top-left burst */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: 8,
+          height: 12,
+          borderRadius: 3,
+          backgroundColor: '#f97316',
+          boxShadow:
+            '24px 6px #22c55e, 64px -8px #facc15, 120px 4px #38bdf8, 180px -10px #ec4899, 230px 2px #a855f7',
+        }}
+      />
+      {/* bottom-right burst */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: -4,
+          right: -8,
+          width: 8,
+          height: 12,
+          borderRadius: 3,
+          backgroundColor: '#22c55e',
+          transform: 'rotate(18deg)',
+          boxShadow:
+            '-24px -8px #facc15, -70px 4px #38bdf8, -130px -12px #ec4899, -190px 6px #a855f7',
+        }}
+      />
+    </div>
+  );
+}
 
 // ---- Root page ----
 
