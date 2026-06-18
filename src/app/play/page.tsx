@@ -557,6 +557,42 @@ function FixedSummaryScreen(props: {
   const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
   const isPerfect = percent === 100;
 
+const hasFiredRef = useRef(false);
+
+  useEffect(() => {
+    if (!isPerfect || hasFiredRef.current) return;
+    hasFiredRef.current = true;
+
+    (async () => {
+      const confetti = (await import('canvas-confetti')).default;
+
+      const duration = 1500;
+      const end = Date.now() + duration;
+      const colors = ['#22c55e', '#facc15', '#38bdf8', '#ec4899', '#a855f7'];
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors,
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors,
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    })();
+  }, [isPerfect]);
+
   const cardStyle = isPerfect
     ? {
         padding: 20,
