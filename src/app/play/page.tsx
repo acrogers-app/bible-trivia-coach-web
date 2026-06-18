@@ -503,7 +503,7 @@ function FixedSummaryScreen(props: {
     </div>
   );
 }
-\n\n// ---- Root page ----
+// ---- Root page ----
 
 export default function PlayPage() {
   const [plan, setPlan] = useState<ReadingPlan | null>(null);
