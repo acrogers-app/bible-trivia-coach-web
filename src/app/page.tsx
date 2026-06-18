@@ -8,7 +8,7 @@ export default function HomePage() {
         style={{
           maxWidth: 960,
           margin: '0 auto',
-          padding: '40px 24px 32px',
+          padding: '36px 24px 30px',
         }}
       >
         {/* HERO */}
@@ -17,7 +17,7 @@ export default function HomePage() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 32,
+            gap: 28,
             textAlign: 'center',
           }}
         >
@@ -63,7 +63,7 @@ export default function HomePage() {
               style={{
                 listStyle: 'none',
                 padding: 0,
-                margin: '0 0 20px',
+                margin: '0 0 18px',
                 fontSize: 13,
                 color: '#374151',
               }}
@@ -79,25 +79,10 @@ export default function HomePage() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: 12,
-                marginTop: 8,
+                marginTop: 6,
               }}
             >
-              <Link
-                href="/play"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '10px 20px',
-                  borderRadius: 999,
-                  backgroundColor: '#16a34a',
-                  color: 'white',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  boxShadow: '0 10px 15px rgba(22,163,74,0.25)',
-                }}
-              >
+              <Link href="/play" className="btc-hero-cta">
                 Start today&apos;s quiz
               </Link>
               <span
@@ -154,7 +139,7 @@ export default function HomePage() {
         <section
           style={{
             marginTop: 32,
-            paddingTop: 24,
+            paddingTop: 18,
             borderTop: '1px solid #e5e7eb',
           }}
         >
@@ -163,7 +148,7 @@ export default function HomePage() {
               fontSize: 16,
               fontWeight: 700,
               color: '#111827',
-              marginBottom: 12,
+              marginBottom: 10,
               textAlign: 'center',
             }}
           >
@@ -172,13 +157,13 @@ export default function HomePage() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: 16,
+              gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
+              gap: 14,
             }}
           >
             <div
               style={{
-                padding: 12,
+                padding: 14,
                 borderRadius: 16,
                 backgroundColor: '#eff6ff',
               }}
@@ -200,7 +185,7 @@ export default function HomePage() {
             </div>
             <div
               style={{
-                padding: 12,
+                padding: 14,
                 borderRadius: 16,
                 backgroundColor: '#ecfdf5',
               }}
@@ -222,7 +207,7 @@ export default function HomePage() {
             </div>
             <div
               style={{
-                padding: 12,
+                padding: 14,
                 borderRadius: 16,
                 backgroundColor: '#fef3c7',
               }}
@@ -248,8 +233,8 @@ export default function HomePage() {
         {/* WHO IT'S FOR */}
         <section
           style={{
-            marginTop: 28,
-            paddingTop: 20,
+            marginTop: 26,
+            paddingTop: 18,
             borderTop: '1px solid #e5e7eb',
             textAlign: 'center',
           }}
@@ -259,7 +244,7 @@ export default function HomePage() {
               fontSize: 15,
               fontWeight: 700,
               color: '#111827',
-              marginBottom: 8,
+              marginBottom: 6,
             }}
           >
             Built for real‑life Bible readers
@@ -280,15 +265,14 @@ export default function HomePage() {
               margin: 0,
               fontSize: 13,
               color: '#374151',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: 8,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: 6,
             }}
           >
-            <li style={{ maxWidth: 260 }}>• Restarting regular Bible reading</li>
-            <li style={{ maxWidth: 260 }}>• Leading a small group or family time</li>
-            <li style={{ maxWidth: 260 }}>• Wanting Scripture to stick, not just be skimmed</li>
+            <li>• Restarting regular Bible reading</li>
+            <li>• Leading a small group or family time</li>
+            <li>• Wanting Scripture to stick, not just be skimmed</li>
           </ul>
         </section>
       </div>
