@@ -503,7 +503,7 @@ export default function PlayPage() {
     async function load() {
       try {
         const [planRes, packRes] = await Promise.all([
-          fetch('/plans/gospels_30.json'),
+          fetch('/data/reading_plan_en_v1.json'),
           fetch('/packs/trivia_core_en_v1.json'),
         ]);
 
