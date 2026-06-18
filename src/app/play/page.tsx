@@ -1192,10 +1192,36 @@ function HomeScreen(props: {
 
   return (
     <div>
-      <h1>Bible Trivia Coach</h1>
-      <p className="btc-text-muted" style={{ marginBottom: 20 }}>
-        Daily Scripture and Bible history quizzes.
-      </p>
+      <section
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1.75rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div>
+            <h1>Bible Trivia Coach</h1>
+            <p className="btc-text-muted" style={{ marginTop: 4 }}>
+              Daily Scripture and Bible history quizzes.
+            </p>
+          </div>
+
+          <div
+            style={{
+              flexShrink: 0,
+            }}
+          >
+            <CoachCharacter />
+          </div>
+        </div>
+      </section>
 
       <Section title="Today" tint="#dbeafe">
         {today && (
