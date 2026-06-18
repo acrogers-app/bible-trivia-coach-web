@@ -320,67 +320,16 @@ function makeReflectionKey(title: string): string | null {
   return m[1].trim();
 }
 
+
 function SummaryExtras({ quizTitle }: { quizTitle: string }) {
-  const [bookSummary, setBookSummary] = React.useState<BookSummary | null>(null);
-  const [reflection, setReflection] = React.useState<ReflectionEntry | null>(null);
-
-  React.useEffect(() => {
-    let active = true;
-
-    (async () => {
-      const { book } = parseBookAndChapterFromTitle(quizTitle);
-
-      if (book) {
-        const summaries = await loadBookSummaries();
-        if (active && summaries[book]) {
-          setBookSummary(summaries[book]);
-        }
-      }
-
-      const key = makeReflectionKey(quizTitle);
-      if (key) {
-        const refs = await loadReflections();
-        if (active && refs[key]) {
-          setReflection(refs[key]);
-        }
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [quizTitle]);
-
-  // Fallback content so even generic quizzes (e.g. "Daily Quiz")
-  // still get a big-picture + reflect card.
-  const effectiveBookSummary: BookSummary =
-    bookSummary ?? {
-      title: 'The Bible',
-      summary:
-        'The Bible tells the unified story of God creating, redeeming, and renewing His people through Jesus.',
-      keyThemes: [
-        'God\'s faithfulness and covenant love',
-        'Rescue and redemption through Christ',
-        'Life in the Kingdom of God',
-      ],
-    };
-
-  const effectiveReflection: ReflectionEntry =
-    reflection ?? {
-      title: 'Reflect & pray',
-      verseFocus: 'Psalm 119:105',
-      prompts: [
-        'Where do I see God\'s guidance in my life right now?',
-        'What part of today\'s quiz made me curious to learn more?',
-        'Is there a verse I want to remember or act on this week?',
-      ],
-      prayerSuggestion:
-        'Lord, thank You for Your Word. Help me to love it, remember it, and live it out this week.',
-    };
-
   return (
     <div
-      style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}
+      style={{
+        marginTop: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+      }}
     >
       <div
         style={{
@@ -393,31 +342,27 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
         <div
           style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
         >
-          Big picture of {effectiveBookSummary.title}
+          Big picture of this quiz
         </div>
         <div
           style={{ fontSize: 13, color: '#111827', marginBottom: 4 }}
         >
-          {effectiveBookSummary.summary}
+          This quiz is meant to nudge you a little deeper into Scripture—
+          noticing context, themes, and what God might be highlighting for you
+          today.
         </div>
-        {effectiveBookSummary.keyThemes &&
-          effectiveBookSummary.keyThemes.length > 0 && (
-            <div style={{ fontSize: 12, color: '#374151', marginTop: 4 }}>
-              <div style={{ fontWeight: 600, marginBottom: 2 }}>Key themes:</div>
-              <ul style={{ paddingLeft: 20, margin: 0 }}>
-                {effectiveBookSummary.keyThemes.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        {effectiveBookSummary.keyVerses &&
-          effectiveBookSummary.keyVerses.length > 0 && (
-            <div style={{ fontSize: 12, color: '#374151', marginTop: 4 }}>
-              <span style={{ fontWeight: 600 }}>Key verses:</span>{' '}
-              {effectiveBookSummary.keyVerses.join(', ')}
-            </div>
-          )}
+        <div
+          style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
+        >
+          <div style={{ fontWeight: 600, marginBottom: 2 }}>
+            Key themes to watch for:
+          </div>
+          <ul style={{ paddingLeft: 20, margin: 0 }}>
+            <li>Who God is in this passage</li>
+            <li>What He is doing or promising</li>
+            <li>How He is inviting you to respond</li>
+          </ul>
+        </div>
       </div>
 
       <div
@@ -431,41 +376,37 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
         <div
           style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
         >
-          {effectiveReflection.title}
+          Reflect &amp; pray
         </div>
-        {effectiveReflection.verseFocus && (
-          <div
-            style={{ fontSize: 12, color: '#4b5563', marginBottom: 4 }}
-          >
-            Focus passage: {effectiveReflection.verseFocus}
-          </div>
-        )}
-        {effectiveReflection.prompts &&
-          effectiveReflection.prompts.length > 0 && (
-            <ul
-              style={{
-                paddingLeft: 20,
-                margin: 0,
-                fontSize: 13,
-                color: '#111827',
-              }}
-            >
-              {effectiveReflection.prompts.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          )}
-        {effectiveReflection.prayerSuggestion && (
-          <div
-            style={{ fontSize: 12, color: '#374151', marginTop: 6 }}
-          >
-            Suggested prayer: {effectiveReflection.prayerSuggestion}
-          </div>
-        )}
+        <div
+          style={{ fontSize: 12, color: '#4b5563', marginBottom: 4 }}
+        >
+          Focus: what stood out to you most in “{quizTitle}”?
+        </div>
+        <ul
+          style={{
+            paddingLeft: 20,
+            margin: 0,
+            fontSize: 13,
+            color: '#111827',
+          }}
+        >
+          <li>What did this quiz remind you about God&apos;s character?</li>
+          <li>Is there a verse you want to revisit or memorize?</li>
+          <li>What next step of obedience is God nudging you toward?</li>
+        </ul>
+        <div
+          style={{ fontSize: 12, color: '#374151', marginTop: 6 }}
+        >
+          Suggested prayer: “Lord, thank You for Your Word. Help me to carry
+          what I learned into my day and to love You with all my heart, soul,
+          mind, and strength.”
+        </div>
       </div>
     </div>
   );
 }
+
 
 // ---- Fixed summary with safe math ----
 
