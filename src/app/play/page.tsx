@@ -1138,15 +1138,18 @@ function HomeScreen(props: {
             title="Choose another day in this plan"
             subtitle="Open any reading from the full‑Bible plan"
             onClick={() => {
-              const maxDay = props.plan ? props.plan.days.length : 0;
+              const plan = props.plan;
+              if (!plan) {
+                window.alert('Reading plan is not loaded yet.');
+                return;
+              }
+              const maxDay = plan.days.length;
               if (!maxDay) {
                 window.alert('Reading plan is not loaded yet.');
                 return;
               }
               const input = window.prompt(
-                'Enter a day number between 1 and ' +
-                  maxDay +
-                  ' to open that reading.',
+                `Enter a day number between 1 and ${maxDay} to open that reading.`,
               );
               if (!input) return;
               const num = Number(input);
@@ -1155,8 +1158,8 @@ function HomeScreen(props: {
                 return;
               }
               const chosen =
-                (props.plan as ReadingPlan).days.find((d) => d.day === num) ||
-                (props.plan as ReadingPlan).days[num - 1];
+                plan.days.find((d) => d.day === num) ||
+                plan.days[num - 1];
               if (!chosen) {
                 window.alert('Could not find that reading day.');
                 return;
@@ -1713,6 +1716,9 @@ function QuizScreen(props: {
   onFinished: (correct: number, total: number) => void;
 }) {
   const { title, questions } = props;
+  const verseMatch = title.match(/^Verse of the day:\s*(.+)$/);
+  const verseRefStr = verseMatch ? verseMatch[1] : null;
+
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -1779,6 +1785,16 @@ function QuizScreen(props: {
           Score: {correctCount}/{questions.length}
         </span>
       </div>
+
+      {verseRefStr && (
+        <div style={{ marginBottom: 16 }}>
+          <PassageInline
+            refStart={verseRefStr}
+            refEnd={verseRefStr}
+            onClose={() => {}}
+          />
+        </div>
+      )}
 
       <div
         style={{
