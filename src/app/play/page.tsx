@@ -1,5 +1,5 @@
 'use client';
-
+import CoachCharacter from '../../components/CoachCharacter';
 import React, { useEffect, useState, useRef } from 'react';
 
 type SourceType = 'scripture' | 'history';
