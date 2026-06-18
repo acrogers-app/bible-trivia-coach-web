@@ -1155,8 +1155,8 @@ function HomeScreen(props: {
                 return;
               }
               const chosen =
-                props.plan.days.find((d) => d.day === num) ||
-                props.plan.days[num - 1];
+                (props.plan as ReadingPlan).days.find((d) => d.day === num) ||
+                (props.plan as ReadingPlan).days[num - 1];
               if (!chosen) {
                 window.alert('Could not find that reading day.');
                 return;
