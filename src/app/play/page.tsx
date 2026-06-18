@@ -443,47 +443,45 @@ function FixedSummaryScreen(props: {
   const correct = Math.min(rawCorrect, rawTotal);
   const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
 
-  const isPerfect = percent === 100;
-
-  const cardStyle = isPerfect
-    ? {
-        padding: 16,
-        borderRadius: 16,
-        background:
-          'linear-gradient(135deg, rgba(34,197,94,0.95), rgba(22,163,74,0.95))',
-        color: 'white',
-        marginBottom: 16,
-      }
-    : {
-        padding: 16,
-        borderRadius: 16,
-        backgroundColor: '#f3f4f6',
-        color: '#111827',
-        marginBottom: 16,
-        border: '1px solid #e5e7eb',
-      };
-
   return (
     <div>
-      <h2>Quiz Summary</h2>
-      <p className="btc-text-muted" style={{ marginBottom: 16 }}>
+      <h2
+        style={{
+          fontSize: 22,
+          fontWeight: 800,
+          marginBottom: 4,
+          color: '#111827',
+        }}
+      >
+        Quiz Summary
+      </h2>
+      <p
+        className="btc-text-muted"
+        style={{ marginBottom: 16, fontSize: 14 }}
+      >
         {props.title}
       </p>
 
-      <div style={cardStyle}>
+      <div
+        style={{
+          padding: 16,
+          borderRadius: 16,
+          backgroundColor: '#f3f4f6',
+          border: '1px solid #e5e7eb',
+          marginBottom: 16,
+          color: '#111827',
+        }}
+      >
         <div style={{ fontSize: 28, fontWeight: 800, marginBottom: 4 }}>
           {correct}/{total}
         </div>
-        <div style={{ fontSize: 18, fontWeight: 600 }}>{percent}% correct</div>
-        {isPerfect ? (
-          <div style={{ fontSize: 14, marginTop: 6 }}>
-            Awesome work—every answer was correct!
-          </div>
-        ) : (
-          <div style={{ fontSize: 14, marginTop: 6 }}>
-            Every question is another seed of Scripture planted—keep going! Nice progress! God rewards those who diligently seek Him (Hebrews 11:6).
-          </div>
-        )}
+        <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>
+          {percent}% correct
+        </div>
+        <div style={{ fontSize: 14, color: '#374151' }}>
+          Every question is another seed of Scripture planted—keep going! Nice
+          progress! God rewards those who diligently seek Him (Hebrews 11:6).
+        </div>
       </div>
 
       <SummaryExtras quizTitle={props.title} />
@@ -505,8 +503,7 @@ function FixedSummaryScreen(props: {
     </div>
   );
 }
-
-// ---- Root page ----
+\n\n// ---- Root page ----
 
 export default function PlayPage() {
   const [plan, setPlan] = useState<ReadingPlan | null>(null);
