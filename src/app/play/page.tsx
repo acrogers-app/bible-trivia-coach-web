@@ -1154,6 +1154,11 @@ function DailyReadingScreen(props: {
       synthRef.current = window.speechSynthesis;
     }
   }, []);
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
 
   useEffect(() => {
     if (activeVerseIdx == null) return;
@@ -1645,6 +1650,11 @@ function PassageInline(props: {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
+  }, []);
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
   }, []);
 
   useEffect(() => {
