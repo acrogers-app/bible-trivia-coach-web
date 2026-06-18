@@ -22,15 +22,15 @@ interface TriviaQuestion {
   difficulty: string;
   category: string;
   playful?: boolean;
-  sourceType: SourceType; // 'scripture' | 'history'
-  learnMore?: string;     // for history / general knowledge questions
-  sources?: string[];     // citations or notes
+  sourceType: SourceType;
+  learnMore?: string;
+  sources?: string[];
   text: string;
   options: string[];
   correctIndex: number;
   explanation: string;
-  refStart?: string;      // only for scripture questions
-  refEnd?: string;        // only for scripture questions
+  refStart?: string;
+  refEnd?: string;
 }
 
 interface TriviaPack {
@@ -54,7 +54,12 @@ type QuizLevel = 'easy' | 'medium' | 'hard' | 'mixed';
 type Screen =
   | { name: 'home' }
   | { name: 'reading'; day: ReadingDay }
-  | { name: 'quiz'; title: string; questions: TriviaQuestion[]; sourceType: SourceType }
+  | {
+      name: 'quiz';
+      title: string;
+      questions: TriviaQuestion[];
+      sourceType: SourceType;
+    }
   | { name: 'summary'; title: string; total: number; correct: number };
 
 type Ref = { bookId: number; chapter: number; verse: number };
@@ -65,21 +70,72 @@ const QUIZ_COUNT_PER_READING = 10;
 // ---- Reference + quiz helpers ----
 
 const bookToId: Record<string, number> = {
-  genesis: 1, exodus: 2, leviticus: 3, numbers: 4, deuteronomy: 5,
-  joshua: 6, judges: 7, ruth: 8, '1 samuel': 9, '2 samuel': 10,
-  '1 kings': 11, '2 kings': 12, '1 chronicles': 13, '2 chronicles': 14,
-  ezra: 15, nehemiah: 16, esther: 17, job: 18, psalms: 19,
-  proverbs: 20, ecclesiastes: 21, 'song of solomon': 22, isaiah: 23,
-  jeremiah: 24, lamentations: 25, ezekiel: 26, daniel: 27,
-  hosea: 28, joel: 29, amos: 30, obadiah: 31, jonah: 32,
-  micah: 33, nahum: 34, habakkuk: 35, zephaniah: 36,
-  haggai: 37, zechariah: 38, malachi: 39,
-  matthew: 40, mark: 41, luke: 42, john: 43, acts: 44,
-  romans: 45, '1 corinthians': 46, '2 corinthians': 47, galatians: 48,
-  ephesians: 49, philippians: 50, colossians: 51, '1 thessalonians': 52,
-  '2 thessalonians': 53, '1 timothy': 54, '2 timothy': 55, titus: 56,
-  philemon: 57, hebrews: 58, james: 59, '1 peter': 60, '2 peter': 61,
-  '1 john': 62, '2 john': 63, '3 john': 64, jude: 65, revelation: 66,
+  genesis: 1,
+  exodus: 2,
+  leviticus: 3,
+  numbers: 4,
+  deuteronomy: 5,
+  joshua: 6,
+  judges: 7,
+  ruth: 8,
+  '1 samuel': 9,
+  '2 samuel': 10,
+  '1 kings': 11,
+  '2 kings': 12,
+  '1 chronicles': 13,
+  '2 chronicles': 14,
+  ezra: 15,
+  nehemiah: 16,
+  esther: 17,
+  job: 18,
+  psalms: 19,
+  proverbs: 20,
+  ecclesiastes: 21,
+  'song of solomon': 22,
+  isaiah: 23,
+  jeremiah: 24,
+  lamentations: 25,
+  ezekiel: 26,
+  daniel: 27,
+  hosea: 28,
+  joel: 29,
+  amos: 30,
+  obadiah: 31,
+  jonah: 32,
+  micah: 33,
+  nahum: 34,
+  habakkuk: 35,
+  zephaniah: 36,
+  haggai: 37,
+  zechariah: 38,
+  malachi: 39,
+  matthew: 40,
+  mark: 41,
+  luke: 42,
+  john: 43,
+  acts: 44,
+  romans: 45,
+  '1 corinthians': 46,
+  '2 corinthians': 47,
+  galatians: 48,
+  ephesians: 49,
+  philippians: 50,
+  colossians: 51,
+  '1 thessalonians': 52,
+  '2 thessalonians': 53,
+  '1 timothy': 54,
+  '2 timothy': 55,
+  titus: 56,
+  philemon: 57,
+  hebrews: 58,
+  james: 59,
+  '1 peter': 60,
+  '2 peter': 61,
+  '1 john': 62,
+  '2 john': 63,
+  '3 john': 64,
+  jude: 65,
+  revelation: 66,
 };
 
 function normalizeBookKey(name: string): string {
@@ -133,8 +189,8 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
 }
 
 type ScriptureScope = {
-  book: string;        // e.g. "Nehemiah"
-  chapter?: number;    // optional; if omitted = whole book
+  book: string;
+  chapter?: number;
 };
 
 function questionInScope(q: TriviaQuestion, scope: ScriptureScope): boolean {
@@ -143,7 +199,6 @@ function questionInScope(q: TriviaQuestion, scope: ScriptureScope): boolean {
   const ref = q.refStart.toLowerCase();
   const bookLower = scope.book.toLowerCase();
 
-  // Match book name at start, e.g. "nehemiah 6:1"
   if (!ref.startsWith(bookLower + ' ')) return false;
 
   if (!scope.chapter) return true;
@@ -206,11 +261,15 @@ function randomQuestions(
   const seriousQs = shuffle(unique.filter((q) => !q.playful));
 
   let chosen: TriviaQuestion[] = [];
-  chosen = chosen.concat(seriousQs.slice(0, Math.max(0, maxCount - targetPlayful)));
+  chosen = chosen.concat(
+    seriousQs.slice(0, Math.max(0, maxCount - targetPlayful)),
+  );
 
   const remaining = maxCount - chosen.length;
   if (remaining > 0) {
-    chosen = chosen.concat(playfulQs.slice(0, Math.min(targetPlayful, remaining)));
+    chosen = chosen.concat(
+      playfulQs.slice(0, Math.min(targetPlayful, remaining)),
+    );
   }
 
   if (chosen.length < maxCount) {
@@ -220,6 +279,31 @@ function randomQuestions(
   }
 
   return shuffle(chosen);
+}
+
+// questions whose ref range contains a specific verse
+function questionsForVerseOfDay(
+  pack: TriviaPack,
+  verseRefStr: string,
+  count: number,
+): TriviaQuestion[] {
+  const verseRef = parseRef(verseRefStr);
+  if (!verseRef) return [];
+
+  const matches: TriviaQuestion[] = [];
+  for (const q of pack.questions) {
+    const qs = parseRef(q.refStart);
+    const qe = parseRef(q.refEnd);
+    if (!qs || !qe) continue;
+    if (qs.bookId !== verseRef.bookId || qe.bookId !== verseRef.bookId)
+      continue;
+    if (!isRefInOrBefore(qs, verseRef)) continue;
+    if (!isRefInOrAfter(qe, verseRef)) continue;
+    matches.push(q);
+  }
+
+  if (!matches.length) return [];
+  return shuffle(matches).slice(0, count);
 }
 
 function availableCount(
@@ -296,32 +380,66 @@ async function loadReflections(): Promise<ReflectionMap> {
   }
 }
 
-// Tries to infer a book and optional chapter-like label from a quiz title.
-function parseBookAndChapterFromTitle(title: string): { book?: string; chapterLabel?: string } {
-  // Common patterns:
-  // "Quiz on Mark", "Quiz on Mark 1", "Quiz on today's reading", etc.
+function parseBookAndChapterFromTitle(title: string): {
+  book?: string;
+  chapterLabel?: string;
+} {
   const m = title.match(/Quiz on\s+(.+)/i);
   if (!m) return {};
-  const rest = m[1].trim();        // e.g. "Mark 1", "Mark", "Mark 1–2"
-  // First word = book candidate
+  const rest = m[1].trim();
   const parts = rest.split(/\s+/);
   if (!parts.length) return {};
   const book = parts[0];
-  // Chapter label = full rest if it starts with a digit or contains ':' or '–'
   const remainder = rest.slice(book.length).trim();
   const chapterLabel = remainder || undefined;
   return { book, chapterLabel };
 }
 
 function makeReflectionKey(title: string): string | null {
-  // For now, simple rule: if title looks like "Quiz on Mark 1", key = "Mark 1".
   const m = title.match(/Quiz on\s+([A-Za-z0-9 ]+)/i);
   if (!m) return null;
   return m[1].trim();
 }
 
-
 function SummaryExtras({ quizTitle }: { quizTitle: string }) {
+  const [bookSummary, setBookSummary] = React.useState<BookSummary | null>(
+    null,
+  );
+  const [reflection, setReflection] = React.useState<ReflectionEntry | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    let active = true;
+
+    (async () => {
+      const { book } = parseBookAndChapterFromTitle(quizTitle);
+
+      if (book) {
+        const summaries = await loadBookSummaries();
+        if (active && summaries[book]) {
+          setBookSummary(summaries[book]);
+        }
+      }
+
+      const key = makeReflectionKey(quizTitle);
+      if (key) {
+        const refs = await loadReflections();
+        if (active && refs[key]) {
+          setReflection(refs[key]);
+        }
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [quizTitle]);
+
+  if (!bookSummary && !reflection) {
+    return null;
+  }
+
   return (
     <div
       style={{
@@ -331,84 +449,97 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
         gap: 12,
       }}
     >
-      <div
-        style={{
-          borderRadius: 16,
-          border: '1px solid #e5e7eb',
-          padding: 12,
-          backgroundColor: '#f9fafb',
-        }}
-      >
+      {bookSummary && (
         <div
-          style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
-        >
-          Big picture of this quiz
-        </div>
-        <div
-          style={{ fontSize: 13, color: '#111827', marginBottom: 4 }}
-        >
-          This quiz is meant to nudge you a little deeper into Scripture—
-          noticing context, themes, and what God might be highlighting for you
-          today.
-        </div>
-        <div
-          style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
-        >
-          <div style={{ fontWeight: 600, marginBottom: 2 }}>
-            Key themes to watch for:
-          </div>
-          <ul style={{ paddingLeft: 20, margin: 0 }}>
-            <li>Who God is in this passage</li>
-            <li>What He is doing or promising</li>
-            <li>How He is inviting you to respond</li>
-          </ul>
-        </div>
-      </div>
-
-      <div
-        style={{
-          borderRadius: 16,
-          border: '1px solid #e5e7eb',
-          padding: 12,
-          backgroundColor: '#fefce8',
-        }}
-      >
-        <div
-          style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
-        >
-          Reflect &amp; pray
-        </div>
-        <div
-          style={{ fontSize: 12, color: '#4b5563', marginBottom: 4 }}
-        >
-          Focus: what stood out to you most in “{quizTitle}”?
-        </div>
-        <ul
           style={{
-            paddingLeft: 20,
-            margin: 0,
-            fontSize: 13,
-            color: '#111827',
+            borderRadius: 16,
+            border: '1px solid #e5e7eb',
+            padding: 12,
+            backgroundColor: '#f9fafb',
           }}
         >
-          <li>What did this quiz remind you about God&apos;s character?</li>
-          <li>Is there a verse you want to revisit or memorize?</li>
-          <li>What next step of obedience is God nudging you toward?</li>
-        </ul>
-        <div
-          style={{ fontSize: 12, color: '#374151', marginTop: 6 }}
-        >
-          Suggested prayer: “Lord, thank You for Your Word. Help me to carry
-          what I learned into my day and to love You with all my heart, soul,
-          mind, and strength.”
+          <div
+            style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
+          >
+            Big picture of {bookSummary.title}
+          </div>
+          <div
+            style={{ fontSize: 13, color: '#111827', marginBottom: 4 }}
+          >
+            {bookSummary.summary}
+          </div>
+          {bookSummary.keyThemes && bookSummary.keyThemes.length > 0 && (
+            <div
+              style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
+            >
+              <div style={{ fontWeight: 600, marginBottom: 2 }}>
+                Key themes:
+              </div>
+              <ul style={{ paddingLeft: 20, margin: 0 }}>
+                {bookSummary.keyThemes.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {bookSummary.keyVerses && bookSummary.keyVerses.length > 0 && (
+            <div
+              style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
+            >
+              <span style={{ fontWeight: 600 }}>Key verses:</span>{' '}
+              {bookSummary.keyVerses.join(', ')}
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {reflection && (
+        <div
+          style={{
+            borderRadius: 16,
+            border: '1px solid #e5e7eb',
+            padding: 12,
+            backgroundColor: '#fefce8',
+          }}
+        >
+          <div
+            style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
+          >
+            Reflect &amp; pray
+          </div>
+          {reflection.verseFocus && (
+            <div
+              style={{ fontSize: 12, color: '#4b5563', marginBottom: 4 }}
+            >
+              Focus passage: {reflection.verseFocus}
+            </div>
+          )}
+          {reflection.prompts && reflection.prompts.length > 0 && (
+            <ul
+              style={{
+                paddingLeft: 20,
+                margin: 0,
+                fontSize: 13,
+                color: '#111827',
+              }}
+            >
+              {reflection.prompts.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+          )}
+          {reflection.prayerSuggestion && (
+            <div
+              style={{ fontSize: 12, color: '#374151', marginTop: 6 }}
+            >
+              Suggested prayer: {reflection.prayerSuggestion}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
-
-
-// ---- Fixed summary with safe math ----
 
 // ---- Fixed summary with safe math ----
 
@@ -461,8 +592,9 @@ function FixedSummaryScreen(props: {
           {percent}% correct
         </div>
         <div style={{ fontSize: 14, color: '#374151' }}>
-          Every question is another seed of Scripture planted—keep going! Nice
-          progress! God rewards those who diligently seek Him (Hebrews 11:6).
+          Every question is another seed of Scripture planted—keep going!
+          Nice progress! God rewards those who diligently seek Him (Hebrews
+          11:6).
         </div>
       </div>
 
@@ -485,14 +617,14 @@ function FixedSummaryScreen(props: {
     </div>
   );
 }
+
 // ---- Root page ----
 
 export default function PlayPage() {
   const [plan, setPlan] = useState<ReadingPlan | null>(null);
   const [pack, setPack] = useState<TriviaPack | null>(null);
-  const [dailyQuizMap, setDailyQuizMap] = useState<DailyQuizPlanMapping | null>(
-    null,
-  );
+  const [dailyQuizMap, setDailyQuizMap] =
+    useState<DailyQuizPlanMapping | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
@@ -507,8 +639,14 @@ export default function PlayPage() {
           fetch('/packs/trivia_core_en_v1.json'),
         ]);
 
-        if (!planRes.ok) throw new Error(`Failed to load reading plan: ${planRes.status}`);
-        if (!packRes.ok) throw new Error(`Failed to load trivia pack: ${packRes.status}`);
+        if (!planRes.ok)
+          throw new Error(
+            `Failed to load reading plan: ${planRes.status}`,
+          );
+        if (!packRes.ok)
+          throw new Error(
+            `Failed to load trivia pack: ${packRes.status}`,
+          );
 
         const planJson = (await planRes.json()) as ReadingPlan;
         const packJson = (await packRes.json()) as TriviaPack;
@@ -532,7 +670,9 @@ export default function PlayPage() {
         }
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : 'Unknown error loading data');
+          setError(
+            e instanceof Error ? e.message : 'Unknown error loading data',
+          );
           setLoading(false);
         }
       }
@@ -545,6 +685,7 @@ export default function PlayPage() {
   }, []);
 
   const today = todaysReadingDay(plan);
+  const verseOfDay = today ? today.start : null;
 
   function startQuiz(config: {
     title: string;
@@ -597,7 +738,8 @@ export default function PlayPage() {
       let endRef = e;
       if (
         startRef.chapter > endRef.chapter ||
-        (startRef.chapter === endRef.chapter && startRef.verse > endRef.verse)
+        (startRef.chapter === endRef.chapter &&
+          startRef.verse > endRef.verse)
       ) {
         startRef = e;
         endRef = s;
@@ -638,6 +780,26 @@ export default function PlayPage() {
     });
   }
 
+  function startVerseQuiz() {
+    if (!pack || !verseOfDay) {
+      window.alert('Verse of the day is still loading.');
+      return;
+    }
+
+    const verseQuestions = questionsForVerseOfDay(pack, verseOfDay, 3);
+    if (!verseQuestions.length) {
+      window.alert('No verse-of-the-day questions are available yet.');
+      return;
+    }
+
+    setScreen({
+      name: 'quiz',
+      title: `Verse of the day: ${verseOfDay}`,
+      questions: verseQuestions,
+      sourceType: 'scripture',
+    });
+  }
+
   function showSummary(title: string, total: number, correct: number) {
     setScreen({ name: 'summary', title, total, correct });
   }
@@ -655,7 +817,13 @@ export default function PlayPage() {
         {!loading && error && (
           <div style={{ padding: '1rem' }}>
             <h1>Bible Trivia Coach</h1>
-            <p style={{ color: '#b91c1c', marginBottom: 8, fontWeight: 600 }}>
+            <p
+              style={{
+                color: '#b91c1c',
+                marginBottom: 8,
+                fontWeight: 600,
+              }}
+            >
               Could not load data.
             </p>
             <p
@@ -674,8 +842,13 @@ export default function PlayPage() {
           <HomeScreen
             today={today}
             pack={pack}
+            plan={plan}
+            verseOfDay={verseOfDay}
             onOpenDailyReading={() => {
               if (today) setScreen({ name: 'reading', day: today });
+            }}
+            onOpenReadingForDay={(day) => {
+              setScreen({ name: 'reading', day });
             }}
             onStartDailyQuiz={() =>
               startQuiz({
@@ -685,6 +858,7 @@ export default function PlayPage() {
                 sourceType: 'scripture',
               })
             }
+            onStartVerseQuiz={startVerseQuiz}
             onStartQuickQuiz={() =>
               startQuiz({
                 title: 'Quick Quiz',
@@ -703,7 +877,8 @@ export default function PlayPage() {
             }
             onStartLevelQuiz={(level, count) =>
               startQuiz({
-                title: `${level[0].toUpperCase()}${level.slice(1)} Quiz`,
+                title:
+                  level.charAt(0).toUpperCase() + level.slice(1) + ' Quiz',
                 count,
                 level,
                 sourceType: 'scripture',
@@ -714,14 +889,21 @@ export default function PlayPage() {
                 window.alert('Questions are still loading.');
                 return;
               }
-              const scope = chapter && chapter > 0 ? { book, chapter } : { book };
+              const scope =
+                chapter && chapter > 0 ? { book, chapter } : { book };
               const qs = questionsForScope(pack, scope, 10, 'mixed');
               if (!qs.length) {
-                const label = chapter && chapter > 0 ? book + ' ' + chapter : book;
-                window.alert('No questions available yet for ' + label + '.');
+                const label =
+                  chapter && chapter > 0 ? book + ' ' + chapter : book;
+                window.alert(
+                  'No questions available yet for ' + label + '.',
+                );
                 return;
               }
-              const title = chapter && chapter > 0 ? 'Quiz on ' + book + ' ' + chapter : 'Quiz on ' + book;
+              const title =
+                chapter && chapter > 0
+                  ? 'Quiz on ' + book + ' ' + chapter
+                  : 'Quiz on ' + book;
               setScreen({
                 name: 'quiz',
                 title,
@@ -769,8 +951,12 @@ export default function PlayPage() {
 function HomeScreen(props: {
   today: ReadingDay | null;
   pack: TriviaPack | null;
+  plan: ReadingPlan | null;
+  verseOfDay: string | null;
   onOpenDailyReading: () => void;
+  onOpenReadingForDay: (day: ReadingDay) => void;
   onStartDailyQuiz: () => void;
+  onStartVerseQuiz: () => void;
   onStartQuickQuiz: () => void;
   onStartHistoryQuiz: () => void;
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
@@ -786,21 +972,72 @@ function HomeScreen(props: {
   const [selectedChapter, setSelectedChapter] = useState<string>('');
 
   const books = [
-    'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy',
-    'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel',
-    '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles',
-    'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms',
-    'Proverbs', 'Ecclesiastes', 'Song of Solomon', 'Isaiah',
-    'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel',
-    'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah',
-    'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai',
-    'Zechariah', 'Malachi',
-    'Matthew', 'Mark', 'Luke', 'John', 'Acts',
-    'Romans', '1 Corinthians', '2 Corinthians', 'Galatians',
-    'Ephesians', 'Philippians', 'Colossians', '1 Thessalonians',
-    '2 Thessalonians', '1 Timothy', '2 Timothy', 'Titus',
-    'Philemon', 'Hebrews', 'James', '1 Peter', '2 Peter',
-    '1 John', '2 John', '3 John', 'Jude', 'Revelation',
+    'Genesis',
+    'Exodus',
+    'Leviticus',
+    'Numbers',
+    'Deuteronomy',
+    'Joshua',
+    'Judges',
+    'Ruth',
+    '1 Samuel',
+    '2 Samuel',
+    '1 Kings',
+    '2 Kings',
+    '1 Chronicles',
+    '2 Chronicles',
+    'Ezra',
+    'Nehemiah',
+    'Esther',
+    'Job',
+    'Psalms',
+    'Proverbs',
+    'Ecclesiastes',
+    'Song of Solomon',
+    'Isaiah',
+    'Jeremiah',
+    'Lamentations',
+    'Ezekiel',
+    'Daniel',
+    'Hosea',
+    'Joel',
+    'Amos',
+    'Obadiah',
+    'Jonah',
+    'Micah',
+    'Nahum',
+    'Habakkuk',
+    'Zephaniah',
+    'Haggai',
+    'Zechariah',
+    'Malachi',
+    'Matthew',
+    'Mark',
+    'Luke',
+    'John',
+    'Acts',
+    'Romans',
+    '1 Corinthians',
+    '2 Corinthians',
+    'Galatians',
+    'Ephesians',
+    'Philippians',
+    'Colossians',
+    '1 Thessalonians',
+    '2 Thessalonians',
+    '1 Timothy',
+    '2 Timothy',
+    'Titus',
+    'Philemon',
+    'Hebrews',
+    'James',
+    '1 Peter',
+    '2 Peter',
+    '1 John',
+    '2 John',
+    '3 John',
+    'Jude',
+    'Revelation',
   ];
 
   const bookMaxChapters: Record<string, number> = {
@@ -889,6 +1126,45 @@ function HomeScreen(props: {
             onClick={props.onOpenDailyReading}
           />
         )}
+        {props.verseOfDay && (
+          <Row
+            title={`Verse of the day: ${props.verseOfDay}`}
+            subtitle="Short 3‑question quiz on this verse"
+            onClick={props.onStartVerseQuiz}
+          />
+        )}
+        {props.plan && (
+          <Row
+            title="Choose another day in this plan"
+            subtitle="Open any reading from the full‑Bible plan"
+            onClick={() => {
+              const maxDay = props.plan ? props.plan.days.length : 0;
+              if (!maxDay) {
+                window.alert('Reading plan is not loaded yet.');
+                return;
+              }
+              const input = window.prompt(
+                'Enter a day number between 1 and ' +
+                  maxDay +
+                  ' to open that reading.',
+              );
+              if (!input) return;
+              const num = Number(input);
+              if (!Number.isFinite(num) || num < 1 || num > maxDay) {
+                window.alert('Please enter a valid day number.');
+                return;
+              }
+              const chosen =
+                props.plan.days.find((d) => d.day === num) ||
+                props.plan.days[num - 1];
+              if (!chosen) {
+                window.alert('Could not find that reading day.');
+                return;
+              }
+              props.onOpenReadingForDay(chosen);
+            }}
+          />
+        )}
         <Row
           title="Daily Quiz (5)"
           subtitle="Mixed Scripture questions"
@@ -938,14 +1214,14 @@ function HomeScreen(props: {
                 fontSize: 14,
               }}
             >
-              <option value="">
-                Whole book
-              </option>
-              {Array.from({ length: maxChapters }, (_, i) => i + 1).map((ch) => (
-                <option key={ch} value={String(ch)}>
-                  Chapter {ch}
-                </option>
-              ))}
+              <option value="">Whole book</option>
+              {Array.from({ length: maxChapters }, (_, i) => i + 1).map(
+                (ch) => (
+                  <option key={ch} value={String(ch)}>
+                    Chapter {ch}
+                  </option>
+                ),
+              )}
             </select>
             <button
               onClick={() => {
@@ -954,7 +1230,9 @@ function HomeScreen(props: {
                 const safeChapter = ch && ch > 0 ? ch : undefined;
                 const max = bookMaxChapters[selectedBook];
                 if (safeChapter && max && safeChapter > max) {
-                  window.alert(selectedBook + ' only has ' + max + ' chapters.');
+                  window.alert(
+                    selectedBook + ' only has ' + max + ' chapters.',
+                  );
                   return;
                 }
                 props.onStartBookQuiz(selectedBook, safeChapter);
@@ -1082,7 +1360,9 @@ function Row(props: {
       <div>
         <div style={{ fontWeight: 600, fontSize: 15 }}>{props.title}</div>
         {props.subtitle && (
-          <div style={{ fontSize: 13, color: '#4b5563' }}>{props.subtitle}</div>
+          <div style={{ fontSize: 13, color: '#4b5563' }}>
+            {props.subtitle}
+          </div>
         )}
       </div>
       <span style={{ color: '#4b5563', fontSize: 18 }}>›</span>
@@ -1123,7 +1403,9 @@ function DailyReadingScreen(props: {
 
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [activeVerseIdx, setActiveVerseIdx] = useState<number | null>(null);
+  const [activeVerseIdx, setActiveVerseIdx] = useState<number | null>(
+    null,
+  );
   const [activeWordIdx, setActiveWordIdx] = useState<number | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const verseRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1132,11 +1414,6 @@ function DailyReadingScreen(props: {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
-  }, []);
-  useEffect(() => {
-    return () => {
-      stopSpeaking();
-    };
   }, []);
 
   useEffect(() => {
@@ -1442,9 +1719,10 @@ function QuizScreen(props: {
   const [correctCount, setCorrectCount] = useState(0);
 
   const [showPassage, setShowPassage] = useState(false);
-  const [passageRef, setPassageRef] = useState<{ start: string; end: string } | null>(
-    null,
-  );
+  const [passageRef, setPassageRef] = useState<{
+    start: string;
+    end: string;
+  } | null>(null);
 
   const q = questions[index];
   const isLast = index === questions.length - 1;
@@ -1574,7 +1852,9 @@ function QuizScreen(props: {
           >
             {selected === q.correctIndex ? 'Correct!' : 'Not quite'}
           </div>
-          <div style={{ fontSize: 14, color: '#111827' }}>{q.explanation}</div>
+          <div style={{ fontSize: 14, color: '#111827' }}>
+            {q.explanation}
+          </div>
         </div>
       )}
 
@@ -1620,7 +1900,9 @@ function PassageInline(props: {
 
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [activeVerseIdx, setActiveVerseIdx] = useState<number | null>(null);
+  const [activeVerseIdx, setActiveVerseIdx] = useState<number | null>(
+    null,
+  );
   const [activeWordIdx, setActiveWordIdx] = useState<number | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const verseRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -1629,11 +1911,6 @@ function PassageInline(props: {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
-  }, []);
-  useEffect(() => {
-    return () => {
-      stopSpeaking();
-    };
   }, []);
 
   useEffect(() => {
@@ -1776,7 +2053,11 @@ function PassageInline(props: {
         }}
       >
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600 }}>Read a related passage about Scripture</div>
+          <div
+            style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}
+          >
+            Read a related passage about Scripture
+          </div>
           <div style={{ fontSize: 12, color: '#4b5563' }}>
             {refStart} – {refEnd}
           </div>
@@ -1847,7 +2128,9 @@ function PassageInline(props: {
         }}
       >
         {loading && (
-          <div style={{ fontSize: 13, color: '#4b5563' }}>Loading passage…</div>
+          <div style={{ fontSize: 13, color: '#4b5563' }}>
+            Loading passage…
+          </div>
         )}
         {error && !loading && (
           <div style={{ fontSize: 13, color: '#b91c1c' }}>
