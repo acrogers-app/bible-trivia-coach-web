@@ -620,6 +620,18 @@ function FixedSummaryScreen(props: {
   const [isNewBest, setIsNewBest] = useState(false);
   const [lifetimeCorrect, setLifetimeCorrect] = useState<number | null>(null);
 
+  const XP_PER_LEVEL = 50;
+  const level =
+    lifetimeCorrect != null
+      ? Math.floor(lifetimeCorrect / XP_PER_LEVEL) + 1
+      : null;
+  const levelProgress =
+    lifetimeCorrect != null ? lifetimeCorrect % XP_PER_LEVEL : null;
+  const levelPercent =
+    levelProgress != null
+      ? Math.round((levelProgress / XP_PER_LEVEL) * 100)
+      : 0;
+
   function makeKeyFromTitle(title: string): string {
     return title
       .toLowerCase()
@@ -897,6 +909,40 @@ function FixedSummaryScreen(props: {
           Lifetime correct answers:{' '}
           {lifetimeCorrect != null ? lifetimeCorrect : '—'}
         </div>
+        {level != null && (
+          <div style={{ marginTop: 4 }}>
+            <div
+              style={{
+                fontSize: 12,
+                color: '#4b5563',
+              }}
+            >
+              Level {level}{' '}
+              <span style={{ opacity: 0.8 }}>
+                · {levelProgress}/{XP_PER_LEVEL} XP to next level
+              </span>
+            </div>
+            <div
+              style={{
+                marginTop: 4,
+                height: 6,
+                borderRadius: 999,
+                backgroundColor: '#e5e7eb',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  width: `${levelPercent}%`,
+                  height: '100%',
+                  borderRadius: 999,
+                  background:
+                    'linear-gradient(90deg, #22c55e, #a3e635)',
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <SummaryExtras quizTitle={props.title} />
