@@ -1615,15 +1615,17 @@ function HomeScreen(props: {
                   type="button"
                   onClick={handleEditName}
                   style={{
-                    border: 'none',
-                    background: 'transparent',
-                    color: '#2563eb',
+                    marginTop: 2,
+                    borderRadius: 999,
+                    border: '1px solid #d1d5db',
+                    background: '#ffffff',
+                    color: '#111827',
                     cursor: 'pointer',
                     fontSize: 12,
-                    padding: 0,
+                    padding: '4px 10px',
                   }}
                 >
-                  Add your name so Coach can cheer you on
+                  Tap here to add your name
                 </button>
               )}
             </div>
