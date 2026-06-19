@@ -113,15 +113,14 @@ export default function HomePage() {
                   '0 20px 25px -5px rgba(15,23,42,0.15), 0 10px 10px -5px rgba(15,23,42,0.1)',
               }}
             >
-              <img
-                src="/bible-hero.svg"
-                alt="Illustration of an open Bible with a bookmark"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  height: 'auto',
-                }}
-              />
+              <Image
+        src="/bsc2.png"
+        alt="Bible Trivia Coach illustration"
+        width={320}
+        height={240}
+        className="w-full h-auto max-w-xs mx-auto"
+        priority
+      />
             </div>
             <p
               style={{
