@@ -557,8 +557,9 @@ function FixedSummaryScreen(props: {
   const percent = total === 0 ? 0 : Math.round((correct / total) * 100);
   const isPerfect = percent === 100;
 
-const hasFiredRef = useRef(false);
+  const hasFiredRef = useRef(false);
 
+  // Confetti for perfect scores
   useEffect(() => {
     if (!isPerfect || hasFiredRef.current) return;
     hasFiredRef.current = true;
@@ -593,6 +594,100 @@ const hasFiredRef = useRef(false);
     })();
   }, [isPerfect]);
 
+  // Summary stats in localStorage
+  const [best, setBest] = useState<{ correct: number; total: number } | null>(
+    null,
+  );
+  const [isNewBest, setIsNewBest] = useState(false);
+  const [lifetimeCorrect, setLifetimeCorrect] = useState<number | null>(null);
+
+  function makeKeyFromTitle(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Lifetime correct answers
+    try {
+      const raw = window.localStorage.getItem('btc_lifetime_correct');
+      const prev = raw ? Number(raw) || 0 : 0;
+      const next = prev + correct;
+      window.localStorage.setItem('btc_lifetime_correct', String(next));
+      setLifetimeCorrect(next);
+    } catch {
+      // ignore storage issues
+    }
+
+    // Best score for this quiz title
+    try {
+      const key = 'btc_best_' + makeKeyFromTitle(props.title);
+      const rawBest = window.localStorage.getItem(key);
+
+      let prevBest: { correct: number; total: number } | null = null;
+      if (rawBest) {
+        try {
+          const parsed = JSON.parse(rawBest) as {
+            correct?: number;
+            total?: number;
+          };
+          if (
+            typeof parsed.correct === 'number' &&
+            typeof parsed.total === 'number'
+          ) {
+            prevBest = { correct: parsed.correct, total: parsed.total };
+          }
+        } catch {
+          // ignore parse issues
+        }
+      }
+
+      let newBest = false;
+      let nextBest = prevBest;
+
+      if (!prevBest) {
+        newBest = true;
+        nextBest = { correct, total };
+      } else {
+        const prevPercent =
+          prevBest.total === 0
+            ? 0
+            : Math.round((prevBest.correct / prevBest.total) * 100);
+
+        if (
+          percent > prevPercent ||
+          (percent === prevPercent && correct > prevBest.correct)
+        ) {
+          newBest = true;
+          nextBest = { correct, total };
+        }
+      }
+
+      if (nextBest) {
+        window.localStorage.setItem(key, JSON.stringify(nextBest));
+      }
+
+      setBest(nextBest);
+      setIsNewBest(newBest);
+    } catch {
+      // ignore storage issues
+    }
+  }, [props.title, correct, total, percent]);
+
+  // Scripture badge milestones
+  const milestones = [
+    { label: 'Solid start', threshold: 60 },
+    { label: 'Strong run', threshold: 80 },
+    { label: 'Near perfect', threshold: 95 },
+  ] as const;
+
+  const badgesUnlocked = milestones.filter(
+    (m) => percent >= m.threshold,
+  ).length;
+
   const cardStyle = isPerfect
     ? {
         padding: 20,
@@ -611,6 +706,10 @@ const hasFiredRef = useRef(false);
         border: '1px solid #e5e7eb',
         color: '#111827',
       };
+
+  const subtleTextColor = isPerfect
+    ? 'rgba(255,255,255,0.9)'
+    : '#4b5563';
 
   return (
     <div>
@@ -633,11 +732,12 @@ const hasFiredRef = useRef(false);
 
       <div style={{ position: 'relative', marginBottom: 16 }}>
         <div style={cardStyle}>
+          {/* Score */}
           <div
             style={{
               fontSize: 32,
               fontWeight: 800,
-              marginBottom: 4,
+              marginBottom: 2,
             }}
           >
             {correct}/{total}
@@ -646,33 +746,137 @@ const hasFiredRef = useRef(false);
             style={{
               fontSize: 18,
               fontWeight: 700,
-              marginBottom: 6,
+              marginBottom: 10,
             }}
           >
             {percent}% correct
           </div>
+
+          {/* Scripture badges */}
+          <div
+            style={{
+              display: 'flex',
+              gap: 8,
+              marginBottom: 8,
+              flexWrap: 'wrap',
+            }}
+          >
+            {milestones.map((m, idx) => {
+              const unlocked = percent >= m.threshold;
+              const bg = unlocked
+                ? isPerfect
+                  ? 'rgba(250,250,250,0.16)'
+                  : '#e0f2fe'
+                : isPerfect
+                ? 'rgba(15,118,110,0.4)'
+                : '#e5e7eb';
+              const border = unlocked
+                ? 'none'
+                : isPerfect
+                ? '1px dashed rgba(209,250,229,0.8)'
+                : '1px dashed rgba(148,163,184,0.9)';
+              const textColor = unlocked
+                ? isPerfect
+                  ? '#fefce8'
+                  : '#0f172a'
+                : isPerfect
+                ? '#e5e7eb'
+                : '#6b7280';
+
+              return (
+                <div
+                  key={m.label}
+                  style={{
+                    minWidth: 80,
+                    padding: '6px 10px',
+                    borderRadius: 999,
+                    backgroundColor: bg,
+                    border,
+                    fontSize: 11,
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      marginBottom: 2,
+                      color: textColor,
+                    }}
+                  >
+                    {unlocked ? '✓' : '•'} Badge {idx + 1}
+                  </div>
+                  <div style={{ color: textColor }}>{m.label}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            style={{
+              fontSize: 12,
+              marginBottom: 8,
+              color: subtleTextColor,
+            }}
+          >
+            {badgesUnlocked === 0
+              ? 'Answer a few more correctly to start unlocking Scripture badges on this quiz.'
+              : `You unlocked ${badgesUnlocked} of ${milestones.length} Scripture badges on this quiz.`}
+          </div>
+
+          {/* Encouragement */}
           {isPerfect ? (
-            <>
-              <div style={{ fontSize: 16, marginBottom: 6 }}>
-                Perfect score! Beautiful work—every answer was spot on.
-              </div>
-              <div style={{ fontSize: 13 }}>
-                Keep planting God&apos;s Word deeply in your heart—He rewards
-                those who diligently seek Him (Hebrews 11:6).
-              </div>
-            </>
+            <div style={{ fontSize: 13 }}>
+              Perfect score! Keep planting God&apos;s Word deeply in your
+              heart—He rewards those who diligently seek Him (Hebrews 11:6).
+            </div>
           ) : (
             <div
               style={{
-                fontSize: 14,
-                color: '#374151',
+                fontSize: 13,
+                color: isPerfect ? 'inherit' : '#374151',
               }}
             >
-              Every question is another seed of Scripture planted—keep going!
-              Nice progress! God rewards those who diligently seek Him
-              (Hebrews 11:6).
+              Every question is another seed of Scripture planted—nice
+              progress! God rewards those who diligently seek Him (Hebrews
+              11:6).
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Best + lifetime stats */}
+      <div
+        style={{
+          fontSize: 13,
+          color: '#4b5563',
+          marginBottom: 8,
+        }}
+      >
+        <div>
+          Best on this quiz:{' '}
+          {best ? (
+            <>
+              {best.correct}/{best.total}{' '}
+              {isNewBest && (
+                <span
+                  style={{
+                    marginLeft: 4,
+                    fontSize: 11,
+                    color: '#16a34a',
+                    fontWeight: 600,
+                  }}
+                >
+                  New best!
+                </span>
+              )}
+            </>
+          ) : (
+            '—'
+          )}
+        </div>
+        <div style={{ marginTop: 2 }}>
+          Lifetime correct answers:{' '}
+          {lifetimeCorrect != null ? lifetimeCorrect : '—'}
         </div>
       </div>
 
