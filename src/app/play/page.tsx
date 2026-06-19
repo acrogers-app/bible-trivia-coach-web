@@ -67,6 +67,25 @@ type VerseLine = { chapter: number; verse: number; text: string };
 
 const QUIZ_COUNT_PER_READING = 10;
 
+const COACH_TIPS: string[] = [
+  "Coach's note: Small, consistent quizzes grow strong roots in God\'s Word.",
+  "Coach's tip: Say the answer out loud—your memory loves hearing Scripture.",
+  "Coach's tip: Missed questions are just pointers to what God is teaching next.",
+  "Coach's tip: Try quizzing on the same chapter tomorrow and see what you remember.",
+  "Coach's tip: Turn this into family night—take turns reading and answering together.",
+  "Coach's tip: Pair today\'s quiz with a short prayer asking God to plant His Word deeply.",
+];
+
+function getTodayCoachTip(): string {
+  try {
+    const today = new Date();
+    const day = today.getDate(); // 1–31
+    return COACH_TIPS[day % COACH_TIPS.length];
+  } catch {
+    return COACH_TIPS[0];
+  }
+}
+
 // ---- Reference + quiz helpers ----
 
 const bookToId: Record<string, number> = {
@@ -1250,6 +1269,8 @@ function HomeScreen(props: {
   const medCount = availableCount(pack, 'medium', 'scripture');
   const hardCount = availableCount(pack, 'hard', 'scripture');
   const mixedCount = availableCount(pack, 'mixed', 'scripture');
+  const coachTip = getTodayCoachTip();
+
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
   const [selectedChapter, setSelectedChapter] = useState<string>('');
@@ -1619,6 +1640,18 @@ function HomeScreen(props: {
             onClick={() => props.onStartLevelQuiz('mixed', Math.min(10, mixedCount))}
           />
         )}
+      </Section>
+
+      <Section title="Coach's tip" tint="#fef9c3">
+        <div
+          style={{
+            padding: '8px 12px',
+            fontSize: 13,
+            color: '#4b5563',
+          }}
+        >
+          {coachTip}
+        </div>
       </Section>
     </div>
   );
