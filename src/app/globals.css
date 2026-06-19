@@ -147,3 +147,17 @@ body {
   box-shadow: 0 10px 18px rgba(22, 163, 74, 0.25);
   filter: brightness(0.97);
 }
+
+
+@keyframes btc-perfect-bounce {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.08); }
+  40% { transform: scale(0.97); }
+  60% { transform: scale(1.03); }
+  80% { transform: scale(0.99); }
+  100% { transform: scale(1); }
+}
+
+.btc-perfect-heading {
+  animation: btc-perfect-bounce 750ms ease-out;
+}

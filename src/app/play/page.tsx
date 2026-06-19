@@ -878,9 +878,22 @@ function FixedSummaryScreen(props: {
 
           {/* Encouragement */}
           {isPerfect ? (
-            <div style={{ fontSize: 13 }}>
-              Perfect score{playerName ? `, ${playerName}` : ''}! Keep planting God&apos;s Word deeply in your
-              heart—He rewards those who diligently seek Him (Hebrews 11:6).
+            <div style={{ marginTop: 4 }}>
+              <div
+                className="btc-perfect-heading"
+                style={{
+                  fontSize: 18,
+                  fontWeight: 800,
+                  letterSpacing: 0.3,
+                  marginBottom: 4,
+                }}
+              >
+                Perfect score{playerName ? `, ${playerName}` : ''}!
+              </div>
+              <div style={{ fontSize: 13 }}>
+                Keep planting God&apos;s Word deeply in your heart—He rewards those who
+                diligently seek Him (Hebrews 11:6).
+              </div>
             </div>
           ) : (
             <div
