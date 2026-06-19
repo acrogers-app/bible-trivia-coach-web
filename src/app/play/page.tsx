@@ -578,6 +578,17 @@ function FixedSummaryScreen(props: {
 
   const hasFiredRef = useRef(false);
 
+  const [playerName] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = window.localStorage.getItem('btc_player_name');
+      const trimmed = raw ? raw.trim() : '';
+      return trimmed || null;
+    } catch {
+      return null;
+    }
+  });
+
   // Confetti for perfect scores
   useEffect(() => {
     if (!isPerfect || hasFiredRef.current) return;
@@ -868,7 +879,7 @@ function FixedSummaryScreen(props: {
           {/* Encouragement */}
           {isPerfect ? (
             <div style={{ fontSize: 13 }}>
-              Perfect score! Keep planting God&apos;s Word deeply in your
+              Perfect score{playerName ? `, ${playerName}` : ''}! Keep planting God&apos;s Word deeply in your
               heart—He rewards those who diligently seek Him (Hebrews 11:6).
             </div>
           ) : (
@@ -879,7 +890,7 @@ function FixedSummaryScreen(props: {
               }}
             >
               Every question is another seed of Scripture planted—nice
-              progress! God rewards those who diligently seek Him (Hebrews
+              progress{playerName ? `, ${playerName}` : ''}! God rewards those who diligently seek Him (Hebrews
               11:6).
             </div>
           )}
@@ -1490,6 +1501,36 @@ function HomeScreen(props: {
     Revelation: 22,
   };
 
+
+  const [playerName, setPlayerName] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = window.localStorage.getItem('btc_player_name');
+      const trimmed = raw ? raw.trim() : '';
+      return trimmed || null;
+    } catch {
+      return null;
+    }
+  });
+
+  function handleEditName() {
+    if (typeof window === 'undefined') return;
+    const current = playerName ?? '';
+    const value = window.prompt('What should Coach call you?', current) ?? '';
+    const trimmed = value.trim();
+    try {
+      if (trimmed) {
+        window.localStorage.setItem('btc_player_name', trimmed);
+        setPlayerName(trimmed);
+      } else {
+        window.localStorage.removeItem('btc_player_name');
+        setPlayerName(null);
+      }
+    } catch {
+      setPlayerName(trimmed || null);
+    }
+  }
+
   const maxChapters = bookMaxChapters[selectedBook] ?? 0;
 
   return (
@@ -1529,6 +1570,50 @@ function HomeScreen(props: {
                 Streak: {streak} day{streak === 1 ? '' : 's'} in a row
               </div>
             )}
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 12,
+                color: '#4b5563',
+              }}
+            >
+              {playerName ? (
+                <>
+                  Coach is cheering for you,{' '}
+                  <span style={{ fontWeight: 600 }}>{playerName}</span>.{' '}
+                  <button
+                    type="button"
+                    onClick={handleEditName}
+                    style={{
+                      marginLeft: 4,
+                      border: 'none',
+                      background: 'transparent',
+                      color: '#2563eb',
+                      cursor: 'pointer',
+                      fontSize: 12,
+                      padding: 0,
+                    }}
+                  >
+                    Change
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleEditName}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#2563eb',
+                    cursor: 'pointer',
+                    fontSize: 12,
+                    padding: 0,
+                  }}
+                >
+                  Add your name so Coach can cheer you on
+                </button>
+              )}
+            </div>
           </div>
 
           <div
