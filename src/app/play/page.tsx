@@ -1337,18 +1337,16 @@ function HomeScreen(props: {
   const mixedCount = availableCount(pack, 'mixed', 'scripture');
   const coachTip = getTodayCoachTip();
 
-  const [streak, setStreak] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  const [streak] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
     try {
       const raw = window.localStorage.getItem('btc_streak');
       const num = raw ? Number(raw) || 0 : 0;
-      setStreak(num > 0 ? num : null);
+      return num > 0 ? num : null;
     } catch {
-      // ignore
+      return null;
     }
-  }, []);
+  });
 
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
