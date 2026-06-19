@@ -1,5 +1,5 @@
 'use client';
-import CoachCharacter from '../../components/CoachCharacter';
+import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
 
 type SourceType = 'scripture' | 'history';
@@ -1216,9 +1216,17 @@ function HomeScreen(props: {
           <div
             style={{
               flexShrink: 0,
+              maxWidth: 192,
             }}
           >
-            <CoachCharacter />
+            <Image
+              src="/bsc2.png"
+              alt="Bible Trivia Coach"
+              width={192}
+              height={192}
+              priority
+              style={{ width: '100%', height: 'auto' }}
+            />
           </div>
         </div>
       </section>
