@@ -33,6 +33,13 @@ interface TriviaQuestion {
   refEnd?: string;
 }
 
+interface AnswerRecord {
+  questionId: string;
+  chosenIndex: number;
+  correctIndex: number;
+  isCorrect: boolean;
+}
+
 interface TriviaPack {
   id: string;
   questions: TriviaQuestion[];
@@ -560,13 +567,15 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
   );
 }
 
-// ---- Fixed summary with safe math ----
+// ---- Fixed summary with safe math + review-missed ----
 
 function FixedSummaryScreen(props: {
   title: string;
   total: number;
   correct: number;
   onBackHome: () => void;
+  questions?: TriviaQuestion[];
+  answers?: AnswerRecord[] | null;
 }) {
   const rawCorrect = typeof props.correct === 'number' ? props.correct : 0;
   const rawTotal = typeof props.total === 'number' ? props.total : 0;
@@ -763,6 +772,27 @@ function FixedSummaryScreen(props: {
   } else {
     coachLine = 'No pressure. This is gentle practice—try again after rereading the passage.';
   }
+
+  // ---- Missed questions (review-missed) ----
+  const missed = React.useMemo(() => {
+    if (!props.questions || !props.answers) return [];
+    const byId = new Map(props.questions.map((q) => [q.id, q]));
+    return props.answers
+      .filter((a) => !a.isCorrect)
+      .map((a) => {
+        const q = byId.get(a.questionId);
+        if (!q) return null;
+        return { question: q, answer: a };
+      })
+      .filter(
+        (
+          item,
+        ): item is { question: TriviaQuestion; answer: AnswerRecord } =>
+          item !== null,
+      );
+  }, [props.questions, props.answers]);
+
+  const [showReview, setShowReview] = useState(false);
 
   return (
     <div>
@@ -991,6 +1021,103 @@ function FixedSummaryScreen(props: {
 
       <SummaryExtras quizTitle={props.title} />
 
+      {/* Review missed questions */}
+      {missed.length > 0 && (
+        <div style={{ marginTop: 12 }}>
+          <button
+            type="button"
+            onClick={() => setShowReview((s) => !s)}
+            style={{
+              padding: '8px 14px',
+              borderRadius: 999,
+              border: '1px solid #e5e7eb',
+              backgroundColor: '#f9fafb',
+              cursor: 'pointer',
+              fontSize: 13,
+              color: '#111827',
+            }}
+          >
+            {showReview
+              ? 'Hide missed questions'
+              : `Review missed questions (${missed.length})`}
+          </button>
+        </div>
+      )}
+
+      {showReview && missed.length > 0 && (
+        <div
+          style={{
+            marginTop: 12,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+          }}
+        >
+          {missed.map(({ question, answer }, idx) => (
+            <div
+              key={question.id}
+              style={{
+                borderRadius: 12,
+                border: '1px solid #e5e7eb',
+                padding: 12,
+                backgroundColor: '#ffffff',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  marginBottom: 4,
+                  color: '#6b7280',
+                }}
+              >
+                Missed question {idx + 1}
+              </div>
+              <div style={{ fontSize: 14, marginBottom: 6 }}>
+                {question.text}
+              </div>
+              <div style={{ fontSize: 13, marginBottom: 2 }}>
+                Your answer:{' '}
+                <span style={{ color: '#b91c1c', fontWeight: 500 }}>
+                  {question.options[answer.chosenIndex] ?? '—'}
+                </span>
+              </div>
+              <div style={{ fontSize: 13, marginBottom: 4 }}>
+                Correct answer:{' '}
+                <span style={{ color: '#166534', fontWeight: 500 }}>
+                  {question.options[answer.correctIndex]}
+                </span>
+              </div>
+              {question.explanation && (
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: '#4b5563',
+                    marginTop: 4,
+                  }}
+                >
+                  {question.explanation}
+                </div>
+              )}
+              {question.refStart && (
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: '#4b5563',
+                    marginTop: 4,
+                  }}
+                >
+                  Reference: {question.refStart}
+                  {question.refEnd &&
+                    question.refEnd !== question.refStart &&
+                    ` – ${question.refEnd}`}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       <button
         onClick={props.onBackHome}
         style={{
@@ -1009,7 +1136,6 @@ function FixedSummaryScreen(props: {
   );
 }
 
-
 // ---- Root page ----
 
 export default function PlayPage() {
@@ -1020,6 +1146,12 @@ export default function PlayPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
+  const [lastQuestions, setLastQuestions] = useState<TriviaQuestion[] | null>(
+    null,
+  );
+  const [lastAnswers, setLastAnswers] = useState<AnswerRecord[] | null>(
+    null,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -1192,7 +1324,15 @@ export default function PlayPage() {
     });
   }
 
-  function showSummary(title: string, total: number, correct: number) {
+  function showSummary(
+    title: string,
+    questions: TriviaQuestion[],
+    total: number,
+    correct: number,
+    answers: AnswerRecord[],
+  ) {
+    setLastQuestions(questions);
+    setLastAnswers(answers);
     setScreen({ name: 'summary', title, total, correct });
   }
 
@@ -1319,8 +1459,14 @@ export default function PlayPage() {
             title={screen.title}
             questions={screen.questions}
             onBack={() => setScreen({ name: 'home' })}
-            onFinished={(correct, total) =>
-              showSummary(screen.title, total, correct)
+            onFinished={(correct, total, answers) =>
+              showSummary(
+                screen.title,
+                screen.questions,
+                total,
+                correct,
+                answers,
+              )
             }
           />
         )}
@@ -1330,6 +1476,8 @@ export default function PlayPage() {
             title={screen.title}
             total={screen.total}
             correct={screen.correct}
+            questions={lastQuestions ?? undefined}
+            answers={lastAnswers ?? undefined}
             onBackHome={() => setScreen({ name: 'home' })}
           />
         )}
@@ -1371,7 +1519,6 @@ function HomeScreen(props: {
       return null;
     }
   });
-
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
   const [selectedChapter, setSelectedChapter] = useState<string>('');
@@ -1513,7 +1660,6 @@ function HomeScreen(props: {
     Jude: 1,
     Revelation: 22,
   };
-
 
   const [playerName, setPlayerName] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null;
@@ -1703,8 +1849,8 @@ function HomeScreen(props: {
 
       <Section title="Daily challenge" tint="#dcfce7">
         <Row
-          title="Today\'s 5-question challenge"
-          subtitle="Short Scripture quiz based on today\'s reading"
+          title="Today&apos;s 5-question challenge"
+          subtitle="Short Scripture quiz based on today&apos;s reading"
           onClick={props.onStartDailyQuiz}
         />
       </Section>
@@ -1803,7 +1949,9 @@ function HomeScreen(props: {
           <Row
             title={`Easy (${easyCount} available)`}
             subtitle="Fast and friendly."
-            onClick={() => props.onStartLevelQuiz('easy', Math.min(10, easyCount))}
+            onClick={() =>
+              props.onStartLevelQuiz('easy', Math.min(10, easyCount))
+            }
           />
         ) : (
           <DisabledRow title="Easy (coming soon)" />
@@ -1813,7 +1961,9 @@ function HomeScreen(props: {
           <Row
             title={`Medium (${medCount} available)`}
             subtitle="A little deeper."
-            onClick={() => props.onStartLevelQuiz('medium', Math.min(10, medCount))}
+            onClick={() =>
+              props.onStartLevelQuiz('medium', Math.min(10, medCount))
+            }
           />
         ) : (
           <DisabledRow title="Medium (coming soon)" />
@@ -1823,7 +1973,9 @@ function HomeScreen(props: {
           <Row
             title={`Hard (${hardCount} available)`}
             subtitle="Challenge mode."
-            onClick={() => props.onStartLevelQuiz('hard', Math.min(10, hardCount))}
+            onClick={() =>
+              props.onStartLevelQuiz('hard', Math.min(10, hardCount))
+            }
           />
         ) : (
           <DisabledRow title="Hard (coming soon)" />
@@ -1833,7 +1985,9 @@ function HomeScreen(props: {
           <Row
             title={`Mixed (${mixedCount} available)`}
             subtitle="A mix of everything."
-            onClick={() => props.onStartLevelQuiz('mixed', Math.min(10, mixedCount))}
+            onClick={() =>
+              props.onStartLevelQuiz('mixed', Math.min(10, mixedCount))
+            }
           />
         )}
       </Section>
@@ -2259,7 +2413,7 @@ function QuizScreen(props: {
   title: string;
   questions: TriviaQuestion[];
   onBack: () => void;
-  onFinished: (correct: number, total: number) => void;
+  onFinished: (correct: number, total: number, answers: AnswerRecord[]) => void;
 }) {
   const { title, questions } = props;
   const verseMatch = title.match(/^Verse of the day:\s*(.+)$/);
@@ -2269,6 +2423,7 @@ function QuizScreen(props: {
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [answers, setAnswers] = useState<AnswerRecord[]>([]);
 
   const [showPassage, setShowPassage] = useState(false);
   const [passageRef, setPassageRef] = useState<{
@@ -2284,6 +2439,18 @@ function QuizScreen(props: {
     setSelected(optionIndex);
     setShowFeedback(true);
     const isCorrect = optionIndex === q.correctIndex;
+
+    setAnswers((prev) => {
+      const next = [...prev];
+      next[index] = {
+        questionId: q.id,
+        chosenIndex: optionIndex,
+        correctIndex: q.correctIndex,
+        isCorrect,
+      };
+      return next;
+    });
+
     if (isCorrect) {
       setCorrectCount((c) => c + 1);
     } else {
@@ -2301,7 +2468,7 @@ function QuizScreen(props: {
 
   function handleNext() {
     if (isLast) {
-      props.onFinished(correctCount, questions.length);
+      props.onFinished(correctCount, questions.length, answers);
     } else {
       setIndex((i) => i + 1);
       setSelected(null);
