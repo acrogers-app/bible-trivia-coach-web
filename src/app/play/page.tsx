@@ -742,6 +742,17 @@ function FixedSummaryScreen(props: {
     ? 'rgba(255,255,255,0.9)'
     : '#4b5563';
 
+  let coachLine: string;
+  if (percent === 100) {
+    coachLine = "Strong run—try a longer passage next time.";
+  } else if (percent >= 80) {
+    coachLine = 'Great work. Revisit the few you missed tomorrow.';
+  } else if (percent >= 50) {
+    coachLine = 'Good reps—these questions are where God is teaching you next.';
+  } else {
+    coachLine = 'No pressure. This is gentle practice—try again after rereading the passage.';
+  }
+
   return (
     <div>
       <h2
@@ -872,6 +883,15 @@ function FixedSummaryScreen(props: {
               11:6).
             </div>
           )}
+          <div
+            style={{
+              marginTop: 6,
+              fontSize: 12,
+              color: subtleTextColor,
+            }}
+          >
+            Coach&apos;s note: {coachLine}
+          </div>
         </div>
       </div>
 
@@ -1317,6 +1337,19 @@ function HomeScreen(props: {
   const mixedCount = availableCount(pack, 'mixed', 'scripture');
   const coachTip = getTodayCoachTip();
 
+  const [streak, setStreak] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem('btc_streak');
+      const num = raw ? Number(raw) || 0 : 0;
+      setStreak(num > 0 ? num : null);
+    } catch {
+      // ignore
+    }
+  }, []);
+
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
   const [selectedChapter, setSelectedChapter] = useState<string>('');
@@ -1482,6 +1515,22 @@ function HomeScreen(props: {
             <p className="btc-text-muted" style={{ marginTop: 4 }}>
               Daily Scripture and Bible history quizzes.
             </p>
+            {streak != null && (
+              <div
+                style={{
+                  marginTop: 8,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '4px 10px',
+                  borderRadius: 999,
+                  backgroundColor: '#e0f2fe',
+                  fontSize: 12,
+                  color: '#1e293b',
+                }}
+              >
+                Streak: {streak} day{streak === 1 ? '' : 's'} in a row
+              </div>
+            )}
           </div>
 
           <div
@@ -1552,9 +1601,12 @@ function HomeScreen(props: {
             }}
           />
         )}
+      </Section>
+
+      <Section title="Daily challenge" tint="#dcfce7">
         <Row
-          title="Daily Quiz (5)"
-          subtitle="Mixed Scripture questions"
+          title="Today\'s 5-question challenge"
+          subtitle="Short Scripture quiz based on today\'s reading"
           onClick={props.onStartDailyQuiz}
         />
       </Section>
