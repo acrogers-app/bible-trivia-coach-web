@@ -1959,6 +1959,16 @@ function HomeScreen(props: {
         />
       </Section>
 
+      <Section title="Family Night" tint="#e0e7ff">
+        <Row
+          title="Family Night (coming soon)"
+          subtitle="Take turns as a family with a shared score."
+          onClick={() => {
+            window.alert("Family Night mode is under construction. Check back soon!");
+          }}
+        />
+      </Section>
+
       <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
           <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
