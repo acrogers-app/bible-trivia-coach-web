@@ -1,6 +1,12 @@
 'use client';
+
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
+import {
+  getTodayCoachTip,
+  getQuizSummaryLine,
+  getDailyChallengeNudgeLine,
+} from '@/lib/coachVoice';
 
 type SourceType = 'scripture' | 'history';
 
@@ -73,25 +79,7 @@ type Ref = { bookId: number; chapter: number; verse: number };
 type VerseLine = { chapter: number; verse: number; text: string };
 
 const QUIZ_COUNT_PER_READING = 10;
-
-const COACH_TIPS: string[] = [
-  "Coach's note: Small, consistent quizzes grow strong roots in God\'s Word.",
-  "Coach's tip: Say the answer out loud—your memory loves hearing Scripture.",
-  "Coach's tip: Missed questions are just pointers to what God is teaching next.",
-  "Coach's tip: Try quizzing on the same chapter tomorrow and see what you remember.",
-  "Coach's tip: Turn this into family night—take turns reading and answering together.",
-  "Coach's tip: Pair today\'s quiz with a short prayer asking God to plant His Word deeply.",
-];
-
-function getTodayCoachTip(): string {
-  try {
-    const today = new Date();
-    const day = today.getDate(); // 1–31
-    return COACH_TIPS[day % COACH_TIPS.length];
-  } catch {
-    return COACH_TIPS[0];
-  }
-}
+const XP_PER_LEVEL = 50;
 
 // ---- Reference + quiz helpers ----
 
@@ -212,6 +200,14 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   const index = (diffDays - 1) % plan.days.length;
   return plan.days[index];
+}
+
+function getTodayKey(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
 }
 
 type ScriptureScope = {
@@ -640,7 +636,6 @@ function FixedSummaryScreen(props: {
   const [isNewBest, setIsNewBest] = useState(false);
   const [lifetimeCorrect, setLifetimeCorrect] = useState<number | null>(null);
 
-  const XP_PER_LEVEL = 50;
   const level =
     lifetimeCorrect != null
       ? Math.floor(lifetimeCorrect / XP_PER_LEVEL) + 1
@@ -762,16 +757,7 @@ function FixedSummaryScreen(props: {
     ? 'rgba(255,255,255,0.9)'
     : '#4b5563';
 
-  let coachLine: string;
-  if (percent === 100) {
-    coachLine = "Strong run—try a longer passage next time.";
-  } else if (percent >= 80) {
-    coachLine = 'Great work. Revisit the few you missed tomorrow.';
-  } else if (percent >= 50) {
-    coachLine = 'Good reps—these questions are where God is teaching you next.';
-  } else {
-    coachLine = 'No pressure. This is gentle practice—try again after rereading the passage.';
-  }
+  const coachLine = getQuizSummaryLine(percent);
 
   // ---- Missed questions (review-missed) ----
   const missed = React.useMemo(() => {
@@ -1136,6 +1122,17 @@ function FixedSummaryScreen(props: {
   );
 }
 
+function markDailyChallengeCompletedForToday(title: string) {
+  if (typeof window === 'undefined') return;
+  if (title !== 'Daily Quiz') return;
+  try {
+    const key = getTodayKey();
+    window.localStorage.setItem('btc_daily_challenge_last_completed', key);
+  } catch {
+    // ignore
+  }
+}
+
 // ---- Root page ----
 
 export default function PlayPage() {
@@ -1333,6 +1330,7 @@ export default function PlayPage() {
   ) {
     setLastQuestions(questions);
     setLastAnswers(answers);
+    markDailyChallengeCompletedForToday(title);
     setScreen({ name: 'summary', title, total, correct });
   }
 
@@ -1508,6 +1506,7 @@ function HomeScreen(props: {
   const hardCount = availableCount(pack, 'hard', 'scripture');
   const mixedCount = availableCount(pack, 'mixed', 'scripture');
   const coachTip = getTodayCoachTip();
+  const dailyNudgeText = getDailyChallengeNudgeLine();
 
   const [streak] = useState<number | null>(() => {
     if (typeof window === 'undefined') return null;
@@ -1517,6 +1516,41 @@ function HomeScreen(props: {
       return num > 0 ? num : null;
     } catch {
       return null;
+    }
+  });
+
+  const [lifetimeCorrect] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = window.localStorage.getItem('btc_lifetime_correct');
+      const num = raw ? Number(raw) || 0 : 0;
+      return num > 0 ? num : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const level =
+    lifetimeCorrect != null
+      ? Math.floor(lifetimeCorrect / XP_PER_LEVEL) + 1
+      : null;
+  const levelProgress =
+    lifetimeCorrect != null ? lifetimeCorrect % XP_PER_LEVEL : null;
+  const levelPercent =
+    levelProgress != null
+      ? Math.round((levelProgress / XP_PER_LEVEL) * 100)
+      : 0;
+
+  const [dailyChallengeCompletedToday] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const last = window.localStorage.getItem(
+        'btc_daily_challenge_last_completed',
+      );
+      if (!last) return false;
+      return last === getTodayKey();
+    } catch {
+      return false;
     }
   });
 
@@ -1775,6 +1809,28 @@ function HomeScreen(props: {
                 </button>
               )}
             </div>
+            {level != null && (
+              <div
+                style={{
+                  marginTop: 6,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '4px 10px',
+                  borderRadius: 999,
+                  backgroundColor: '#ecfdf5',
+                  border: '1px solid #bbf7d0',
+                  fontSize: 12,
+                  color: '#166534',
+                  gap: 6,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>Level {level}</span>
+                <span style={{ opacity: 0.9 }}>
+                  {levelPercent}% toward next level
+                </span>
+              </div>
+            )}
           </div>
 
           <div
@@ -1793,6 +1849,46 @@ function HomeScreen(props: {
             />
           </div>
         </div>
+
+        {/* Daily challenge nudge */}
+        {!dailyChallengeCompletedToday && (
+          <div
+            style={{
+              marginTop: 12,
+              padding: '6px 10px',
+              borderRadius: 999,
+              backgroundColor: '#dcfce7',
+              border: '1px solid #bbf7d0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: 12,
+              color: '#166534',
+              gap: 8,
+              flexWrap: 'wrap',
+            }}
+          >
+            <span>
+              {dailyNudgeText ||
+                "Today’s 5-question challenge is ready—just a few minutes in God’s Word."}
+            </span>
+            <button
+              type="button"
+              onClick={props.onStartDailyQuiz}
+              style={{
+                padding: '4px 10px',
+                borderRadius: 999,
+                border: 'none',
+                backgroundColor: '#16a34a',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              Start
+            </button>
+          </div>
+        )}
       </section>
 
       <Section title="Today" tint="#dbeafe">
@@ -1849,8 +1945,8 @@ function HomeScreen(props: {
 
       <Section title="Daily challenge" tint="#dcfce7">
         <Row
-          title="Today&apos;s 5-question challenge"
-          subtitle="Short Scripture quiz based on today&apos;s reading"
+          title="Today's 5-question challenge"
+          subtitle="Short Scripture quiz based on today's reading"
           onClick={props.onStartDailyQuiz}
         />
       </Section>
