@@ -101,24 +101,57 @@ function fetchLines(s: Ref, e: Ref): VerseLine[] {
   return lines;
 }
 
+
+function normalizeRefInput(ref: string) {
+  let t = ref
+    .replace(/\u00A0/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // ordinals / roman numerals at start
+  t = t
+    .replace(/^(First|1st)\s+/i, '1 ')
+    .replace(/^(Second|2nd)\s+/i, '2 ')
+    .replace(/^(Third|3rd)\s+/i, '3 ')
+    .replace(/^(III)\s+/i, '3 ')
+    .replace(/^(II)\s+/i, '2 ')
+    .replace(/^(I)\s+/i, '1 ');
+
+  // allow "1John" -> "1 John"
+  t = t.replace(/^([123])(?=[A-Za-z])/,'$1 ');
+
+  // book aliases
+  t = t
+    .replace(/^Psalm(\s+\d)/i, 'Psalms$1')
+    .replace(/^Ps\.?\s*(\d)/i, 'Psalms $1')
+    .replace(/^Revelations\b/i, 'Revelation')
+    .replace(/^Song of Songs\b/i, 'Song of Solomon')
+    .replace(/^Canticles\b/i, 'Song of Solomon');
+
+  return t;
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const start = searchParams.get('start');
-  const end = searchParams.get('end');
+  const startRaw = searchParams.get('start');
+  const endRaw = searchParams.get('end');
 
-  if (!start || !end) {
+  if (!startRaw || !endRaw) {
     return NextResponse.json(
       { error: 'Missing start or end query parameters' },
       { status: 400 }
     );
   }
 
+  const start = normalizeRefInput(startRaw);
+  const end = normalizeRefInput(endRaw);
+
   const s = parseRef(start);
   const e = parseRef(end);
 
   if (!s || !e || s.bookId !== e.bookId) {
     return NextResponse.json(
-      { error: `Unsupported reference: ${start} – ${end}` },
+      { error: `Unsupported reference: ${startRaw} – ${endRaw}` },
       { status: 400 }
     );
   }
