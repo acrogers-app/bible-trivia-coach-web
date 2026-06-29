@@ -1238,6 +1238,32 @@ export default function PlayPage() {
     });
   }
 
+
+  function normalizeRefInput(ref?: string | null) {
+    let t = String(ref ?? '')
+      .replace(/\u00A0/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    t = t
+      .replace(/^(First|1st)\s+/i, '1 ')
+      .replace(/^(Second|2nd)\s+/i, '2 ')
+      .replace(/^(Third|3rd)\s+/i, '3 ')
+      .replace(/^(III)\s+/i, '3 ')
+      .replace(/^(II)\s+/i, '2 ')
+      .replace(/^(I)\s+/i, '1 ')
+      .replace(/^([123])(?=[A-Za-z])/, '$1 ');
+
+    t = t
+      .replace(/^Psalm(\s+\d)/i, 'Psalms$1')
+      .replace(/^Ps\.?\s*(\d)/i, 'Psalms $1')
+      .replace(/^Revelations\b/i, 'Revelation')
+      .replace(/^Song of Songs\b/i, 'Song of Solomon')
+      .replace(/^Canticles\b/i, 'Song of Solomon');
+
+    return t;
+  }
+
   function startReadingQuiz(day: ReadingDay) {
     if (!pack) return;
 
@@ -1255,8 +1281,8 @@ export default function PlayPage() {
     }
 
     if (!questions.length) {
-      const s = parseRef(day.start);
-      const e = parseRef(day.end);
+      const s = parseRef(normalizeRefInput(day.start));
+      const e = parseRef(normalizeRefInput(day.end));
       if (!s || !e || s.bookId !== e.bookId) {
         window.alert('Unable to map questions for this reading yet.');
         return;
@@ -1275,13 +1301,28 @@ export default function PlayPage() {
 
       const inRange: TriviaQuestion[] = [];
       for (const q of pack.questions) {
-        const qs = parseRef(q.refStart);
-        const qe = parseRef(q.refEnd);
+        if (!q.refStart || !q.refEnd) continue;
+        const qs = parseRef(normalizeRefInput(q.refStart));
+        const qe = parseRef(normalizeRefInput(q.refEnd));
         if (!qs || !qe) continue;
         if (qs.bookId !== startRef.bookId || qe.bookId !== startRef.bookId)
           continue;
-        if (!isRefInOrAfter(qs, startRef)) continue;
-        if (!isRefInOrBefore(qe, endRef)) continue;
+
+        // normalize question range order (just in case)
+        let qStart = qs;
+        let qEnd = qe;
+        if (
+          qStart.chapter > qEnd.chapter ||
+          (qStart.chapter === qEnd.chapter && qStart.verse > qEnd.verse)
+        ) {
+          qStart = qe;
+          qEnd = qs;
+        }
+
+        // overlap check: include questions that intersect the reading range
+        if (!isRefInOrBefore(qStart, endRef)) continue;   // question starts after reading ends
+        if (!isRefInOrAfter(qEnd, startRef)) continue;    // question ends before reading starts
+
         inRange.push(q);
       }
 
