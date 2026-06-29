@@ -2683,7 +2683,7 @@ function QuizScreen(props: {
               border = '1px solid #16a34a';
             } else if (isSelected && !isCorrect) {
               bg = '#fecaca';
-              border = '1px solid '#dc2626';
+              border = '1px solid #dc2626';
             } else if (showFeedback && isCorrect) {
               bg = '#dcfce7';
               border = '1px solid #16a34a';
