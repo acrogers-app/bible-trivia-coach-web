@@ -2065,39 +2065,52 @@ function HomeScreen(props: {
           />
         )}
         {props.plan && (
-          <Row
-            title="Choose another day in this plan"
-            subtitle="Open any reading from the full‑Bible plan"
-            onClick={() => {
-              const plan = props.plan;
-              if (!plan) {
-                window.alert('Reading plan is not loaded yet.');
-                return;
-              }
-              const maxDay = plan.days.length;
-              if (!maxDay) {
-                window.alert('Reading plan is not loaded yet.');
-                return;
-              }
-              const input = window.prompt(
-                `Enter a day number between 1 and ${maxDay} to open that reading.`,
-              );
-              if (!input) return;
-              const num = Number(input);
-              if (!Number.isFinite(num) || num < 1 || num > maxDay) {
-                window.alert('Please enter a valid day number.');
-                return;
-              }
-              const chosen =
-                plan.days.find((d) => d.day === num) ||
-                plan.days[num - 1];
-              if (!chosen) {
-                window.alert('Could not find that reading day.');
-                return;
-              }
-              props.onOpenReadingForDay(chosen);
+          <div style={{ marginTop: 8 }}>
+          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>
+            Choose another day
+          </div>
+
+          {/* Search box */}
+          <input
+            type="text"
+            inputMode="search"
+            placeholder="Search by book name (e.g. John, Psalms)…"
+            style={{ width: '100%', padding: '8px 12px', borderRadius: 12,
+              border: '1px solid rgba(0,0,0,0.15)', marginBottom: 8, boxSizing: 'border-box' }}
+            onChange={(ev) => {
+              const q = ev.target.value.toLowerCase().trim();
+              const items = document.querySelectorAll('[data-day-item]');
+              items.forEach((el: Element) => {
+                const htmlEl = el as HTMLElement;
+                htmlEl.style.display = !q || htmlEl.dataset.title?.toLowerCase().includes(q) ? '' : 'none';
+              });
             }}
           />
+
+          {/* Scrollable day list */}
+          <div style={{ maxHeight: 240, overflowY: 'auto', borderRadius: 12,
+            border: '1px solid rgba(0,0,0,0.10)' }}>
+            {props.plan?.days?.map((d) => (
+              <button
+                key={d.day}
+                type="button"
+                data-day-item
+                data-title={d.title}
+                onClick={() => props.onOpenReadingForDay(d)}
+                style={{
+                  display: 'flex', justifyContent: 'space-between',
+                  alignItems: 'center', width: '100%', textAlign: 'left',
+                  padding: '10px 14px', background: 'transparent',
+                  border: 'none', borderBottom: '1px solid rgba(0,0,0,0.06)',
+                  cursor: 'pointer',
+                }}
+              >
+                <span style={{ fontWeight: 600, fontSize: 13 }}>Day {d.day}</span>
+                <span className="btc-text-muted" style={{ fontSize: 12 }}>{d.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
 
                 )}
 
