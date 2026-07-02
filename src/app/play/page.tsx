@@ -7,6 +7,39 @@ import {
   getQuizSummaryLine,
   getDailyChallengeNudgeLine,
 } from '@/lib/coachVoice';
+import BottomNav from '../../components/BottomNav';
+import { loadSettings } from '../../lib/appSettings';
+
+// btc:voice-helpers
+function btcPrimaryLang(tag: string) {
+  return (tag || '').toLowerCase().split('-')[0] || '';
+}
+function btcIsBlockedVoice(name: string) {
+  const n = (name || '').toLowerCase();
+  return ['bad news','good news','bahh','bark','cellos','organ','wobble',
+    'boing','jester','superstar','trinoids','zarvox','grandma','grandpa',
+    'sound','effect'].some(x => n.includes(x));
+}
+function btcVoiceScore(v: SpeechSynthesisVoice, lang: string) {
+  const n = (v.name || '').toLowerCase();
+  let s = 0;
+  if ((v.lang||'').toLowerCase() === lang.toLowerCase()) s += 20;
+  if (btcPrimaryLang(v.lang) === btcPrimaryLang(lang)) s += 10;
+  if (n.includes('google')) s += 80;
+  if (n.includes('microsoft')) s += 55;
+  if (n.includes('enhanced')) s += 25;
+  if (n.includes('samantha')) s += 90;
+  if (n.includes('alex')) s += 60;
+  if (v.default) s += 30;
+  if (btcIsBlockedVoice(v.name)) s -= 999;
+  return s;
+}
+function btcBestVoice(voices: SpeechSynthesisVoice[], lang: string) {
+  const p = btcPrimaryLang(lang);
+  const candidates = voices.filter(v => btcPrimaryLang(v.lang) === p && !btcIsBlockedVoice(v.name));
+  return [...candidates].sort((a,b) => btcVoiceScore(b,lang) - btcVoiceScore(a,lang))[0] || null;
+}
+
 
 type SourceType = 'scripture' | 'history';
 
@@ -468,6 +501,23 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
   if (!bookSummary && !reflection) {
     return null;
   }
+
+  function openMoreAndScroll(anchorId: string) {
+
+    try {
+
+      const d = document.getElementById('btc-more') as HTMLDetailsElement | null;
+
+      if (d) d.open = true;
+
+      const el = document.getElementById(anchorId);
+
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch {}
+
+  }
+
 
   return (
     <div
@@ -1302,8 +1352,8 @@ export default function PlayPage() {
       const inRange: TriviaQuestion[] = [];
       for (const q of pack.questions) {
         if (!q.refStart || !q.refEnd) continue;
-        const qs = parseRef(normalizeRefInput(q.refStart));
-        const qe = parseRef(normalizeRefInput(q.refEnd));
+        const qs = parseRef(q.refStart);
+        const qe = parseRef(q.refEnd);
         if (!qs || !qe) continue;
         if (qs.bookId !== startRef.bookId || qe.bookId !== startRef.bookId)
           continue;
@@ -1355,7 +1405,7 @@ export default function PlayPage() {
       return;
     }
 
-    const verseQuestions = questionsForVerseOfDay(pack, verseOfDay, 3);
+    const verseQuestions = questionsForVerseOfDay(pack, normalizeRefInput(verseOfDay), 3);
     if (!verseQuestions.length) {
       window.alert('No verse-of-the-day questions are available yet.');
       return;
@@ -1368,7 +1418,6 @@ export default function PlayPage() {
       sourceType: 'scripture',
     });
   }
-
   function showSummary(
     title: string,
     questions: TriviaQuestion[],
@@ -1396,8 +1445,11 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="btc-root">
+    <div className="btc-root" style={{ paddingBottom: 110 }}>
+      <BottomNav />
       <div className="btc-card">
+      
+
         {loading && (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
             <h1>Bible Trivia Coach</h1>
@@ -2018,7 +2070,29 @@ function HomeScreen(props: {
               props.onOpenReadingForDay(chosen);
             }}
           />
+
+                )}
+
+        {/* btc:read-listen-today-rows-v2 */}
+        {today && (
+          <>
+            <Row
+              title="Read today"
+              subtitle="Open today's passage in Read & Listen"
+              onClick={() => {
+                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`;
+              }}
+            />
+            <Row
+              title="Listen now"
+              subtitle="Read aloud with follow‑along highlighting"
+              onClick={() => {
+                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}&autoplay=1`;
+              }}
+            />
+          </>
         )}
+
       </Section>
 
       <Section title="Daily challenge" tint="#dcfce7">
@@ -2029,7 +2103,142 @@ function HomeScreen(props: {
         />
       </Section>
 
-      <Section title="Quick" tint="#fef3c7">
+      <Section title="Play" tint="#fff7ed">
+        <div
+          data-testid="btc-play-tiles"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 12,
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => props.onStartVerseQuiz()}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>Verse of the day</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              3-question quiz on today’s verse
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/play?action=quiz&level=mixed&count=10&sourceType=scripture'; }}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>Quick Quiz</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              10 mixed questions
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/play?action=scroll&target=btc-family'; }}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>Family Night</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              Take turns with a shared score
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/play?action=scroll&target=btc-levels'; }}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>Levels (Strict)</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              Easy / Medium / Hard / Mixed
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/play?action=scroll&target=btc-by-book'; }}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>By Book</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              Choose a book to quiz on
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { window.location.href = '/play?action=scroll&target=btc-history'; }}
+            style={{
+              textAlign: 'left',
+              padding: 14,
+              borderRadius: 16,
+              border: '1px solid rgba(0,0,0,0.10)',
+              background: 'white',
+              minHeight: 72,
+            }}
+          >
+            <div style={{ fontWeight: 800 }}>Bible History</div>
+            <div className="btc-text-muted" style={{ marginTop: 4 }}>
+              History-mode questions
+            </div>
+          </button>
+        </div>
+      </Section>
+      <details
+        id="btc-more"
+        style={{
+          marginTop: 8,
+          marginBottom: 8,
+          padding: 12,
+          borderRadius: 16,
+          border: '1px solid rgba(0,0,0,0.10)',
+          background: 'rgba(0,0,0,0.02)',
+        }}
+      >
+        <summary style={{ cursor: 'pointer', fontWeight: 800, padding: 8 }}>
+          More options
+        </summary>
+
+        <div style={{ marginTop: 10 }}>
+          <div id="btc-quick" />
+          <Section title="Quick" tint="#fef3c7">
         <Row
           title="Quick Quiz (10)"
           subtitle="10 mixed questions"
@@ -2037,6 +2246,7 @@ function HomeScreen(props: {
         />
       </Section>
 
+      <div id="btc-family" />
       <Section title="Family Night" tint="#e0e7ff">
         <Row
           title="Family Night"
@@ -2045,6 +2255,7 @@ function HomeScreen(props: {
         />
       </Section>
 
+      <div id="btc-by-book" />
       <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
           <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
@@ -2118,6 +2329,7 @@ function HomeScreen(props: {
         </div>
       </Section>
 
+      <div id="btc-history" />
       <Section title="Bible History" tint="#e0e7ff">
         <Row
           title="Bible History (10)"
@@ -2126,6 +2338,7 @@ function HomeScreen(props: {
         />
       </Section>
 
+      <div id="btc-levels" />
       <Section title="Levels (Strict)" tint="#dcfce7">
         {easyCount > 0 ? (
           <Row
@@ -2174,6 +2387,7 @@ function HomeScreen(props: {
         )}
       </Section>
 
+      <div id="btc-tip" />
       <Section title="Coach's tip" tint="#fef9c3">
         <div
           style={{
@@ -2185,6 +2399,9 @@ function HomeScreen(props: {
           {coachTip}
         </div>
       </Section>
+        </div>
+      </details>
+
     </div>
   );
 }
@@ -2379,6 +2596,19 @@ function DailyReadingScreen(props: {
 
     lines.forEach((v, verseIdx) => {
       const utter = new SpeechSynthesisUtterance(v.text);
+      {
+        const _btcS = loadSettings();
+        utter.lang = _btcS.readerLang || 'en-US';
+        utter.rate = _btcS.readerRate || 1.0;
+        try {
+          const _btcVoices = window.speechSynthesis?.getVoices?.() ?? [];
+          const _btcChosen = _btcS.readerVoiceURI
+            ? _btcVoices.find(v => v.voiceURI === _btcS.readerVoiceURI) || null
+            : null;
+          const _btcVoice = _btcChosen || btcBestVoice(_btcVoices, _btcS.readerLang || 'en-US');
+          if (_btcVoice) { utter.voice = _btcVoice; utter.lang = _btcVoice.lang || utter.lang; }
+        } catch {}
+      }
       const boundaries: { start: number; end: number }[] = [];
       const wordRegex = /\S+/g;
       let m: RegExpExecArray | null;
@@ -3386,6 +3616,19 @@ function PassageInline(props: {
 
     lines.forEach((v, verseIdx) => {
       const utter = new SpeechSynthesisUtterance(v.text);
+      {
+        const _btcS = loadSettings();
+        utter.lang = _btcS.readerLang || 'en-US';
+        utter.rate = _btcS.readerRate || 1.0;
+        try {
+          const _btcVoices = window.speechSynthesis?.getVoices?.() ?? [];
+          const _btcChosen = _btcS.readerVoiceURI
+            ? _btcVoices.find(v => v.voiceURI === _btcS.readerVoiceURI) || null
+            : null;
+          const _btcVoice = _btcChosen || btcBestVoice(_btcVoices, _btcS.readerLang || 'en-US');
+          if (_btcVoice) { utter.voice = _btcVoice; utter.lang = _btcVoice.lang || utter.lang; }
+        } catch {}
+      }
       const boundaries: { start: number; end: number }[] = [];
       const wordRegex = /\S+/g;
       let m: RegExpExecArray | null;

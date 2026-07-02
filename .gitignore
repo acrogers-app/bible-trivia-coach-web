@@ -54,3 +54,29 @@ public/data/*.before-*.json
 src/app/play/page.*.tsx
 src/app/play/*.backup.tsx
 play_backups/
+
+# Python virtual environment
+.venv/
+
+# Backup files (all patterns)
+*.bak.*
+*.bak
+
+# Generated script reports / checkpoints
+scripts/phase1_checkpoint.json
+scripts/phase1_gaps.json
+scripts/phase1_generated.json
+scripts/phase1_manual_refs.json
+scripts/phase1_merge_report.json
+scripts/structural_removed.json
+
+# One-time patch scripts (keep source, not patches)
+scripts/patch_*.mjs
+scripts/fix_*.mjs
+scripts/repair_*.mjs
+scripts/remove_*.mjs
+scripts/add_*.mjs
+scripts/ensure_*.mjs
+
+# Python fix scripts
+scripts/fix_*.py
