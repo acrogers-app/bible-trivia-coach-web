@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import {
   type AppSettings,
+  type ColorTheme,
   applySettingsToDocument,
   defaultSettings,
   loadSettings,
@@ -202,7 +203,43 @@ export default function SettingsPage() {
         <div style={card}>
           <h2 style={h2}>App appearance</h2>
 
+          {/* ── Color theme picker ── */}
           <div style={{ marginTop: 10 }}>
+            <div style={labelSmall}>Color theme</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginTop: 6 }}>
+              {([ 
+                { value: 'light',  label: '☀️ Light'  },
+                { value: 'dark',   label: '🌙 Dark'   },
+                { value: 'system', label: '⚙️ System' },
+              ] as { value: 'light'|'dark'|'system'; label: string }[]).map(opt => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => update({ colorTheme: opt.value })}
+                  style={{
+                    padding: '10px 4px',
+                    borderRadius: 12,
+                    border: draft.colorTheme === opt.value
+                      ? '2.5px solid #1d4ed8'
+                      : '1px solid rgba(0,0,0,0.15)',
+                    background: draft.colorTheme === opt.value
+                      ? 'rgba(29,78,216,0.08)' : 'white',
+                    fontWeight: draft.colorTheme === opt.value ? 700 : 500,
+                    cursor: 'pointer',
+                    fontSize: 13,
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+            <div className="btc-text-muted" style={{ fontSize: 12, marginTop: 6 }}>
+              Dark mode is easier on the eyes at night. System follows your device automatically.
+            </div>
+          </div>
+
+          {/* ── Font ── */}
+          <div style={{ marginTop: 12 }}>
             <div style={labelSmall}>App font</div>
             <select value={draft.appFont} onChange={(e) => update({ appFont: e.target.value as any })} style={select}>
               <option value="system">System (default)</option>
@@ -211,7 +248,8 @@ export default function SettingsPage() {
             </select>
           </div>
 
-          <div style={{ marginTop: 10 }}>
+          {/* ── Text size ── */}
+          <div style={{ marginTop: 12 }}>
             <div style={labelSmall}>App text size: {draft.appTextScale.toFixed(2)}x</div>
             <input type="range" min="0.9" max="1.3" step="0.05" value={draft.appTextScale}
               onChange={(e) => update({ appTextScale: parseFloat(e.target.value) })}
@@ -219,15 +257,25 @@ export default function SettingsPage() {
             />
           </div>
 
+          {/* ── Toggles ── */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
             <label style={row}>
               <input type="checkbox" checked={draft.highContrast} onChange={(e) => update({ highContrast: e.target.checked })} />
-              <span><strong>High contrast</strong></span>
+              <span>
+                <strong>High contrast</strong>
+                <span className="btc-text-muted" style={{ display: 'block', fontSize: 11, marginTop: 2 }}>
+                  Bold borders, max readability
+                </span>
+              </span>
             </label>
-
             <label style={row}>
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />
-              <span><strong>Reduce motion</strong></span>
+              <span>
+                <strong>Reduce motion</strong>
+                <span className="btc-text-muted" style={{ display: 'block', fontSize: 11, marginTop: 2 }}>
+                  No animations
+                </span>
+              </span>
             </label>
             <label style={row}>
               <input
