@@ -2064,78 +2064,12 @@ function HomeScreen(props: {
             onClick={props.onStartVerseQuiz}
           />
         )}
-        {props.plan && (() => {
-          const [open, setOpen] = React.useState(false);
-          return (
-            <>
-              <Row
-                title="Choose another day in this plan"
-                subtitle="Open any reading from the full Bible plan"
-                onClick={() => setOpen(o => !o)}
-              />
-              {open && (
-                <div style={{ marginTop: 4, marginBottom: 4 }}>
-                  <input
-                    type="text"
-                    inputMode="search"
-                    placeholder="Search by book name (e.g. John, Psalms)…"
-                    autoFocus
-                    style={{
-                      width: '100%',
-                      padding: '10px 14px',
-                      borderRadius: 12,
-                      border: '1px solid rgba(0,0,0,0.15)',
-                      marginBottom: 6,
-                      boxSizing: 'border-box',
-                      fontSize: 14,
-                    }}
-                    onChange={(ev) => {
-                      const q = ev.target.value.toLowerCase().trim();
-                      document.querySelectorAll('[data-day-item]').forEach((el) => {
-                        const htmlEl = el as HTMLElement;
-                        htmlEl.style.display =
-                          !q || htmlEl.dataset.title?.toLowerCase().includes(q) ? '' : 'none';
-                      });
-                    }}
-                  />
-                  <div style={{
-                    maxHeight: 220,
-                    overflowY: 'auto',
-                    borderRadius: 12,
-                    border: '1px solid rgba(0,0,0,0.10)',
-                    background: 'white',
-                  }}>
-                    {props.plan.days.map((d) => (
-                      <button
-                        key={d.day}
-                        type="button"
-                        data-day-item
-                        data-title={d.title}
-                        onClick={() => { setOpen(false); props.onOpenReadingForDay(d); }}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          width: '100%',
-                          textAlign: 'left',
-                          padding: '10px 14px',
-                          background: 'transparent',
-                          border: 'none',
-                          borderBottom: '1px solid rgba(0,0,0,0.06)',
-                          cursor: 'pointer',
-                          fontSize: 14,
-                        }}
-                      >
-                        <span style={{ fontWeight: 600 }}>Day {d.day}</span>
-                        <span style={{ opacity: 0.6, fontSize: 13 }}>{d.title}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
-          );
-        })()}
+        {props.plan && (
+          <DayPickerRow
+            plan={props.plan}
+            onOpenReadingForDay={props.onOpenReadingForDay}
+          />
+        )}
 
         {/* btc:read-listen-today-rows-v2 */}
         {today && (
@@ -2347,6 +2281,68 @@ function HomeScreen(props: {
       </div>
 
     </div>
+  );
+}
+
+
+// ---- Day Picker Row ----
+function DayPickerRow(props: {
+  plan: { days: { day: number; title: string; start: string; end: string }[] };
+  onOpenReadingForDay: (day: { day: number; title: string; start: string; end: string }) => void;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+
+  const filtered = query.trim()
+    ? props.plan.days.filter(d => d.title.toLowerCase().includes(query.toLowerCase()))
+    : props.plan.days;
+
+  return (
+    <>
+      <Row
+        title="Choose another day in this plan"
+        subtitle="Open any reading from the full Bible plan"
+        onClick={() => setOpen(o => !o)}
+      />
+      {open && (
+        <div style={{ marginTop: 4, marginBottom: 4 }}>
+          <input
+            type="text"
+            inputMode="search"
+            placeholder="Search by book name (e.g. John, Psalms)…"
+            autoFocus
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            style={{
+              width: '100%', padding: '10px 14px', borderRadius: 12,
+              border: '1px solid rgba(0,0,0,0.15)', marginBottom: 6,
+              boxSizing: 'border-box', fontSize: 14,
+            }}
+          />
+          <div style={{
+            maxHeight: 220, overflowY: 'auto', borderRadius: 12,
+            border: '1px solid rgba(0,0,0,0.10)', background: 'white',
+          }}>
+            {filtered.map((d) => (
+              <button
+                key={d.day}
+                type="button"
+                onClick={() => { setOpen(false); setQuery(''); props.onOpenReadingForDay(d); }}
+                style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  width: '100%', textAlign: 'left', padding: '10px 14px',
+                  background: 'transparent', border: 'none',
+                  borderBottom: '1px solid rgba(0,0,0,0.06)', cursor: 'pointer', fontSize: 14,
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>Day {d.day}</span>
+                <span style={{ opacity: 0.6, fontSize: 13 }}>{d.title}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

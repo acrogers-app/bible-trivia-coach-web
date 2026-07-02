@@ -386,7 +386,7 @@ useEffect(() => {
                 return (
                   <>
                     {activeLine.text.slice(0, r.start)}
-                    <mark style={{ padding: '0 4px', borderRadius: 8, background: 'rgba(34,197,94,0.45)', color: 'white' }}>
+                    <mark style={{ padding: '2px 4px', borderRadius: 6, background: 'rgba(37,99,235,0.85)', color: 'white', fontWeight: 700 }}>
                       {activeLine.text.slice(r.start, r.end)}
                     </mark>
                     {activeLine.text.slice(r.end)}
@@ -535,8 +535,10 @@ useEffect(() => {
                     margin: '0 0 12px 0',
                     padding: active ? '8px 10px' : '0',
                     borderRadius: 12,
-                    background: active ? 'rgba(34,197,94,0.10)' : 'transparent',
-                    border: active ? '1px solid rgba(34,197,94,0.25)' : '1px solid transparent',
+                    background: active ? 'rgba(37,99,235,0.10)' : 'transparent',
+                    border: active ? '1px solid rgba(37,99,235,0.30)' : '1px solid transparent',
+                    borderLeft: active ? '4px solid rgba(37,99,235,0.70)' : '4px solid transparent',
+                    paddingLeft: active ? '10px' : '10px',
                     cursor: 'default',
                   }}
                 >
