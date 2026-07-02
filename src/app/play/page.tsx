@@ -2064,94 +2064,78 @@ function HomeScreen(props: {
             onClick={props.onStartVerseQuiz}
           />
         )}
-        {props.plan && (
-          <details style={{ marginTop: 8 }}>
-            <summary
-              style={{
-                cursor: 'pointer',
-                listStyle: 'none',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '16px 20px',
-                borderRadius: 16,
-                border: '1px solid rgba(0,0,0,0.08)',
-                background: 'white',
-                fontSize: 15,
-                fontWeight: 700,
-                color: 'inherit',
-                lineHeight: 1.3,
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: 700 }}>Choose another day</div>
-                <div style={{ fontSize: 13, fontWeight: 400, opacity: 0.6, marginTop: 2 }}>
-                  Open any reading from the full plan
-                </div>
-              </div>
-              <span style={{ opacity: 0.35, fontSize: 20, marginLeft: 12 }}>›</span>
-            </summary>
-
-            <div style={{ marginTop: 10 }}>
-              <input
-                type="text"
-                inputMode="search"
-                placeholder="Search by book name (e.g. John, Psalms)…"
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  borderRadius: 12,
-                  border: '1px solid rgba(0,0,0,0.15)',
-                  marginBottom: 8,
-                  boxSizing: 'border-box',
-                }}
-                onChange={(ev) => {
-                  const q = ev.target.value.toLowerCase().trim();
-                  const items = document.querySelectorAll('[data-day-item]');
-                  items.forEach((el) => {
-                    const htmlEl = el as HTMLElement;
-                    htmlEl.style.display =
-                      !q || htmlEl.dataset.title?.toLowerCase().includes(q) ? '' : 'none';
-                  });
-                }}
+        {props.plan && (() => {
+          const [open, setOpen] = React.useState(false);
+          return (
+            <>
+              <Row
+                title="Choose another day in this plan"
+                subtitle="Open any reading from the full Bible plan"
+                onClick={() => setOpen(o => !o)}
               />
-              <div
-                style={{
-                  maxHeight: 220,
-                  overflowY: 'auto',
-                  borderRadius: 12,
-                  border: '1px solid rgba(0,0,0,0.10)',
-                  background: 'white',
-                }}
-              >
-                {props.plan.days.map((d) => (
-                  <button
-                    key={d.day}
-                    type="button"
-                    data-day-item
-                    data-title={d.title}
-                    onClick={() => props.onOpenReadingForDay(d)}
+              {open && (
+                <div style={{ marginTop: 4, marginBottom: 4 }}>
+                  <input
+                    type="text"
+                    inputMode="search"
+                    placeholder="Search by book name (e.g. John, Psalms)…"
+                    autoFocus
                     style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
                       width: '100%',
-                      textAlign: 'left',
                       padding: '10px 14px',
-                      background: 'transparent',
-                      border: 'none',
-                      borderBottom: '1px solid rgba(0,0,0,0.06)',
-                      cursor: 'pointer',
+                      borderRadius: 12,
+                      border: '1px solid rgba(0,0,0,0.15)',
+                      marginBottom: 6,
+                      boxSizing: 'border-box',
+                      fontSize: 14,
                     }}
-                  >
-                    <span style={{ fontWeight: 600, fontSize: 13 }}>Day {d.day}</span>
-                    <span style={{ fontSize: 12, opacity: 0.7 }}>{d.title}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </details>
-        )}
+                    onChange={(ev) => {
+                      const q = ev.target.value.toLowerCase().trim();
+                      document.querySelectorAll('[data-day-item]').forEach((el) => {
+                        const htmlEl = el as HTMLElement;
+                        htmlEl.style.display =
+                          !q || htmlEl.dataset.title?.toLowerCase().includes(q) ? '' : 'none';
+                      });
+                    }}
+                  />
+                  <div style={{
+                    maxHeight: 220,
+                    overflowY: 'auto',
+                    borderRadius: 12,
+                    border: '1px solid rgba(0,0,0,0.10)',
+                    background: 'white',
+                  }}>
+                    {props.plan.days.map((d) => (
+                      <button
+                        key={d.day}
+                        type="button"
+                        data-day-item
+                        data-title={d.title}
+                        onClick={() => { setOpen(false); props.onOpenReadingForDay(d); }}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '10px 14px',
+                          background: 'transparent',
+                          border: 'none',
+                          borderBottom: '1px solid rgba(0,0,0,0.06)',
+                          cursor: 'pointer',
+                          fontSize: 14,
+                        }}
+                      >
+                        <span style={{ fontWeight: 600 }}>Day {d.day}</span>
+                        <span style={{ opacity: 0.6, fontSize: 13 }}>{d.title}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          );
+        })()}
 
         {/* btc:read-listen-today-rows-v2 */}
         {today && (
