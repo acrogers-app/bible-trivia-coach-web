@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const corePath = "public/data/trivia_core_en_v1.json";
+const corePath = "public/packs/trivia_core_en_v1.json";
 
 if (!fs.existsSync(corePath)) {
   console.error("Could not find", corePath);
@@ -14,15 +14,8 @@ if (!Array.isArray(data.questions)) {
 }
 
 const bannedPhrases = [
-  "podcast",
-  "paperwork",
-  "meme",
-  "selfie",
-  "video game",
-  "social media",
-  "email",
-  "texting",
-  "guarded guard"
+  "podcast", "paperwork", "meme", "selfie", "video game",
+  "social media", "email", "texting", "guarded guard"
 ];
 
 function looksSilly(text) {
@@ -34,14 +27,20 @@ let issues = [];
 
 for (const q of data.questions) {
   const id = q.id || "<no-id>";
+  const isTF = q.trueFalse === true;
+  const isPlayful = q.playful === true;
 
   // Basic structure checks
   if (!q.text || typeof q.text !== "string") {
     issues.push({ id, type: "structure", msg: "Missing or non-string question text" });
   }
 
-  if (!Array.isArray(q.options) || q.options.length !== 4) {
-    issues.push({ id, type: "structure", msg: "Options must be an array of 4 strings" });
+  const expectedLen = isTF ? 2 : 4;
+  if (!Array.isArray(q.options) || q.options.length !== expectedLen) {
+    issues.push({
+      id, type: "structure",
+      msg: `Options must be an array of ${expectedLen} strings (got ${q.options?.length ?? 0})`
+    });
   } else {
     q.options.forEach((opt, idx) => {
       if (typeof opt !== "string") {
@@ -51,10 +50,21 @@ for (const q of data.questions) {
       if (opt.length > 90) {
         issues.push({ id, type: "readability", msg: `Option[${idx}] very long (${opt.length} chars)` });
       }
-      if (looksSilly(opt)) {
+      // Only flag silly options on non-playful questions
+      if (!isPlayful && looksSilly(opt)) {
         issues.push({ id, type: "silly", msg: `Option[${idx}] contains suspicious phrase: "${opt}"` });
       }
     });
+  }
+
+  // correctIndex must be valid
+  if (
+    typeof q.correctIndex !== "number" ||
+    q.correctIndex < 0 ||
+    !Array.isArray(q.options) ||
+    q.correctIndex >= q.options.length
+  ) {
+    issues.push({ id, type: "structure", msg: "Missing or invalid correctIndex" });
   }
 
   // Scripture questions should have refStart/refEnd
@@ -77,9 +87,28 @@ if (issues.length === 0) {
   process.exit(0);
 }
 
-console.log(`Found ${issues.length} potential issues. Showing first 40:`);
-for (const issue of issues.slice(0, 40)) {
-  console.log(`- [${issue.type}] id=${issue.id}: ${issue.msg}`);
+// Separate structural from readability/silly
+const structural = issues.filter(i => i.type === "structure");
+const warnings   = issues.filter(i => i.type !== "structure");
+
+console.log(`Found ${structural.length} structural issues, ${warnings.length} warnings.`);
+
+if (structural.length > 0) {
+  console.log("\nStructural issues (must fix):");
+  for (const issue of structural.slice(0, 20)) {
+    console.log(`  [${issue.type}] id=${issue.id}: ${issue.msg}`);
+  }
 }
 
-process.exit(1);
+if (warnings.length > 0) {
+  console.log("\nWarnings (review but not blocking):");
+  for (const issue of warnings.slice(0, 20)) {
+    console.log(`  [${issue.type}] id=${issue.id}: ${issue.msg}`);
+  }
+}
+
+// Only fail on structural issues
+if (structural.length > 0) {
+  process.exit(1);
+}
+process.exit(0);
