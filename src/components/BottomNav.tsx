@@ -55,21 +55,30 @@ export default function BottomNav() {
             <Link
               key={it.href}
               href={it.href}
+              aria-current={active ? 'page' : undefined}
               style={{
                 textAlign: 'center',
                 padding: '8px 4px',
                 borderRadius: 14,
                 textDecoration: 'none',
-                color: active ? 'rgba(37,99,235,1)' : 'rgba(0,0,0,0.45)',
+                // WCAG AA: inactive #555 on white = 7.4:1 contrast ratio
+                color: active ? '#1d4ed8' : '#444444',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 2,
-                borderBottom: active ? '2px solid rgba(37,99,235,0.8)' : '2px solid transparent',
+                gap: 3,
+                borderBottom: active ? '3px solid #1d4ed8' : '3px solid transparent',
+                flex: 1,
               }}
             >
-              <span style={{ fontSize: 22 }}>{it.icon}</span>
-              <span style={{ fontSize: 11, fontWeight: active ? 700 : 500 }}>{it.label}</span>
+              <span style={{ fontSize: 24, lineHeight: 1 }}>{it.icon}</span>
+              <span style={{
+                fontSize: 12,
+                fontWeight: active ? 700 : 600,
+                letterSpacing: active ? 0 : 0.1,
+              }}>
+                {it.label}
+              </span>
             </Link>
           );
         })}
