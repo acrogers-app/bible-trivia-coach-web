@@ -1656,6 +1656,7 @@ function HomeScreen(props: {
   onStartHistoryQuiz: () => void;
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
   onStartBookQuiz: (book: string, chapter?: number) => void;
+  dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
   const easyCount = availableCount(pack, 'easy', 'scripture');
@@ -2122,168 +2123,103 @@ function HomeScreen(props: {
 
       </Section>
 
-      <Section title="Daily challenge" tint="#dcfce7">
-        <Row
-          title="Today's 5-question challenge"
-          subtitle="Short Scripture quiz based on today's reading"
-          onClick={props.onStartDailyQuiz}
-        />
-      </Section>
+      <div style={{ marginTop:14 }}>
 
-      <Section title="Play" tint="#fff7ed">
+        {/* ── Quick action tile grid ─────────────────────────────── */}
         <div
-          data-testid="btc-play-tiles"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: 12,
+            gridTemplateColumns: 'repeat(auto-fit, minmax(145px, 1fr))',
+            gap: 10,
           }}
         >
+          {/* ⚡ Daily Challenge */}
           <button
             type="button"
-            onClick={() => props.onStartVerseQuiz()}
+            onClick={props.onStartDailyQuiz}
             style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
+              textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border: props.dailyChallengeCompleted
+                ? '1.5px solid #86efac' : '1px solid rgba(0,0,0,0.10)',
+              background: props.dailyChallengeCompleted
+                ? 'rgba(34,197,94,0.06)' : 'white',
+              minHeight: 90,
             }}
           >
-            <div style={{ fontWeight: 800 }}>Verse of the day</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              3-question quiz on today’s verse
+            <div style={{ fontSize:24, marginBottom:4 }}>⚡</div>
+            <div style={{ fontWeight:800 }}>
+              Daily Challenge
+              {props.dailyChallengeCompleted && (
+                <span style={{ marginLeft:6 }}>✅</span>
+              )}
+            </div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>
+              5-question Scripture quiz
             </div>
           </button>
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/play?action=quiz&level=mixed&count=10&sourceType=scripture'; }}
-            style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
-            }}
+            onClick={props.onStartQuickQuiz}
+            style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
           >
-            <div style={{ fontWeight: 800 }}>Quick Quiz</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              10 mixed questions
-            </div>
+            <div style={{ fontSize:24, marginBottom:4 }}>📖</div>
+            <div style={{ fontWeight:800 }}>Quick Quiz</div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>10 mixed questions</div>
           </button>
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/play?action=scroll&target=btc-family'; }}
-            style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
-            }}
+            onClick={props.onOpenFamilyNight}
+            style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
           >
-            <div style={{ fontWeight: 800 }}>Family Night</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              Take turns with a shared score
-            </div>
+            <div style={{ fontSize:24, marginBottom:4 }}>👨‍👩‍👧</div>
+            <div style={{ fontWeight:800 }}>Family Night</div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>Take turns, shared score</div>
           </button>
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/play?action=scroll&target=btc-levels'; }}
-            style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
+            onClick={() => {
+              const el = document.getElementById('btc-by-book-anchor');
+              if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
             }}
+            style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90 }}
           >
-            <div style={{ fontWeight: 800 }}>Levels (Strict)</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              Easy / Medium / Hard / Mixed
-            </div>
+            <div style={{ fontSize:24, marginBottom:4 }}>📚</div>
+            <div style={{ fontWeight:800 }}>By Book</div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>Pick a book to quiz on</div>
           </button>
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/play?action=scroll&target=btc-by-book'; }}
-            style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
-            }}
+            onClick={props.onStartHistoryQuiz}
+            style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
           >
-            <div style={{ fontWeight: 800 }}>By Book</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              Choose a book to quiz on
-            </div>
+            <div style={{ fontSize:24, marginBottom:4 }}>📜</div>
+            <div style={{ fontWeight:800 }}>Bible History</div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>History-mode questions</div>
           </button>
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/play?action=scroll&target=btc-history'; }}
-            style={{
-              textAlign: 'left',
-              padding: 14,
-              borderRadius: 16,
-              border: '1px solid rgba(0,0,0,0.10)',
-              background: 'white',
-              minHeight: 72,
-            }}
+            onClick={() => { window.location.href = '/levels'; }}
+            style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
           >
-            <div style={{ fontWeight: 800 }}>Bible History</div>
-            <div className="btc-text-muted" style={{ marginTop: 4 }}>
-              History-mode questions
-            </div>
+            <div style={{ fontSize:24, marginBottom:4 }}>🎯</div>
+            <div style={{ fontWeight:800 }}>Levels</div>
+            <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>Easy / Medium / Hard / Mixed</div>
           </button>
         </div>
-      </Section>
-      <details
-        id="btc-more"
-        style={{
-          marginTop: 8,
-          marginBottom: 8,
-          padding: 12,
-          borderRadius: 16,
-          border: '1px solid rgba(0,0,0,0.10)',
-          background: 'rgba(0,0,0,0.02)',
-        }}
-      >
-        <summary style={{ cursor: 'pointer', fontWeight: 800, padding: 8 }}>
-          More options
-        </summary>
 
-        <div style={{ marginTop: 10 }}>
-          <div id="btc-quick" />
-          <Section title="Quick" tint="#fef3c7">
-        <Row
-          title="Quick Quiz (10)"
-          subtitle="10 mixed questions"
-          onClick={props.onStartQuickQuiz}
-        />
-      </Section>
-
-      <div id="btc-family" />
-      <Section title="Family Night" tint="#e0e7ff">
-        <Row
-          title="Family Night"
-          subtitle="Take turns as a family with a shared score."
-          onClick={props.onOpenFamilyNight}
-        />
-      </Section>
-
-      <div id="btc-by-book" />
-      <Section title="By Book" tint="#e0f2fe">
+        {/* ── By Book (scrolls here when tile tapped) ───────────── */}
+        <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
+        <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
           <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
             Choose a book to quiz on
@@ -2356,78 +2292,23 @@ function HomeScreen(props: {
         </div>
       </Section>
 
-      <div id="btc-history" />
-      <Section title="Bible History" tint="#e0e7ff">
-        <Row
-          title="Bible History (10)"
-          subtitle="History‑mode questions"
-          onClick={props.onStartHistoryQuiz}
-        />
-      </Section>
-
-      <div id="btc-levels" />
-      <Section title="Levels (Strict)" tint="#dcfce7">
-        {easyCount > 0 ? (
-          <Row
-            title={`Easy (${easyCount} available)`}
-            subtitle="Fast and friendly."
-            onClick={() =>
-              props.onStartLevelQuiz('easy', Math.min(10, easyCount))
-            }
-          />
-        ) : (
-          <DisabledRow title="Easy (coming soon)" />
-        )}
-
-        {medCount > 0 ? (
-          <Row
-            title={`Medium (${medCount} available)`}
-            subtitle="A little deeper."
-            onClick={() =>
-              props.onStartLevelQuiz('medium', Math.min(10, medCount))
-            }
-          />
-        ) : (
-          <DisabledRow title="Medium (coming soon)" />
-        )}
-
-        {hardCount > 0 ? (
-          <Row
-            title={`Hard (${hardCount} available)`}
-            subtitle="Challenge mode."
-            onClick={() =>
-              props.onStartLevelQuiz('hard', Math.min(10, hardCount))
-            }
-          />
-        ) : (
-          <DisabledRow title="Hard (coming soon)" />
-        )}
-
-        {mixedCount > 0 && (
-          <Row
-            title={`Mixed (${mixedCount} available)`}
-            subtitle="A mix of everything."
-            onClick={() =>
-              props.onStartLevelQuiz('mixed', Math.min(10, mixedCount))
-            }
-          />
-        )}
-      </Section>
-
-      <div id="btc-tip" />
-      <Section title="Coach's tip" tint="#fef9c3">
-        <div
-          style={{
-            padding: '8px 12px',
-            fontSize: 13,
-            color: '#4b5563',
-          }}
+        {/* ── Coach's tip (collapsible) ──────────────────────────── */}
+        <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
+          border:'1px solid rgba(0,0,0,0.07)', background:'rgba(254,249,195,0.6)' }}
         >
-          {coachTip}
-        </div>
-      </Section>
-        </div>
-      </details>
+          <summary style={{ cursor:'pointer', padding:'10px 14px',
+            fontWeight:700, listStyle:'none', display:'flex',
+            alignItems:'center', gap:8 }}
+          >
+            <span>💡</span>
+            <span>Coach&apos;s tip</span>
+          </summary>
+          <div style={{ padding:'8px 14px 12px', fontSize:13, color:'#4b5563' }}>
+            {coachTip}
+          </div>
+        </details>
+
+      </div>
 
     </div>
   );
