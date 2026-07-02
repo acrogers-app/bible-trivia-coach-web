@@ -2070,18 +2070,23 @@ function HomeScreen(props: {
               style={{
                 cursor: 'pointer',
                 listStyle: 'none',
-                display: 'inline-flex',
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: 6,
-                padding: '6px 14px',
-                borderRadius: 999,
-                border: '1px solid rgba(0,0,0,0.12)',
+                padding: '14px 18px',
+                borderRadius: 16,
+                border: '1px solid rgba(0,0,0,0.08)',
                 background: 'white',
-                fontSize: 13,
-                fontWeight: 600,
+                fontSize: 15,
+                fontWeight: 700,
+                color: 'inherit',
               }}
             >
-              📅 Change day
+              <span>
+                <span style={{ marginRight: 8 }}>📅</span>
+                Choose another day in this plan
+              </span>
+              <span style={{ opacity: 0.4, fontSize: 18 }}>›</span>
             </summary>
 
             <div style={{ marginTop: 10 }}>
