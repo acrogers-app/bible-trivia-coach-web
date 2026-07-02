@@ -2073,20 +2073,23 @@ function HomeScreen(props: {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '14px 18px',
+                padding: '16px 20px',
                 borderRadius: 16,
                 border: '1px solid rgba(0,0,0,0.08)',
                 background: 'white',
                 fontSize: 15,
                 fontWeight: 700,
                 color: 'inherit',
+                lineHeight: 1.3,
               }}
             >
-              <span>
-                <span style={{ marginRight: 8 }}>📅</span>
-                Choose another day in this plan
-              </span>
-              <span style={{ opacity: 0.4, fontSize: 18 }}>›</span>
+              <div>
+                <div style={{ fontWeight: 700 }}>Choose another day</div>
+                <div style={{ fontSize: 13, fontWeight: 400, opacity: 0.6, marginTop: 2 }}>
+                  Open any reading from the full plan
+                </div>
+              </div>
+              <span style={{ opacity: 0.35, fontSize: 20, marginLeft: 12 }}>›</span>
             </summary>
 
             <div style={{ marginTop: 10 }}>
