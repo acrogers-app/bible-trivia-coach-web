@@ -16,6 +16,7 @@ export type AppSettings = {
   readerLang: string;         // e.g. en-US
   readerAutoFollow: boolean;
   readerShowAllVoices: boolean;
+  analyticsEnabled: boolean;
 };
 
 export const defaultSettings: AppSettings = {
@@ -31,6 +32,7 @@ export const defaultSettings: AppSettings = {
   readerLang: 'en-US',
   readerAutoFollow: true,
   readerShowAllVoices: false,
+  analyticsEnabled: true,
 };
 
 const KEY = 'btc:settings:v2';

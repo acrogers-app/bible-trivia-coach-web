@@ -229,6 +229,19 @@ export default function SettingsPage() {
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />
               <span><strong>Reduce motion</strong></span>
             </label>
+            <label style={row}>
+              <input
+                type="checkbox"
+                checked={draft.analyticsEnabled !== false}
+                onChange={(e) => update({ analyticsEnabled: e.target.checked })}
+              />
+              <span>
+                <strong>Anonymous analytics</strong>
+                <span className="btc-text-muted" style={{ fontSize: 12, display: 'block', marginTop: 2 }}>
+                  Helps improve questions. No personal data collected.
+                </span>
+              </span>
+            </label>
           </div>
 
           <div style={preview}>

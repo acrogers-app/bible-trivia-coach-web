@@ -8,6 +8,7 @@ import {
   getDailyChallengeNudgeLine,
 } from '@/lib/coachVoice';
 import BottomNav from '../../components/BottomNav';
+import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { loadSettings } from '../../lib/appSettings';
 
 // btc:voice-helpers
@@ -1428,6 +1429,32 @@ export default function PlayPage() {
     setLastQuestions(questions);
     setLastAnswers(answers);
     markDailyChallengeCompletedForToday(title);
+
+    // btc:analytics
+    try {
+      sendQuizAnalytics({
+        sessionId:  makeSessionId(),
+        quizTitle:  title,
+        total,
+        correct,
+        timestamp:  new Date().toISOString(),
+        answers: answers.map((a) => {
+          const q = questions.find((x) => x.id === a.questionId);
+          return {
+            questionId:   a.questionId,
+            questionText: q?.text ?? '',
+            correct:      a.isCorrect,
+            selectedText: q?.options?.[a.chosenIndex] ?? String(a.chosenIndex),
+            correctText:  q?.options?.[a.correctIndex] ?? String(a.correctIndex),
+            difficulty:   q?.difficulty ?? 'unknown',
+            refStart:     q?.refStart ?? '',
+            refEnd:       q?.refEnd ?? '',
+            sourceType:   q?.sourceType ?? 'scripture',
+          };
+        }),
+      });
+    } catch {}
+
     setScreen({ name: 'summary', title, total, correct });
   }
 
