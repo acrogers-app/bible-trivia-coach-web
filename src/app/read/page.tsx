@@ -129,21 +129,20 @@ export default function ReadPage() {
       const autoplay = sp.get('autoplay') === '1';
 
       if (start && end) {
-        setMode('passage');
-        setPassageStart(start);
-        setPassageEnd(end);
-
-        // Try to set book/chapter for nicer display (best-effort)
-        const m = start.match(/^(.+?)\s+(\d+):\d+/);
-        if (m) {
-          setBook(m[1]);
-          setChapter(parseInt(m[2], 10));
-        }
-
         pendingAutoplayRef.current = autoplay;
 
         // Load immediately (don’t rely on state timing)
         (async () => {
+          setMode('passage');
+          setPassageStart(start);
+          setPassageEnd(end);
+
+          // Try to set book/chapter for nicer display (best-effort)
+          const m = start.match(/^(.+?)\s+(\d+):\d+/);
+          if (m) {
+            setBook(m[1]);
+            setChapter(parseInt(m[2], 10));
+          }
           setError(null);
           setLoading(true);
           stop();
@@ -272,7 +271,7 @@ export default function ReadPage() {
     } catch {}
 
     let gotBoundary = false;
-    u.onboundary = (e: any) => {
+    u.onboundary = (e: SpeechSynthesisEvent) => {
       if (runIdRef.current !== runId) return;
       if (typeof e?.charIndex === 'number') {
         gotBoundary = true;
@@ -324,8 +323,9 @@ export default function ReadPage() {
     if (!pendingAutoplayRef.current) return;
     pendingAutoplayRef.current = false;
     // start listening
-    try { listen(); } catch {}
-  }, [lines.length]);
+    const t = window.setTimeout(() => { try { listen(); } catch {} }, 0);
+    return () => window.clearTimeout(t);
+  }, [lines.length, listen]);
   
 useEffect(() => {
     if (!settings.readerAutoFollow) return;

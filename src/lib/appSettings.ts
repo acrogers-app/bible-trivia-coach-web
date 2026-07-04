@@ -49,8 +49,12 @@ export function loadSettings(): AppSettings {
     const raw = localStorage.getItem(KEY);
     if (!raw) return { ...defaultSettings, readerLang: langDefault };
 
-    const parsed = JSON.parse(raw);
-    const merged: AppSettings = { ...defaultSettings, readerLang: langDefault, ...parsed };
+    const parsed: unknown = JSON.parse(raw);
+    const stored: Partial<AppSettings> =
+      typeof parsed === 'object' && parsed !== null
+        ? (parsed as Partial<AppSettings>)
+        : {};
+    const merged: AppSettings = { ...defaultSettings, readerLang: langDefault, ...stored };
 
     merged.appTextScale = clamp(merged.appTextScale, 0.9, 1.3);
     merged.readerFontSize = clamp(merged.readerFontSize, 14, 28);
@@ -73,12 +77,12 @@ export function saveSettings(s: AppSettings) {
 
 export function onSettingsChanged(fn: () => void) {
   if (typeof window === 'undefined') return () => {};
-  const handler = () => fn();
-  window.addEventListener(EVENT, handler as any);
+  const handler: EventListener = () => fn();
+  window.addEventListener(EVENT, handler);
   window.addEventListener('storage', (e) => {
     if (e.key === KEY) fn();
   });
-  return () => window.removeEventListener(EVENT, handler as any);
+  return () => window.removeEventListener(EVENT, handler);
 }
 
 export function applySettingsToDocument(s: AppSettings) {

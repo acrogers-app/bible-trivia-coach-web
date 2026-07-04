@@ -78,18 +78,10 @@ function isGoogleAvailable(voices: VoiceOpt[], lang: string) {
 }
 
 export default function SettingsPage() {
-  const [saved, setSaved] = useState<AppSettings>(defaultSettings);
-  const [draft, setDraft] = useState<AppSettings>(defaultSettings);
+  const [saved, setSaved] = useState<AppSettings>(() => loadSettings());
+  const [draft, setDraft] = useState<AppSettings>(() => loadSettings());
   const [voices, setVoices] = useState<VoiceOpt[]>([]);
   const [status, setStatus] = useState<string>('');
-
-  useEffect(() => {
-    const s = loadSettings();
-    setSaved(s);
-    setDraft(s);
-    applySettingsToDocument(s);
-  }, []);
-
   useEffect(() => {
     function load() {
       try {
@@ -241,7 +233,7 @@ export default function SettingsPage() {
           {/* ── Font ── */}
           <div style={{ marginTop: 12 }}>
             <div style={labelSmall}>App font</div>
-            <select value={draft.appFont} onChange={(e) => update({ appFont: e.target.value as any })} style={select}>
+            <select value={draft.appFont} onChange={(e) => update({ appFont: e.target.value as AppSettings['appFont'] })} style={select}>
               <option value="system">System (default)</option>
               <option value="rounded">Rounded (friendly)</option>
               <option value="serif">Serif (classic)</option>
@@ -305,7 +297,7 @@ export default function SettingsPage() {
 
           <div style={{ marginTop: 10 }}>
             <div style={labelSmall}>Reader theme</div>
-            <select value={draft.readerTheme} onChange={(e) => update({ readerTheme: e.target.value as any })} style={select}>
+            <select value={draft.readerTheme} onChange={(e) => update({ readerTheme: e.target.value as AppSettings['readerTheme'] })} style={select}>
               <option value="vibrant">Vibrant (Aurora)</option>
               <option value="calm">Calm</option>
             </select>
