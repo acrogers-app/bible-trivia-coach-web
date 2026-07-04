@@ -283,3 +283,100 @@ html[data-btc-reduce-motion="1"] .btc-listen-overlay {
   border: 1px solid rgba(255,255,255,0.14);
   background: rgba(255,255,255,0.06);
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   BTC THEME SYSTEM
+   Light / Dark / High Contrast
+   Uses CSS custom properties so everything updates instantly
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Light (default) ── */
+:root,
+html[data-btc-theme="light"] {
+  --btc-bg:           #f3f4f6;
+  --btc-card-bg:      #ffffff;
+  --btc-card-border:  rgba(0,0,0,0.07);
+  --btc-text:         #111827;
+  --btc-text-muted:   #6b7280;
+  --btc-nav-bg:       #ffffff;
+  --btc-nav-border:   rgba(0,0,0,0.09);
+  --btc-nav-active:   #1d4ed8;
+  --btc-nav-inactive: #1a1a1a;
+  --btc-row-bg:       #ffffff;
+  --btc-row-border:   rgba(0,0,0,0.08);
+  --btc-input-bg:     #ffffff;
+  --btc-input-border: rgba(0,0,0,0.20);
+  --btc-section-tint: rgba(219,234,254,0.5);
+  color-scheme: light;
+}
+
+/* ── Dark ── */
+html[data-btc-theme="dark"] {
+  --btc-bg:           #0f172a;
+  --btc-card-bg:      #1e293b;
+  --btc-card-border:  rgba(255,255,255,0.08);
+  --btc-text:         #f1f5f9;
+  --btc-text-muted:   #94a3b8;
+  --btc-nav-bg:       #1e293b;
+  --btc-nav-border:   rgba(255,255,255,0.10);
+  --btc-nav-active:   #60a5fa;
+  --btc-nav-inactive: #cbd5e1;
+  --btc-row-bg:       #273549;
+  --btc-row-border:   rgba(255,255,255,0.08);
+  --btc-input-bg:     #1e293b;
+  --btc-input-border: rgba(255,255,255,0.20);
+  --btc-section-tint: rgba(30,41,59,0.8);
+  color-scheme: dark;
+}
+
+/* ── High Contrast (overlays either theme) ── */
+html[data-btc-contrast="high"] {
+  --btc-text:         #000000;
+  --btc-text-muted:   #000000;
+  --btc-card-border:  #000000;
+  --btc-row-border:   #000000;
+}
+html[data-btc-theme="dark"][data-btc-contrast="high"] {
+  --btc-text:         #ffffff;
+  --btc-text-muted:   #ffffff;
+  --btc-card-border:  #ffffff;
+  --btc-row-border:   #ffffff;
+  --btc-nav-inactive: #ffffff;
+}
+
+/* ── Apply variables to existing components ── */
+body {
+  background: var(--btc-bg);
+  color: var(--btc-text);
+}
+
+.btc-root {
+  font-family: var(--btc-font-family);
+  font-size: calc(16px * var(--btc-font-mult));
+  background: var(--btc-bg);
+  color: var(--btc-text);
+  min-height: 100vh;
+}
+
+.btc-card {
+  background: var(--btc-card-bg) !important;
+  border: 1px solid var(--btc-card-border) !important;
+  color: var(--btc-text);
+}
+
+.btc-text-muted {
+  color: var(--btc-text-muted) !important;
+}
+
+/* High contrast: bold borders everywhere */
+html[data-btc-contrast="high"] .btc-card {
+  border: 2.5px solid var(--btc-card-border) !important;
+}
+
+/* Reduce motion */
+html[data-btc-reduce-motion="1"] * {
+  scroll-behavior: auto !important;
+  transition: none !important;
+  animation: none !important;
+}
