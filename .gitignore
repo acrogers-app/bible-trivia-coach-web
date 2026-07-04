@@ -80,3 +80,8 @@ scripts/ensure_*.mjs
 
 # Python fix scripts
 scripts/fix_*.py
+
+# No public backups or macOS resource forks
+public/**/._*
+public/**/*.before-*.json
+public/**/*.bak.*
