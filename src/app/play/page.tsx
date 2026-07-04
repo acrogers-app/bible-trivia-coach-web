@@ -1211,53 +1211,49 @@ export default function PlayPage() {
   useEffect(() => {
     let cancelled = false;
 
-    async function load() {
+    async function loadPlan() {
       try {
-        const [planRes, packRes] = await Promise.all([
-          fetch('/data/reading_plan_en_v1.json'),
-          fetch('/packs/trivia_core_en_v1.json'),
-        ]);
-
+        const planRes = await fetch('/data/reading_plan_en_v1.json');
         if (!planRes.ok)
-          throw new Error(
-            `Failed to load reading plan: ${planRes.status}`,
-          );
-        if (!packRes.ok)
-          throw new Error(
-            `Failed to load trivia pack: ${packRes.status}`,
-          );
-
+          throw new Error(`Failed to load reading plan: ${planRes.status}`);
         const planJson = (await planRes.json()) as ReadingPlan;
-        const packJson = (await packRes.json()) as TriviaPack;
-
-        let mapping: DailyQuizPlanMapping | null = null;
-        try {
-          const mapRes = await fetch('/daily_quizzes_gospels_30.json');
-          if (mapRes.ok) {
-            mapping = (await mapRes.json()) as DailyQuizPlanMapping;
-          }
-        } catch {
-          // optional
-        }
-
         if (!cancelled) {
           setPlan(planJson);
-          setPack(packJson);
-          setDailyQuizMap(mapping);
           setError(null);
           setLoading(false);
         }
       } catch (e) {
         if (!cancelled) {
-          setError(
-            e instanceof Error ? e.message : 'Unknown error loading data',
-          );
+          setError(e instanceof Error ? e.message : 'Unknown error loading data');
           setLoading(false);
         }
       }
     }
 
-    load();
+    async function loadPack() {
+      try {
+        const [packRes, mapRes] = await Promise.all([
+          fetch('/packs/trivia_core_en_v1.json'),
+          fetch('/daily_quizzes_gospels_30.json').catch(() => null),
+        ]);
+        if (!packRes.ok)
+          throw new Error(`Failed to load trivia pack: ${packRes.status}`);
+        const packJson = (await packRes.json()) as TriviaPack;
+        const mapping: DailyQuizPlanMapping | null =
+          mapRes?.ok ? ((await mapRes.json()) as DailyQuizPlanMapping) : null;
+        if (!cancelled) {
+          setPack(packJson);
+          setDailyQuizMap(mapping);
+        }
+      } catch {
+        // Pack load failure is non-fatal — hub still renders, quizzes show "loading"
+      }
+    }
+
+    // Load plan first (fast, ~5KB) so the hub renders immediately.
+    // Then load the full pack in the background (~6MB).
+    loadPlan().then(() => { if (!cancelled) loadPack(); });
+
     return () => {
       cancelled = true;
     };
