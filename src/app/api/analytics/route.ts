@@ -86,16 +86,91 @@ async function logToLangfuse(payload: QuizAnalyticsPayload) {
   await lf.flushAsync();
 }
 
+
+const MAX_ANSWERS = 50;
+const MAX_STRING_LENGTH = 256;
+const MAX_BODY_BYTES = 128 * 1024;
+
+function capString(value: unknown, max = MAX_STRING_LENGTH): string {
+  return typeof value === 'string' ? value.slice(0, max) : '';
+}
+
+function invalidPayload() {
+  return NextResponse.json({ ok: false, error: 'invalid payload' }, { status: 400 });
+}
+
+function sanitizePayload(body: unknown): QuizAnalyticsPayload | null {
+  if (typeof body !== 'object' || body === null) return null;
+  const b = body as Record<string, unknown>;
+
+  const sessionId = capString(b.sessionId);
+  if (!sessionId) return null;
+  if (!Array.isArray(b.answers) || b.answers.length > MAX_ANSWERS) return null;
+
+  const answers: QuizAnswerEvent[] = [];
+  for (const raw of b.answers) {
+    if (typeof raw !== 'object' || raw === null) return null;
+    const a = raw as Record<string, unknown>;
+    answers.push({
+      questionId: capString(a.questionId),
+      questionText: capString(a.questionText),
+      correct: a.correct === true,
+      selectedText: capString(a.selectedText),
+      correctText: capString(a.correctText),
+      difficulty: capString(a.difficulty),
+      refStart: capString(a.refStart),
+      refEnd: capString(a.refEnd),
+      sourceType: capString(a.sourceType),
+    });
+  }
+
+  const total = Number(b.total);
+  const correct = Number(b.correct);
+
+  return {
+    sessionId,
+    quizTitle: capString(b.quizTitle),
+    total: Number.isFinite(total) ? Math.min(Math.max(total, 0), 1000) : 0,
+    correct: Number.isFinite(correct) ? Math.min(Math.max(correct, 0), 1000) : 0,
+    answers,
+    timestamp: capString(b.timestamp),
+  };
+}
+
 export async function POST(req: NextRequest) {
+  // Reject declared-oversized bodies before reading them.
+  const declaredSize = Number(req.headers.get('content-length'));
+  if (Number.isFinite(declaredSize) && declaredSize > MAX_BODY_BYTES) {
+    return invalidPayload();
+  }
+
+  let raw: string;
   try {
-    const body = (await req.json()) as QuizAnalyticsPayload;
-    if (!body?.sessionId || !Array.isArray(body.answers)) {
-      return NextResponse.json({ ok: false, error: 'invalid payload' }, { status: 400 });
-    }
-    await logToLangfuse(body);
-    return NextResponse.json({ ok: true, logged: body.answers.length });
+    raw = await req.text();
+  } catch {
+    return invalidPayload();
+  }
+
+  // Enforce size cap on actual bytes (not characters).
+  const bytes = new TextEncoder().encode(raw).length;
+  if (bytes > MAX_BODY_BYTES) return invalidPayload();
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return invalidPayload();
+  }
+
+  const payload = sanitizePayload(parsed);
+  if (!payload) return invalidPayload();
+
+  try {
+    await logToLangfuse(payload);
+    return NextResponse.json({ ok: true, logged: payload.answers.length });
   } catch (err) {
     console.error('[analytics]', err instanceof Error ? err.message : err);
     return NextResponse.json({ ok: true, skipped: true });
   }
 }
+
