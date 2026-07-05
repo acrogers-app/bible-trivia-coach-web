@@ -156,7 +156,8 @@ export default function SettingsPage() {
 
   function save() {
     saveSettings(draft);
-    setSaved(draft);
+    setSaved({ ...draft });
+    applySettingsToDocument(draft);
     setStatus('Saved.');
   }
   function cancel() {

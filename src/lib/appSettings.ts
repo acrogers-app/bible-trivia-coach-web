@@ -35,7 +35,7 @@ export const defaultSettings: AppSettings = {
   analyticsEnabled: true,
 };
 
-const KEY = 'btc:settings:v2';
+const KEY = 'btc:settings:v3';
 const EVENT = 'btc:settings-changed';
 
 export function loadSettings(): AppSettings {
