@@ -2195,6 +2195,7 @@ function HomeScreen(props: {
             onClick={() => {
               const el = document.getElementById('btc-by-book-anchor');
               if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+              else window.location.href = '/play?action=scroll&target=btc-by-book-anchor';
             }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90 }}
@@ -2234,16 +2235,17 @@ function HomeScreen(props: {
           <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: '#6b7280' }}>
             Choose a book to quiz on
           </label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             <select
               value={selectedBook}
               onChange={(e) => setSelectedBook(e.target.value)}
               style={{
                 flex: 1,
-                borderRadius: 999,
-                border: '1px solid #e5e7eb',
-                padding: '6px 10px',
+                borderRadius: 12,
+                border: '1px solid rgba(0,0,0,0.15)',
+                padding: '10px 12px',
                 fontSize: 14,
+                background: 'white',
               }}
             >
               {books.map((b) => (
@@ -2257,10 +2259,11 @@ function HomeScreen(props: {
               onChange={(e) => setSelectedChapter(e.target.value)}
               style={{
                 width: 150,
-                borderRadius: 999,
-                border: '1px solid #e5e7eb',
-                padding: '6px 10px',
+                borderRadius: 12,
+                border: '1px solid rgba(0,0,0,0.15)',
+                padding: '10px 12px',
                 fontSize: 14,
+                background: 'white',
               }}
             >
               <option value="">Whole book</option>
@@ -2279,24 +2282,45 @@ function HomeScreen(props: {
                 const safeChapter = ch && ch > 0 ? ch : undefined;
                 const max = bookMaxChapters[selectedBook];
                 if (safeChapter && max && safeChapter > max) {
-                  window.alert(
-                    selectedBook + ' only has ' + max + ' chapters.',
-                  );
+                  window.alert(selectedBook + ' only has ' + max + ' chapters.');
                   return;
                 }
                 props.onStartBookQuiz(selectedBook, safeChapter);
               }}
               style={{
-                padding: '6px 14px',
+                padding: '8px 18px',
                 borderRadius: 999,
                 border: 'none',
                 backgroundColor: '#2563eb',
                 color: 'white',
                 fontSize: 14,
+                fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
-              Start
+              Start Quiz
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const trimmed = selectedChapter.trim();
+                const ch = trimmed ? Number(trimmed) : 1;
+                const safeChapter = ch && ch > 0 ? ch : 1;
+                const url = `/read?start=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':1')}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
+                window.location.href = url;
+              }}
+              style={{
+                padding: '8px 18px',
+                borderRadius: 999,
+                border: '1px solid rgba(0,0,0,0.15)',
+                backgroundColor: 'white',
+                color: '#374151',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              🎧 Listen first
             </button>
           </div>
         </div>
