@@ -380,3 +380,130 @@ html[data-btc-reduce-motion="1"] * {
   transition: none !important;
   animation: none !important;
 }
+
+/* ═══════════════════════════════════════════════
+   DARK MODE — override all hard-coded white/light
+   inline styles cannot be beaten by CSS, but we
+   can target known class patterns aggressively
+   ═══════════════════════════════════════════════ */
+
+html[data-btc-theme="dark"] body {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* Main card */
+html[data-btc-theme="dark"] .btc-card {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255,255,255,0.10) !important;
+}
+
+/* Section cards (the gray inner boxes) */
+html[data-btc-theme="dark"] .btc-card > div[style*="rgba(0,0,0,0.03)"],
+html[data-btc-theme="dark"] .btc-card > div[style*="background: rgba(0,0,0,0.03)"] {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* All inputs and selects */
+html[data-btc-theme="dark"] input,
+html[data-btc-theme="dark"] select,
+html[data-btc-theme="dark"] textarea {
+  background: #273549 !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255,255,255,0.20) !important;
+}
+
+/* Buttons with white background */
+html[data-btc-theme="dark"] button[style*="background: white"],
+html[data-btc-theme="dark"] button[style*="background:'white'"] {
+  background: #273549 !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Any div/section with white background */
+html[data-btc-theme="dark"] div[style*="background: white"],
+html[data-btc-theme="dark"] div[style*="background:'white'"],
+html[data-btc-theme="dark"] section[style*="background: white"] {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+/* Row items */
+html[data-btc-theme="dark"] div[style*="background: rgba(0,0,0,0.03)"] {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+/* Text muted */
+html[data-btc-theme="dark"] .btc-text-muted {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+/* Preview box */
+html[data-btc-theme="dark"] div[style*="border: 1px solid rgba(0,0,0,0.10)"] {
+  background: #273549 !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  color: #f1f5f9 !important;
+}
+
+/* Scrollable lists */
+html[data-btc-theme="dark"] div[style*="overflowY: 'auto'"],
+html[data-btc-theme="dark"] div[style*="overflow-y: auto"] {
+  background: #1e293b !important;
+  border-color: rgba(255,255,255,0.10) !important;
+}
+
+html[data-btc-theme="dark"] button[data-day-item] {
+  color: #f1f5f9 !important;
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+}
+
+html[data-btc-theme="dark"] button[data-day-item]:hover {
+  background: rgba(255,255,255,0.05) !important;
+}
+
+/* Section headings stay visible */
+html[data-btc-theme="dark"] h1,
+html[data-btc-theme="dark"] h2,
+html[data-btc-theme="dark"] h3 {
+  color: #f1f5f9 !important;
+}
+
+/* Bottom nav in dark mode */
+html[data-btc-theme="dark"] nav[aria-label="Primary navigation"] {
+  background: #1e293b !important;
+  border-top-color: rgba(255,255,255,0.10) !important;
+}
+
+/* Range slider track */
+html[data-btc-theme="dark"] input[type="range"] {
+  accent-color: #60a5fa;
+}
+
+/* Checkboxes */
+html[data-btc-theme="dark"] input[type="checkbox"] {
+  accent-color: #60a5fa;
+}
+
+/* Theme picker buttons */
+html[data-btc-theme="dark"] button[style*="background: rgba(29,78,216"] {
+  background: rgba(96,165,250,0.15) !important;
+  border-color: #60a5fa !important;
+  color: #f1f5f9 !important;
+}
+
+/* Tile grid buttons */
+html[data-btc-theme="dark"] .btc-card button[style*="background: white"],
+html[data-btc-theme="dark"] .btc-card a[style*="background: white"] {
+  background: #273549 !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* Row items in daily reading */
+html[data-btc-theme="dark"] section[style] {
+  background: rgba(255,255,255,0.03) !important;
+}
