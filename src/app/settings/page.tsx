@@ -215,10 +215,6 @@ export default function SettingsPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
-            <label style={row}>
-              <input type="checkbox" checked={draft.highContrast} onChange={(e) => update({ highContrast: e.target.checked })} />
-              <span><strong>High contrast</strong></span>
-            </label>
 
             <label style={row}>
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />

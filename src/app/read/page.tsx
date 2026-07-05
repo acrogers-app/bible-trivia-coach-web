@@ -247,9 +247,21 @@ export default function ReadPage() {
               {m === 'chapter' ? 'Whole chapter' : 'Verse range'}
             </button>
           ))}
-          <a href="/settings" style={{ marginLeft:'auto', color:'var(--btc-accent)', textDecoration:'underline', fontSize:13 }}>
-            Reader settings
-          </a>
+          <a href="/settings" style={{
+              marginLeft: 'auto',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '6px 14px',
+              borderRadius: 999,
+              border: '1px solid rgba(0,0,0,0.15)',
+              background: 'white',
+              color: '#374151',
+              textDecoration: 'none',
+              fontSize: 13,
+              fontWeight: 600,
+            }}>
+              ⚙️ Reader settings
+            </a>
         </div>
 
         {mode === 'range' && (

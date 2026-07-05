@@ -1211,49 +1211,53 @@ export default function PlayPage() {
   useEffect(() => {
     let cancelled = false;
 
-    async function loadPlan() {
+    async function load() {
       try {
-        const planRes = await fetch('/data/reading_plan_en_v1.json');
+        const [planRes, packRes] = await Promise.all([
+          fetch('/data/reading_plan_en_v1.json'),
+          fetch('/packs/trivia_core_en_v1.json'),
+        ]);
+
         if (!planRes.ok)
-          throw new Error(`Failed to load reading plan: ${planRes.status}`);
+          throw new Error(
+            `Failed to load reading plan: ${planRes.status}`,
+          );
+        if (!packRes.ok)
+          throw new Error(
+            `Failed to load trivia pack: ${packRes.status}`,
+          );
+
         const planJson = (await planRes.json()) as ReadingPlan;
+        const packJson = (await packRes.json()) as TriviaPack;
+
+        let mapping: DailyQuizPlanMapping | null = null;
+        try {
+          const mapRes = await fetch('/daily_quizzes_gospels_30.json');
+          if (mapRes.ok) {
+            mapping = (await mapRes.json()) as DailyQuizPlanMapping;
+          }
+        } catch {
+          // optional
+        }
+
         if (!cancelled) {
           setPlan(planJson);
+          setPack(packJson);
+          setDailyQuizMap(mapping);
           setError(null);
           setLoading(false);
         }
       } catch (e) {
         if (!cancelled) {
-          setError(e instanceof Error ? e.message : 'Unknown error loading data');
+          setError(
+            e instanceof Error ? e.message : 'Unknown error loading data',
+          );
           setLoading(false);
         }
       }
     }
 
-    async function loadPack() {
-      try {
-        const [packRes, mapRes] = await Promise.all([
-          fetch('/packs/trivia_core_en_v1.json'),
-          fetch('/daily_quizzes_gospels_30.json').catch(() => null),
-        ]);
-        if (!packRes.ok)
-          throw new Error(`Failed to load trivia pack: ${packRes.status}`);
-        const packJson = (await packRes.json()) as TriviaPack;
-        const mapping: DailyQuizPlanMapping | null =
-          mapRes?.ok ? ((await mapRes.json()) as DailyQuizPlanMapping) : null;
-        if (!cancelled) {
-          setPack(packJson);
-          setDailyQuizMap(mapping);
-        }
-      } catch {
-        // Pack load failure is non-fatal — hub still renders, quizzes show "loading"
-      }
-    }
-
-    // Load plan first (fast, ~5KB) so the hub renders immediately.
-    // Then load the full pack in the background (~6MB).
-    loadPlan().then(() => { if (!cancelled) loadPack(); });
-
+    load();
     return () => {
       cancelled = true;
     };
@@ -2045,7 +2049,7 @@ function HomeScreen(props: {
         )}
       </section>
 
-      <Section title="Today" tint="transparent">
+      <Section title="Today" tint="#dbeafe">
         {today && (
           <Row
             title={`Daily Reading: ${today.title}`}
@@ -2072,7 +2076,7 @@ function HomeScreen(props: {
           <>
             <Row
               title="Read today"
-              subtitle="Open today's passage in Read & Listen"
+              subtitle="Open today's passage in the Reader"
               onClick={() => {
                 window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`;
               }}
@@ -2185,9 +2189,9 @@ function HomeScreen(props: {
 
         {/* ── By Book (scrolls here when tile tapped) ───────────── */}
         <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
-        <Section title="By Book" tint="transparent">
+        <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
-          <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
+          <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: '#6b7280' }}>
             Choose a book to quiz on
           </label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -2260,7 +2264,7 @@ function HomeScreen(props: {
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
-          border:'1px solid rgba(0,0,0,0.07)', background:'var(--btc-surface)' }}
+          border:'1px solid rgba(0,0,0,0.07)', background:'rgba(254,249,195,0.6)' }}
         >
           <summary style={{ cursor:'pointer', padding:'10px 14px',
             fontWeight:700, listStyle:'none', display:'flex',
@@ -2352,16 +2356,22 @@ function Section(props: {
       style={{
         marginTop: 18,
         marginBottom: 6,
+        padding: 14,
         borderRadius: 18,
-        padding: '14px 16px',
-        background: 'var(--btc-surface, rgba(0,0,0,0.03))',
-        border: '1px solid var(--btc-border, rgba(0,0,0,0.07))',
+        backgroundColor: props.tint,
       }}
     >
-      <h2 style={{ margin: '0 0 10px 0', fontSize: 16, fontWeight: 800, color: 'var(--btc-text)' }}>
+      <h2
+        style={{
+          fontSize: 'var(--btc-heading-md)',
+          fontWeight: 700,
+          letterSpacing: 0.08,
+          marginBottom: 10,
+        }}
+      >
         {props.title}
       </h2>
-      {props.children}
+      <div>{props.children}</div>
     </section>
   );
 }
@@ -2369,38 +2379,35 @@ function Section(props: {
 function Row(props: {
   title: string;
   subtitle?: string;
-  onClick?: () => void;
+  onClick: () => void;
 }) {
   return (
     <button
-      type="button"
       onClick={props.onClick}
       style={{
+        width: '100%',
+        textAlign: 'left',
+        backgroundColor: '#ffffff',
+        borderRadius: 999,
+        padding: '11px 16px',
+        border: '1px solid #9ca3af',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%',
-        textAlign: 'left',
-        padding: '14px 18px',
-        marginBottom: 8,
-        borderRadius: 16,
-        border: '1px solid var(--btc-row-border, rgba(0,0,0,0.08))',
-        background: 'var(--btc-row-bg, #ffffff)',
+        marginBottom: 10,
         cursor: 'pointer',
-        color: 'var(--btc-text)',
+        color: '#111827',
       }}
     >
       <div>
-        <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--btc-text)' }}>
-          {props.title}
-        </div>
+        <div style={{ fontWeight: 600, fontSize: 15 }}>{props.title}</div>
         {props.subtitle && (
-          <div style={{ fontSize: 13, marginTop: 2, color: 'var(--btc-text-muted)' }}>
+          <div style={{ fontSize: 13, color: '#4b5563' }}>
             {props.subtitle}
           </div>
         )}
       </div>
-      <span style={{ opacity: 0.4, fontSize: 18, color: 'var(--btc-text)' }}>›</span>
+      <span style={{ color: '#4b5563', fontSize: 18 }}>›</span>
     </button>
   );
 }
