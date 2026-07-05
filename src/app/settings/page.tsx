@@ -107,13 +107,7 @@ export default function SettingsPage() {
     };
   }, []);
 
-  useEffect(() => {
-    applySettingsToDocument(draft);
-  }, [draft]);
-
-  useEffect(() => {
-    return () => applySettingsToDocument(saved);
-  }, [saved]);
+  // Settings are only applied on Save — not during editing
 
   const dirty = useMemo(() => JSON.stringify(saved) !== JSON.stringify(draft), [saved, draft]);
 
