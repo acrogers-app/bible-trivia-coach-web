@@ -322,7 +322,7 @@ export default function ReadPage() {
                 {active && range ? (
                   <>
                     {l.text.slice(0, range.start)}
-                    <mark style={{ padding:'0 2px', borderRadius:6, background:'var(--btc-accent)', color:'#fff', fontWeight:700 }}>
+                    <mark style={{ padding:'2px 4px', borderRadius:4, background:'#FFD600', color:'#111', fontWeight:700, boxShadow:'0 0 0 1px rgba(0,0,0,0.15)' }}>
                       {l.text.slice(range.start, range.end)}
                     </mark>
                     {l.text.slice(range.end)}
