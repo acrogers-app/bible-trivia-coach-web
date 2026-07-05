@@ -2045,7 +2045,7 @@ function HomeScreen(props: {
         )}
       </section>
 
-      <Section title="Today" tint="#dbeafe">
+      <Section title="Today" tint="transparent">
         {today && (
           <Row
             title={`Daily Reading: ${today.title}`}
@@ -2185,7 +2185,7 @@ function HomeScreen(props: {
 
         {/* ── By Book (scrolls here when tile tapped) ───────────── */}
         <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
-        <Section title="By Book" tint="#e0f2fe">
+        <Section title="By Book" tint="transparent">
         <div style={{ padding: '12px 16px' }}>
           <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
             Choose a book to quiz on
@@ -2260,7 +2260,7 @@ function HomeScreen(props: {
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
-          border:'1px solid rgba(0,0,0,0.07)', background:'rgba(254,249,195,0.6)' }}
+          border:'1px solid rgba(0,0,0,0.07)', background:'var(--btc-surface)' }}
         >
           <summary style={{ cursor:'pointer', padding:'10px 14px',
             fontWeight:700, listStyle:'none', display:'flex',
@@ -2352,22 +2352,16 @@ function Section(props: {
       style={{
         marginTop: 18,
         marginBottom: 6,
-        padding: 14,
         borderRadius: 18,
-        backgroundColor: props.tint,
+        padding: '14px 16px',
+        background: 'var(--btc-surface, rgba(0,0,0,0.03))',
+        border: '1px solid var(--btc-border, rgba(0,0,0,0.07))',
       }}
     >
-      <h2
-        style={{
-          fontSize: 'var(--btc-heading-md)',
-          fontWeight: 700,
-          letterSpacing: 0.08,
-          marginBottom: 10,
-        }}
-      >
+      <h2 style={{ margin: '0 0 10px 0', fontSize: 16, fontWeight: 800, color: 'var(--btc-text)' }}>
         {props.title}
       </h2>
-      <div>{props.children}</div>
+      {props.children}
     </section>
   );
 }
@@ -2375,35 +2369,38 @@ function Section(props: {
 function Row(props: {
   title: string;
   subtitle?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <button
+      type="button"
       onClick={props.onClick}
       style={{
-        width: '100%',
-        textAlign: 'left',
-        backgroundColor: '#ffffff',
-        borderRadius: 999,
-        padding: '11px 16px',
-        border: '1px solid #9ca3af',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 10,
+        width: '100%',
+        textAlign: 'left',
+        padding: '14px 18px',
+        marginBottom: 8,
+        borderRadius: 16,
+        border: '1px solid var(--btc-row-border, rgba(0,0,0,0.08))',
+        background: 'var(--btc-row-bg, #ffffff)',
         cursor: 'pointer',
-        color: '#111827',
+        color: 'var(--btc-text)',
       }}
     >
       <div>
-        <div style={{ fontWeight: 600, fontSize: 15 }}>{props.title}</div>
+        <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--btc-text)' }}>
+          {props.title}
+        </div>
         {props.subtitle && (
-          <div style={{ fontSize: 13, color: '#4b5563' }}>
+          <div style={{ fontSize: 13, marginTop: 2, color: 'var(--btc-text-muted)' }}>
             {props.subtitle}
           </div>
         )}
       </div>
-      <span style={{ color: '#4b5563', fontSize: 18 }}>›</span>
+      <span style={{ opacity: 0.4, fontSize: 18, color: 'var(--btc-text)' }}>›</span>
     </button>
   );
 }
