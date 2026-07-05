@@ -1,9 +1,7 @@
 export type AppFont = 'system' | 'rounded' | 'serif';
-export type ColorTheme = 'light' | 'dark' | 'system';
 export type ReaderTheme = 'calm' | 'vibrant';
 
 export type AppSettings = {
-  colorTheme: ColorTheme;
   // accessibility
   appTextScale: number;       // 0.9–1.3
   appFont: AppFont;
@@ -22,7 +20,6 @@ export type AppSettings = {
 };
 
 export const defaultSettings: AppSettings = {
-  colorTheme: 'system' as ColorTheme,
   appTextScale: 1.0,
   appFont: 'system',
   highContrast: false,
@@ -92,20 +89,6 @@ export function applySettingsToDocument(s: AppSettings) {
   // Font + scale
   root.style.setProperty('--btc-font-mult', String(clamp(s.appTextScale, 0.9, 1.3)));
   root.style.setProperty('--btc-font-family', fontFamilyFor(s.appFont));
-
-  // Color theme
-  const prefersDark = typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-  const isDark = s.colorTheme === 'dark' || (s.colorTheme === 'system' && prefersDark);
-  root.setAttribute('data-btc-theme', isDark ? 'dark' : 'light');
-
-  // High contrast (on top of theme)
-  if (s.highContrast) root.setAttribute('data-btc-contrast', 'high');
-  else root.removeAttribute('data-btc-contrast');
-
-  // Reduce motion
-  if (s.reduceMotion) root.setAttribute('data-btc-reduce-motion', '1');
-  else root.removeAttribute('data-btc-reduce-motion');
-
   root.setAttribute('data-btc-reader-theme', s.readerTheme);
 }
 

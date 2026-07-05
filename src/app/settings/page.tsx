@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import {
   type AppSettings,
-  type ColorTheme,
   applySettingsToDocument,
   defaultSettings,
   loadSettings,
@@ -78,10 +77,18 @@ function isGoogleAvailable(voices: VoiceOpt[], lang: string) {
 }
 
 export default function SettingsPage() {
-  const [saved, setSaved] = useState<AppSettings>(() => loadSettings());
-  const [draft, setDraft] = useState<AppSettings>(() => loadSettings());
+  const [saved, setSaved] = useState<AppSettings>(defaultSettings);
+  const [draft, setDraft] = useState<AppSettings>(defaultSettings);
   const [voices, setVoices] = useState<VoiceOpt[]>([]);
   const [status, setStatus] = useState<string>('');
+
+  useEffect(() => {
+    const s = loadSettings();
+    setSaved(s);
+    setDraft(s);
+    applySettingsToDocument(s);
+  }, []);
+
   useEffect(() => {
     function load() {
       try {
@@ -195,54 +202,16 @@ export default function SettingsPage() {
         <div style={card}>
           <h2 style={h2}>App appearance</h2>
 
-          {/* ── Color theme picker ── */}
           <div style={{ marginTop: 10 }}>
-            <div style={labelSmall}>Color theme</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginTop: 6 }}>
-              {([ 
-                { value: 'light',  label: '☀️ Light'  },
-                { value: 'dark',   label: '🌙 Dark'   },
-                { value: 'system', label: '⚙️ System' },
-              ] as { value: 'light'|'dark'|'system'; label: string }[]).map(opt => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => update({ colorTheme: opt.value })}
-                  style={{
-                    padding: '10px 4px',
-                    borderRadius: 12,
-                    border: draft.colorTheme === opt.value
-                      ? '2.5px solid #1d4ed8'
-                      : '1px solid rgba(0,0,0,0.15)',
-                    background: draft.colorTheme === opt.value
-                      ? 'var(--btc-accent-soft)' : 'var(--btc-btn-bg)',
-                    fontWeight: draft.colorTheme === opt.value ? 700 : 500,
-                    cursor: 'pointer',
-                    fontSize: 13,
-                    color: 'var(--btc-text)',
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            <div className="btc-text-muted" style={{ fontSize: 12, marginTop: 6 }}>
-              Dark mode is easier on the eyes at night. System follows your device automatically.
-            </div>
-          </div>
-
-          {/* ── Font ── */}
-          <div style={{ marginTop: 12 }}>
             <div style={labelSmall}>App font</div>
-            <select value={draft.appFont} onChange={(e) => update({ appFont: e.target.value as AppSettings['appFont'] })} style={select}>
+            <select value={draft.appFont} onChange={(e) => update({ appFont: e.target.value as any })} style={select}>
               <option value="system">System (default)</option>
               <option value="rounded">Rounded (friendly)</option>
               <option value="serif">Serif (classic)</option>
             </select>
           </div>
 
-          {/* ── Text size ── */}
-          <div style={{ marginTop: 12 }}>
+          <div style={{ marginTop: 10 }}>
             <div style={labelSmall}>App text size: {draft.appTextScale.toFixed(2)}x</div>
             <input type="range" min="0.9" max="1.3" step="0.05" value={draft.appTextScale}
               onChange={(e) => update({ appTextScale: parseFloat(e.target.value) })}
@@ -250,25 +219,15 @@ export default function SettingsPage() {
             />
           </div>
 
-          {/* ── Toggles ── */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
             <label style={row}>
               <input type="checkbox" checked={draft.highContrast} onChange={(e) => update({ highContrast: e.target.checked })} />
-              <span>
-                <strong>High contrast</strong>
-                <span className="btc-text-muted" style={{ display: 'block', fontSize: 11, marginTop: 2 }}>
-                  Bold borders, max readability
-                </span>
-              </span>
+              <span><strong>High contrast</strong></span>
             </label>
+
             <label style={row}>
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />
-              <span>
-                <strong>Reduce motion</strong>
-                <span className="btc-text-muted" style={{ display: 'block', fontSize: 11, marginTop: 2 }}>
-                  No animations
-                </span>
-              </span>
+              <span><strong>Reduce motion</strong></span>
             </label>
             <label style={row}>
               <input
@@ -298,7 +257,7 @@ export default function SettingsPage() {
 
           <div style={{ marginTop: 10 }}>
             <div style={labelSmall}>Reader theme</div>
-            <select value={draft.readerTheme} onChange={(e) => update({ readerTheme: e.target.value as AppSettings['readerTheme'] })} style={select}>
+            <select value={draft.readerTheme} onChange={(e) => update({ readerTheme: e.target.value as any })} style={select}>
               <option value="vibrant">Vibrant (Aurora)</option>
               <option value="calm">Calm</option>
             </select>
@@ -333,7 +292,7 @@ export default function SettingsPage() {
               )}
             </select>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'var(--btc-surface-2)', border: '1px solid var(--btc-border)', color: 'var(--btc-text)' }}>
+            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'white', border: '1px solid rgba(0,0,0,0.10)' }}>
               <div style={{ fontWeight: 900, marginBottom: 6 }}>Voice quality</div>
               <div className="btc-text-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
                 Voice quality depends on your browser/device.<br />
@@ -392,12 +351,12 @@ export default function SettingsPage() {
   );
 }
 
-const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16, background: 'var(--btc-surface)', border: '1px solid var(--btc-border)' };
+const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16, background: 'rgba(0,0,0,0.03)' };
 const h2: React.CSSProperties = { margin: 0, fontSize: 16 };
 const row: React.CSSProperties = { display: 'flex', gap: 10, alignItems: 'center', marginTop: 10 };
 const labelSmall: React.CSSProperties = { fontSize: 12, opacity: 0.75, marginBottom: 6 };
-const select: React.CSSProperties = { width: '100%', padding: 10, borderRadius: 12, background: 'var(--btc-input-bg)', color: 'var(--btc-text)', border: '1px solid var(--btc-input-border)' };
-const btn: React.CSSProperties = { padding: '10px 14px', borderRadius: 12, background: 'var(--btc-btn-bg)', color: 'var(--btc-text)', border: '1px solid var(--btc-btn-border)' };
+const select: React.CSSProperties = { width: '100%', padding: 10, borderRadius: 12 };
+const btn: React.CSSProperties = { padding: '10px 14px', borderRadius: 12 };
 const btnPrimary: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: 12,
@@ -405,4 +364,10 @@ const btnPrimary: React.CSSProperties = {
   border: '1px solid rgba(0,0,0,0.12)',
   background: 'rgba(37,99,235,0.10)',
 };
-const preview: React.CSSProperties = { marginTop: 12, padding: 12, borderRadius: 14, border: '1px solid var(--btc-border)', background: 'var(--btc-surface-2)', color: 'var(--btc-text)' };
+const preview: React.CSSProperties = {
+  marginTop: 12,
+  padding: 12,
+  borderRadius: 14,
+  border: '1px solid rgba(0,0,0,0.10)',
+  background: 'white',
+};
