@@ -1266,6 +1266,46 @@ export default function PlayPage() {
   const today = todaysReadingDay(plan);
   const verseOfDay = today ? today.start : null;
 
+  // btc:url-actions — handle ?action=quiz|scroll|verse from Levels/More pages
+  useEffect(() => {
+    if (!pack) return;
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (!action) return;
+
+    const cleanUrl = () => {
+      try { window.history.replaceState({}, '', '/play'); } catch {}
+    };
+
+    if (action === 'quiz') {
+      const level = (params.get('level') || 'mixed') as QuizLevel;
+      const count = Math.max(1, Math.min(50, parseInt(params.get('count') || '10', 10) || 10));
+      const sourceType = (params.get('sourceType') || 'scripture') as SourceType;
+      cleanUrl();
+      startQuiz({ title: level === 'mixed' ? 'Quick Quiz' : level.charAt(0).toUpperCase() + level.slice(1) + ' Quiz', count, level, sourceType });
+      return;
+    }
+
+    if (action === 'scroll') {
+      const target = params.get('target');
+      cleanUrl();
+      const d = document.getElementById('btc-more') as HTMLDetailsElement | null;
+      if (d) d.open = true;
+      if (target) {
+        setTimeout(() => {
+          document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+      }
+      return;
+    }
+
+    if (action === 'verse') {
+      cleanUrl();
+      startVerseQuiz();
+    }
+  }, [pack]);
+
+
   function startQuiz(config: {
     title: string;
     count: number;
