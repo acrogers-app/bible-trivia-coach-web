@@ -285,93 +285,108 @@ html[data-btc-reduce-motion="1"] .btc-listen-overlay {
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   BTC THEME SYSTEM
-   Light / Dark / High Contrast
-   Uses CSS custom properties so everything updates instantly
-   ═══════════════════════════════════════════════════════════ */
 
-/* ── Light (default) ── */
+/* ═══════════════════════════════════
+   BTC DESIGN TOKENS (CSS Variables)
+   ═══════════════════════════════════ */
+
 :root,
 html[data-btc-theme="light"] {
-  --btc-bg:           #f3f4f6;
-  --btc-card-bg:      #ffffff;
-  --btc-card-border:  rgba(0,0,0,0.07);
-  --btc-text:         #111827;
-  --btc-text-muted:   #6b7280;
-  --btc-nav-bg:       #ffffff;
-  --btc-nav-border:   rgba(0,0,0,0.09);
-  --btc-nav-active:   #1d4ed8;
-  --btc-nav-inactive: #1a1a1a;
-  --btc-row-bg:       #ffffff;
-  --btc-row-border:   rgba(0,0,0,0.08);
-  --btc-input-bg:     #ffffff;
-  --btc-input-border: rgba(0,0,0,0.20);
-  --btc-section-tint: rgba(219,234,254,0.5);
+  --btc-bg:             #f3f4f6;
+  --btc-card:           #ffffff;
+  --btc-card-border:    rgba(0,0,0,0.07);
+  --btc-surface:        rgba(0,0,0,0.03);
+  --btc-surface-2:      #ffffff;
+  --btc-border:         rgba(0,0,0,0.10);
+  --btc-text:           #111827;
+  --btc-text-muted:     #6b7280;
+  --btc-text-sub:       #9ca3af;
+  --btc-input-bg:       #ffffff;
+  --btc-input-border:   rgba(0,0,0,0.18);
+  --btc-row-bg:         #ffffff;
+  --btc-row-border:     rgba(0,0,0,0.08);
+  --btc-btn-bg:         #ffffff;
+  --btc-btn-border:     rgba(0,0,0,0.12);
+  --btc-nav-bg:         #ffffff;
+  --btc-nav-border:     rgba(0,0,0,0.09);
+  --btc-nav-active:     #1d4ed8;
+  --btc-nav-inactive:   #1a1a1a;
+  --btc-accent:         #1d4ed8;
+  --btc-accent-soft:    rgba(29,78,216,0.08);
+  --btc-aurora-from:    rgba(59,130,246,0.14);
+  --btc-aurora-to:      rgba(34,197,94,0.12);
   color-scheme: light;
 }
 
-/* ── Dark ── */
 html[data-btc-theme="dark"] {
-  --btc-bg:           #0f172a;
-  --btc-card-bg:      #1e293b;
-  --btc-card-border:  rgba(255,255,255,0.08);
-  --btc-text:         #f1f5f9;
-  --btc-text-muted:   #94a3b8;
-  --btc-nav-bg:       #1e293b;
-  --btc-nav-border:   rgba(255,255,255,0.10);
-  --btc-nav-active:   #60a5fa;
-  --btc-nav-inactive: #cbd5e1;
-  --btc-row-bg:       #273549;
-  --btc-row-border:   rgba(255,255,255,0.08);
-  --btc-input-bg:     #1e293b;
-  --btc-input-border: rgba(255,255,255,0.20);
-  --btc-section-tint: rgba(30,41,59,0.8);
+  --btc-bg:             #0f172a;
+  --btc-card:           #1e293b;
+  --btc-card-border:    rgba(255,255,255,0.08);
+  --btc-surface:        rgba(255,255,255,0.05);
+  --btc-surface-2:      #273549;
+  --btc-border:         rgba(255,255,255,0.10);
+  --btc-text:           #f1f5f9;
+  --btc-text-muted:     #94a3b8;
+  --btc-text-sub:       #64748b;
+  --btc-input-bg:       #273549;
+  --btc-input-border:   rgba(255,255,255,0.18);
+  --btc-row-bg:         #273549;
+  --btc-row-border:     rgba(255,255,255,0.08);
+  --btc-btn-bg:         #273549;
+  --btc-btn-border:     rgba(255,255,255,0.15);
+  --btc-nav-bg:         #1e293b;
+  --btc-nav-border:     rgba(255,255,255,0.10);
+  --btc-nav-active:     #60a5fa;
+  --btc-nav-inactive:   #cbd5e1;
+  --btc-accent:         #60a5fa;
+  --btc-accent-soft:    rgba(96,165,250,0.12);
+  --btc-aurora-from:    rgba(59,130,246,0.22);
+  --btc-aurora-to:      rgba(34,197,94,0.18);
   color-scheme: dark;
 }
 
-/* ── High Contrast (overlays either theme) ── */
 html[data-btc-contrast="high"] {
   --btc-text:         #000000;
   --btc-text-muted:   #000000;
   --btc-card-border:  #000000;
-  --btc-row-border:   #000000;
+  --btc-border:       #000000;
 }
 html[data-btc-theme="dark"][data-btc-contrast="high"] {
   --btc-text:         #ffffff;
   --btc-text-muted:   #ffffff;
   --btc-card-border:  #ffffff;
-  --btc-row-border:   #ffffff;
+  --btc-border:       #ffffff;
   --btc-nav-inactive: #ffffff;
 }
 
-/* ── Apply variables to existing components ── */
+/* ── Apply tokens ── */
 body {
   background: var(--btc-bg);
   color: var(--btc-text);
+  transition: background 0.2s, color 0.2s;
 }
 
 .btc-root {
-  font-family: var(--btc-font-family);
-  font-size: calc(16px * var(--btc-font-mult));
+  font-family: var(--btc-font-family, system-ui);
+  font-size: calc(16px * var(--btc-font-mult, 1));
   background: var(--btc-bg);
   color: var(--btc-text);
   min-height: 100vh;
 }
 
 .btc-card {
-  background: var(--btc-card-bg) !important;
+  background: var(--btc-card) !important;
   border: 1px solid var(--btc-card-border) !important;
-  color: var(--btc-text);
+  color: var(--btc-text) !important;
 }
 
 .btc-text-muted {
   color: var(--btc-text-muted) !important;
 }
 
-/* High contrast: bold borders everywhere */
-html[data-btc-contrast="high"] .btc-card {
-  border: 2.5px solid var(--btc-card-border) !important;
+/* Inputs / selects always use tokens */
+input, select, textarea {
+  accent-color: var(--btc-accent);
 }
 
 /* Reduce motion */
@@ -381,129 +396,12 @@ html[data-btc-reduce-motion="1"] * {
   animation: none !important;
 }
 
-/* ═══════════════════════════════════════════════
-   DARK MODE — override all hard-coded white/light
-   inline styles cannot be beaten by CSS, but we
-   can target known class patterns aggressively
-   ═══════════════════════════════════════════════ */
-
-html[data-btc-theme="dark"] body {
-  background: #0f172a !important;
-  color: #f1f5f9 !important;
+/* Aurora animation */
+@keyframes btcAuroraShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-
-/* Main card */
-html[data-btc-theme="dark"] .btc-card {
-  background: #1e293b !important;
-  color: #f1f5f9 !important;
-  border-color: rgba(255,255,255,0.10) !important;
-}
-
-/* Section cards (the gray inner boxes) */
-html[data-btc-theme="dark"] .btc-card > div[style*="rgba(0,0,0,0.03)"],
-html[data-btc-theme="dark"] .btc-card > div[style*="background: rgba(0,0,0,0.03)"] {
-  background: rgba(255,255,255,0.05) !important;
-  border-color: rgba(255,255,255,0.08) !important;
-}
-
-/* All inputs and selects */
-html[data-btc-theme="dark"] input,
-html[data-btc-theme="dark"] select,
-html[data-btc-theme="dark"] textarea {
-  background: #273549 !important;
-  color: #f1f5f9 !important;
-  border-color: rgba(255,255,255,0.20) !important;
-}
-
-/* Buttons with white background */
-html[data-btc-theme="dark"] button[style*="background: white"],
-html[data-btc-theme="dark"] button[style*="background:'white'"] {
-  background: #273549 !important;
-  color: #f1f5f9 !important;
-  border-color: rgba(255,255,255,0.15) !important;
-}
-
-/* Any div/section with white background */
-html[data-btc-theme="dark"] div[style*="background: white"],
-html[data-btc-theme="dark"] div[style*="background:'white'"],
-html[data-btc-theme="dark"] section[style*="background: white"] {
-  background: #1e293b !important;
-  color: #f1f5f9 !important;
-}
-
-/* Row items */
-html[data-btc-theme="dark"] div[style*="background: rgba(0,0,0,0.03)"] {
-  background: rgba(255,255,255,0.04) !important;
-}
-
-/* Text muted */
-html[data-btc-theme="dark"] .btc-text-muted {
-  color: #94a3b8 !important;
-  opacity: 1 !important;
-}
-
-/* Preview box */
-html[data-btc-theme="dark"] div[style*="border: 1px solid rgba(0,0,0,0.10)"] {
-  background: #273549 !important;
-  border-color: rgba(255,255,255,0.12) !important;
-  color: #f1f5f9 !important;
-}
-
-/* Scrollable lists */
-html[data-btc-theme="dark"] div[style*="overflowY: 'auto'"],
-html[data-btc-theme="dark"] div[style*="overflow-y: auto"] {
-  background: #1e293b !important;
-  border-color: rgba(255,255,255,0.10) !important;
-}
-
-html[data-btc-theme="dark"] button[data-day-item] {
-  color: #f1f5f9 !important;
-  border-bottom-color: rgba(255,255,255,0.06) !important;
-}
-
-html[data-btc-theme="dark"] button[data-day-item]:hover {
-  background: rgba(255,255,255,0.05) !important;
-}
-
-/* Section headings stay visible */
-html[data-btc-theme="dark"] h1,
-html[data-btc-theme="dark"] h2,
-html[data-btc-theme="dark"] h3 {
-  color: #f1f5f9 !important;
-}
-
-/* Bottom nav in dark mode */
-html[data-btc-theme="dark"] nav[aria-label="Primary navigation"] {
-  background: #1e293b !important;
-  border-top-color: rgba(255,255,255,0.10) !important;
-}
-
-/* Range slider track */
-html[data-btc-theme="dark"] input[type="range"] {
-  accent-color: #60a5fa;
-}
-
-/* Checkboxes */
-html[data-btc-theme="dark"] input[type="checkbox"] {
-  accent-color: #60a5fa;
-}
-
-/* Theme picker buttons */
-html[data-btc-theme="dark"] button[style*="background: rgba(29,78,216"] {
-  background: rgba(96,165,250,0.15) !important;
-  border-color: #60a5fa !important;
-  color: #f1f5f9 !important;
-}
-
-/* Tile grid buttons */
-html[data-btc-theme="dark"] .btc-card button[style*="background: white"],
-html[data-btc-theme="dark"] .btc-card a[style*="background: white"] {
-  background: #273549 !important;
-  color: #f1f5f9 !important;
-  border-color: rgba(255,255,255,0.12) !important;
-}
-
-/* Row items in daily reading */
-html[data-btc-theme="dark"] section[style] {
-  background: rgba(255,255,255,0.03) !important;
+html[data-btc-reduce-motion="1"] .btc-aurora {
+  animation: none !important;
 }
