@@ -243,12 +243,15 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
   return plan.days[index];
 }
 
-function getTodayKey(): string {
-  const d = new Date();
+function getDayKey(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${y}-${m}-${day}`;
+}
+
+function getTodayKey(): string {
+  return getDayKey(new Date());
 }
 
 type ScriptureScope = {
@@ -1191,6 +1194,28 @@ function markDailyChallengeCompletedForToday(title: string) {
   }
 }
 
+function updateStreakOnQuizComplete() {
+  if (typeof window === 'undefined') return;
+  try {
+    const today = getTodayKey();
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    const yesterday = getDayKey(d);
+
+    const lastDate = window.localStorage.getItem('btc_streak_last_date');
+    if (lastDate === today) return;
+
+    const raw = window.localStorage.getItem('btc_streak');
+    const current = raw ? Number(raw) || 0 : 0;
+    const next = lastDate === yesterday ? current + 1 : 1;
+
+    window.localStorage.setItem('btc_streak', String(next));
+    window.localStorage.setItem('btc_streak_last_date', today);
+  } catch {
+    // ignore
+  }
+}
+
 // ---- Root page ----
 
 export default function PlayPage() {
@@ -1469,6 +1494,7 @@ export default function PlayPage() {
     setLastQuestions(questions);
     setLastAnswers(answers);
     markDailyChallengeCompletedForToday(title);
+    updateStreakOnQuizComplete();
 
     // btc:analytics
     try {
