@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Claude Code worktrees and local tooling:
+    ".claude/**",
     // Local backup / snapshot files we do not want to lint:
     "play_backups/**",
     "src/app/play.page.before-fix.tsx",

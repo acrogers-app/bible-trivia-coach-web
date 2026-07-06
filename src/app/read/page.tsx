@@ -95,10 +95,10 @@ export default function ReadPage() {
       const end = sp.get('end');
       const autoplay = sp.get('autoplay') === '1';
       if (!start || !end) return;
-      const m = start.match(/^(.+?)\s+(\d+):\d+/);
-      if (m) { setBook(m[1]); setChapter(parseInt(m[2],10)); }
       pendingAutoplayRef.current = autoplay;
       (async () => {
+        const m = start.match(/^(.+?)\s+(\d+):\d+/);
+        if (m) { setBook(m[1]); setChapter(parseInt(m[2],10)); }
         setError(null); setLoading(true); stop();
         try {
           const res = await fetch(`/api/passage?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
@@ -173,7 +173,7 @@ export default function ReadPage() {
       if (best) { u.voice = best; u.lang = best.lang || u.lang; }
     } catch {}
     let gotBoundary = false;
-    u.onboundary = (e: any) => {
+    u.onboundary = (e: SpeechSynthesisEvent) => {
       if (runIdRef.current !== runId) return;
       if (typeof e?.charIndex === 'number') { gotBoundary = true; setActiveChar(e.charIndex); }
     };
