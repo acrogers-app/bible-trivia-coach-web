@@ -1,0 +1,23 @@
+{
+  "name": "Bible Trivia Coach",
+  "short_name": "BTC",
+  "description": "Daily Bible quizzes, reading plans, and Scripture coaching",
+  "start_url": "/play",
+  "display": "standalone",
+  "background_color": "#1d4ed8",
+  "theme_color": "#1d4ed8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/bsc2.png",
+      "sizes": "768x768",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
+    }
+  ]
+}
