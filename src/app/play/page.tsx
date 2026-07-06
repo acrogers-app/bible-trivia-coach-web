@@ -1216,6 +1216,46 @@ function updateStreakOnQuizComplete() {
   }
 }
 
+const MISSED_IDS_KEY = 'btc_missed_question_ids';
+const MISSED_PRACTICE_TITLE = 'Practice: Revisit';
+
+function readMissedQuestionIds(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(MISSED_IDS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((x): x is string => typeof x === 'string')
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function updateMissedQuestionIds(title: string, answers: AnswerRecord[]) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (title === MISSED_PRACTICE_TITLE) {
+      window.localStorage.removeItem(MISSED_IDS_KEY);
+      return;
+    }
+    const newlyMissed = answers
+      .filter((a) => !a.isCorrect)
+      .map((a) => a.questionId);
+    if (!newlyMissed.length) return;
+    const merged: string[] = [];
+    for (const id of [...newlyMissed, ...readMissedQuestionIds()]) {
+      if (!merged.includes(id)) merged.push(id);
+    }
+    window.localStorage.setItem(
+      MISSED_IDS_KEY,
+      JSON.stringify(merged.slice(0, 20)),
+    );
+  } catch {
+    // ignore
+  }
+}
+
 // ---- Root page ----
 
 export default function PlayPage() {
@@ -1495,6 +1535,7 @@ export default function PlayPage() {
     setLastAnswers(answers);
     markDailyChallengeCompletedForToday(title);
     updateStreakOnQuizComplete();
+    updateMissedQuestionIds(title, answers);
 
     // btc:analytics
     try {
@@ -1522,6 +1563,32 @@ export default function PlayPage() {
     } catch {}
 
     setScreen({ name: 'summary', title, total, correct });
+  }
+
+  function startMissedPractice() {
+    if (!pack) {
+      window.alert('Questions are still loading.');
+      return;
+    }
+    const byId = new Map(pack.questions.map((q) => [q.id, q]));
+    const questions = readMissedQuestionIds()
+      .map((id) => byId.get(id))
+      .filter((q): q is TriviaQuestion => Boolean(q));
+    if (!questions.length) {
+      try {
+        window.localStorage.removeItem(MISSED_IDS_KEY);
+      } catch {
+        // ignore
+      }
+      window.alert('Nothing to revisit right now — nice work!');
+      return;
+    }
+    setScreen({
+      name: 'quiz',
+      title: MISSED_PRACTICE_TITLE,
+      questions,
+      sourceType: 'scripture',
+    });
   }
 
   function startFamilyGame(players: FamilyPlayer[], questionCount: number) {
@@ -1604,6 +1671,7 @@ export default function PlayPage() {
               })
             }
             onOpenFamilyNight={() => setScreen({ name: 'family-setup' })}
+            onStartMissedPractice={startMissedPractice}
             onStartHistoryQuiz={() =>
               startQuiz({
                 title: 'Bible History',
@@ -1722,6 +1790,7 @@ function HomeScreen(props: {
   onStartHistoryQuiz: () => void;
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
   onStartBookQuiz: (book: string, chapter?: number) => void;
+  onStartMissedPractice: () => void;
   dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
@@ -1776,6 +1845,11 @@ function HomeScreen(props: {
     } catch {
       return false;
     }
+  });
+
+  const [missedCount] = useState<number>(() => {
+    if (typeof window === 'undefined') return 0;
+    return readMissedQuestionIds().length;
   });
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
@@ -2110,6 +2184,47 @@ function HomeScreen(props: {
               }}
             >
               Start
+            </button>
+          </div>
+        )}
+
+        {/* Revisit missed questions (review-missed) */}
+        {missedCount > 0 && (
+          <div
+            style={{
+              marginTop: 12,
+              padding: '6px 10px',
+              borderRadius: 999,
+              backgroundColor: '#fef9c3',
+              border: '1px solid #fde68a',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: 12,
+              color: '#854d0e',
+              gap: 8,
+              flexWrap: 'wrap',
+            }}
+          >
+            <span>
+              Ready to revisit {missedCount}{' '}
+              {missedCount === 1 ? 'question' : 'questions'} from last time?
+              Every second look helps it stick.
+            </span>
+            <button
+              type="button"
+              onClick={props.onStartMissedPractice}
+              style={{
+                padding: '4px 10px',
+                borderRadius: 999,
+                border: 'none',
+                backgroundColor: '#d97706',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              Revisit
             </button>
           </div>
         )}
