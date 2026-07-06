@@ -53,6 +53,41 @@ function parseRef(input: string): Ref | null {
   return { bookId, chapter: ch, verse: vs };
 }
 
+
+const MAX_CHAPTER_SPAN = 10; // max chapters allowed in a single /api/passage request
+const ABS_MAX_CHAPTER = 200; // absolute sanity cap (Bible max is 150 in Psalms)
+const ABS_MAX_VERSE = 300;   // absolute sanity cap
+
+function normalizeOrder(s: Ref, e: Ref): [Ref, Ref] {
+  let a = s;
+  let b = e;
+  if (a.chapter > b.chapter || (a.chapter === b.chapter && a.verse > b.verse)) {
+    a = e;
+    b = s;
+  }
+  return [a, b];
+}
+
+function getMaxChapter(bookId: number): number {
+  const db = getDb();
+  const row = db
+    .prepare('SELECT MAX(chapter) AS maxChapter FROM verses WHERE book_id = ?')
+    .get(bookId) as { maxChapter: number | null };
+  return row?.maxChapter ?? 0;
+}
+
+function getMaxVerse(bookId: number, chapter: number): number {
+  const db = getDb();
+  const row = db
+    .prepare('SELECT MAX(number) AS maxVerse FROM verses WHERE book_id = ? AND chapter = ?')
+    .get(bookId, chapter) as { maxVerse: number | null };
+  return row?.maxVerse ?? 0;
+}
+
+function invalidRef(msg = 'Invalid reference') {
+  return NextResponse.json({ error: msg }, { status: 400 });
+}
+
 function fetchLines(s: Ref, e: Ref): VerseLine[] {
   const db = getDb();
   const lines: VerseLine[] = [];
@@ -156,6 +191,37 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const [a, b] = normalizeOrder(s, e);
+
+  // Absolute sanity caps (cheap reject)
+  if (
+    a.chapter <= 0 || b.chapter <= 0 ||
+    a.verse <= 0 || b.verse <= 0 ||
+    a.chapter > ABS_MAX_CHAPTER || b.chapter > ABS_MAX_CHAPTER ||
+    a.verse > ABS_MAX_VERSE || b.verse > ABS_MAX_VERSE
+  ) {
+    return invalidRef('Invalid reference');
+  }
+
+  // Limit span to prevent CPU-exhaustion loops
+  if ((b.chapter - a.chapter) > MAX_CHAPTER_SPAN) {
+    return invalidRef(`Reference range too large (max ${MAX_CHAPTER_SPAN} chapters)`);
+  }
+
+  // Validate chapters/verses against the DB so nonsense values fail fast
+  const maxChapter = getMaxChapter(a.bookId);
+  if (!maxChapter || a.chapter > maxChapter || b.chapter > maxChapter) {
+    return invalidRef('Invalid chapter');
+  }
+
+  const maxVerseA = getMaxVerse(a.bookId, a.chapter);
+  const maxVerseB = getMaxVerse(a.bookId, b.chapter);
+  if (!maxVerseA || !maxVerseB || a.verse > maxVerseA || b.verse > maxVerseB) {
+    return invalidRef('Invalid verse');
+  }
+
+
+
   try {
     const lines = fetchLines(s, e);
     if (!lines.length) {
@@ -168,12 +234,7 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      {
-        error:
-          err instanceof Error
-            ? err.message
-            : 'Failed to load passage from database'
-      },
+      { error: 'Failed to load passage' },
       { status: 500 }
     );
   }

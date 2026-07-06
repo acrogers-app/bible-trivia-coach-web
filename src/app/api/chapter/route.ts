@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
   }
 
   const chapter = parseInt(chapterRaw, 10);
-  if (!Number.isFinite(chapter) || chapter <= 0) {
+  if (!Number.isFinite(chapter) || chapter <= 0 || chapter > 200) {
     return NextResponse.json({ error: 'Invalid chapter' }, { status: 400 });
   }
 
@@ -100,9 +100,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ lines, maxVerse });
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Failed to load chapter from database' },
-      { status: 500 }
-    );
-  }
+    return NextResponse.json({ error: 'Failed to load chapter' }, { status: 500 });
+}
 }

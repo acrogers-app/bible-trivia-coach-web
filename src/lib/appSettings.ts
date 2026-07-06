@@ -1,9 +1,7 @@
 export type AppFont = 'system' | 'rounded' | 'serif';
-export type ColorTheme = 'light' | 'dark' | 'system';
 export type ReaderTheme = 'calm' | 'vibrant';
 
 export type AppSettings = {
-  colorTheme: ColorTheme;
   // accessibility
   appTextScale: number;       // 0.9–1.3
   appFont: AppFont;
@@ -22,7 +20,6 @@ export type AppSettings = {
 };
 
 export const defaultSettings: AppSettings = {
-  colorTheme: 'system' as ColorTheme,
   appTextScale: 1.0,
   appFont: 'system',
   highContrast: false,
@@ -38,7 +35,7 @@ export const defaultSettings: AppSettings = {
   analyticsEnabled: true,
 };
 
-const KEY = 'btc:settings:v2';
+const KEY = 'btc:settings:v3';
 const EVENT = 'btc:settings-changed';
 
 export function loadSettings(): AppSettings {
@@ -49,8 +46,12 @@ export function loadSettings(): AppSettings {
     const raw = localStorage.getItem(KEY);
     if (!raw) return { ...defaultSettings, readerLang: langDefault };
 
-    const parsed = JSON.parse(raw);
-    const merged: AppSettings = { ...defaultSettings, readerLang: langDefault, ...parsed };
+    const parsed: unknown = JSON.parse(raw);
+    const stored: Partial<AppSettings> =
+      typeof parsed === 'object' && parsed !== null
+        ? (parsed as Partial<AppSettings>)
+        : {};
+    const merged: AppSettings = { ...defaultSettings, readerLang: langDefault, ...stored };
 
     merged.appTextScale = clamp(merged.appTextScale, 0.9, 1.3);
     merged.readerFontSize = clamp(merged.readerFontSize, 14, 28);
@@ -73,12 +74,12 @@ export function saveSettings(s: AppSettings) {
 
 export function onSettingsChanged(fn: () => void) {
   if (typeof window === 'undefined') return () => {};
-  const handler = () => fn();
-  window.addEventListener(EVENT, handler as any);
+  const handler: EventListener = () => fn();
+  window.addEventListener(EVENT, handler);
   window.addEventListener('storage', (e) => {
     if (e.key === KEY) fn();
   });
-  return () => window.removeEventListener(EVENT, handler as any);
+  return () => window.removeEventListener(EVENT, handler);
 }
 
 export function applySettingsToDocument(s: AppSettings) {
@@ -88,20 +89,6 @@ export function applySettingsToDocument(s: AppSettings) {
   // Font + scale
   root.style.setProperty('--btc-font-mult', String(clamp(s.appTextScale, 0.9, 1.3)));
   root.style.setProperty('--btc-font-family', fontFamilyFor(s.appFont));
-
-  // Color theme
-  const prefersDark = typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-  const isDark = s.colorTheme === 'dark' || (s.colorTheme === 'system' && prefersDark);
-  root.setAttribute('data-btc-theme', isDark ? 'dark' : 'light');
-
-  // High contrast (on top of theme)
-  if (s.highContrast) root.setAttribute('data-btc-contrast', 'high');
-  else root.removeAttribute('data-btc-contrast');
-
-  // Reduce motion
-  if (s.reduceMotion) root.setAttribute('data-btc-reduce-motion', '1');
-  else root.removeAttribute('data-btc-reduce-motion');
-
   root.setAttribute('data-btc-reader-theme', s.readerTheme);
 }
 

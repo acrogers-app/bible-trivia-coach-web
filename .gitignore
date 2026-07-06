@@ -58,6 +58,9 @@ play_backups/
 # Python virtual environment
 .venv/
 
+# Claude Code local state / nested worktrees
+.claude/
+
 # Backup files (all patterns)
 *.bak.*
 *.bak
@@ -80,3 +83,8 @@ scripts/ensure_*.mjs
 
 # Python fix scripts
 scripts/fix_*.py
+
+# No public backups or macOS resource forks
+public/**/._*
+public/**/*.before-*.json
+public/**/*.bak.*

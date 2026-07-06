@@ -10,6 +10,7 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { loadSettings } from '../../lib/appSettings';
+import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -243,13 +244,7 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
   return plan.days[index];
 }
 
-function getTodayKey(): string {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
+// getDayKey/getTodayKey live in src/lib/streakUtils.ts
 
 type ScriptureScope = {
   book: string;
@@ -1191,6 +1186,46 @@ function markDailyChallengeCompletedForToday(title: string) {
   }
 }
 
+const MISSED_IDS_KEY = 'btc_missed_question_ids';
+const MISSED_PRACTICE_TITLE = 'Practice: Revisit';
+
+function readMissedQuestionIds(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(MISSED_IDS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((x): x is string => typeof x === 'string')
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function updateMissedQuestionIds(title: string, answers: AnswerRecord[]) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (title === MISSED_PRACTICE_TITLE) {
+      window.localStorage.removeItem(MISSED_IDS_KEY);
+      return;
+    }
+    const newlyMissed = answers
+      .filter((a) => !a.isCorrect)
+      .map((a) => a.questionId);
+    if (!newlyMissed.length) return;
+    const merged: string[] = [];
+    for (const id of [...newlyMissed, ...readMissedQuestionIds()]) {
+      if (!merged.includes(id)) merged.push(id);
+    }
+    window.localStorage.setItem(
+      MISSED_IDS_KEY,
+      JSON.stringify(merged.slice(0, 20)),
+    );
+  } catch {
+    // ignore
+  }
+}
+
 // ---- Root page ----
 
 export default function PlayPage() {
@@ -1265,6 +1300,46 @@ export default function PlayPage() {
 
   const today = todaysReadingDay(plan);
   const verseOfDay = today ? today.start : null;
+
+  // btc:url-actions — handle ?action=quiz|scroll|verse from Levels/More pages
+  useEffect(() => {
+    if (!pack) return;
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (!action) return;
+
+    const cleanUrl = () => {
+      try { window.history.replaceState({}, '', '/play'); } catch {}
+    };
+
+    if (action === 'quiz') {
+      const level = (params.get('level') || 'mixed') as QuizLevel;
+      const count = Math.max(1, Math.min(50, parseInt(params.get('count') || '10', 10) || 10));
+      const sourceType = (params.get('sourceType') || 'scripture') as SourceType;
+      cleanUrl();
+      startQuiz({ title: level === 'mixed' ? 'Quick Quiz' : level.charAt(0).toUpperCase() + level.slice(1) + ' Quiz', count, level, sourceType });
+      return;
+    }
+
+    if (action === 'scroll') {
+      const target = params.get('target');
+      cleanUrl();
+      const d = document.getElementById('btc-more') as HTMLDetailsElement | null;
+      if (d) d.open = true;
+      if (target) {
+        setTimeout(() => {
+          document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+      }
+      return;
+    }
+
+    if (action === 'verse') {
+      cleanUrl();
+      startVerseQuiz();
+    }
+  }, [pack]);
+
 
   function startQuiz(config: {
     title: string;
@@ -1429,6 +1504,8 @@ export default function PlayPage() {
     setLastQuestions(questions);
     setLastAnswers(answers);
     markDailyChallengeCompletedForToday(title);
+    updateStreakForToday();
+    updateMissedQuestionIds(title, answers);
 
     // btc:analytics
     try {
@@ -1456,6 +1533,32 @@ export default function PlayPage() {
     } catch {}
 
     setScreen({ name: 'summary', title, total, correct });
+  }
+
+  function startMissedPractice() {
+    if (!pack) {
+      window.alert('Questions are still loading.');
+      return;
+    }
+    const byId = new Map(pack.questions.map((q) => [q.id, q]));
+    const questions = readMissedQuestionIds()
+      .map((id) => byId.get(id))
+      .filter((q): q is TriviaQuestion => Boolean(q));
+    if (!questions.length) {
+      try {
+        window.localStorage.removeItem(MISSED_IDS_KEY);
+      } catch {
+        // ignore
+      }
+      window.alert('Nothing to revisit right now — nice work!');
+      return;
+    }
+    setScreen({
+      name: 'quiz',
+      title: MISSED_PRACTICE_TITLE,
+      questions,
+      sourceType: 'scripture',
+    });
   }
 
   function startFamilyGame(players: FamilyPlayer[], questionCount: number) {
@@ -1538,6 +1641,7 @@ export default function PlayPage() {
               })
             }
             onOpenFamilyNight={() => setScreen({ name: 'family-setup' })}
+            onStartMissedPractice={startMissedPractice}
             onStartHistoryQuiz={() =>
               startQuiz({
                 title: 'Bible History',
@@ -1656,6 +1760,7 @@ function HomeScreen(props: {
   onStartHistoryQuiz: () => void;
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
   onStartBookQuiz: (book: string, chapter?: number) => void;
+  onStartMissedPractice: () => void;
   dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
@@ -1707,6 +1812,23 @@ function HomeScreen(props: {
       );
       if (!last) return false;
       return last === getTodayKey();
+    } catch {
+      return false;
+    }
+  });
+
+  const [missedCount] = useState<number>(() => {
+    if (typeof window === 'undefined') return 0;
+    return readMissedQuestionIds().length;
+  });
+
+  const [readingDoneToday] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return (
+        window.localStorage.getItem('btc_reading_last_completed') ===
+        getTodayKey()
+      );
     } catch {
       return false;
     }
@@ -2047,12 +2169,53 @@ function HomeScreen(props: {
             </button>
           </div>
         )}
+
+        {/* Revisit missed questions (review-missed) */}
+        {missedCount > 0 && (
+          <div
+            style={{
+              marginTop: 12,
+              padding: '6px 10px',
+              borderRadius: 999,
+              backgroundColor: '#fef9c3',
+              border: '1px solid #fde68a',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: 12,
+              color: '#854d0e',
+              gap: 8,
+              flexWrap: 'wrap',
+            }}
+          >
+            <span>
+              Ready to revisit {missedCount}{' '}
+              {missedCount === 1 ? 'question' : 'questions'} from last time?
+              Every second look helps it stick.
+            </span>
+            <button
+              type="button"
+              onClick={props.onStartMissedPractice}
+              style={{
+                padding: '4px 10px',
+                borderRadius: 999,
+                border: 'none',
+                backgroundColor: '#d97706',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              Revisit
+            </button>
+          </div>
+        )}
       </section>
 
       <Section title="Today" tint="#dbeafe">
         {today && (
           <Row
-            title={`Daily Reading: ${today.title}`}
+            title={`${readingDoneToday ? '✓ ' : ''}Daily Reading: ${today.title}`}
             subtitle={`${today.start} – ${today.end}`}
             onClick={props.onOpenDailyReading}
           />
@@ -2076,7 +2239,7 @@ function HomeScreen(props: {
           <>
             <Row
               title="Read today"
-              subtitle="Open today's passage in Read & Listen"
+              subtitle="Open today's passage in the Reader"
               onClick={() => {
                 window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`;
               }}
@@ -2155,6 +2318,7 @@ function HomeScreen(props: {
             onClick={() => {
               const el = document.getElementById('btc-by-book-anchor');
               if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+              else window.location.href = '/play?action=scroll&target=btc-by-book-anchor';
             }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90 }}
@@ -2191,19 +2355,20 @@ function HomeScreen(props: {
         <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
         <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
-          <label style={{ display: 'block', fontSize: 14, marginBottom: 8 }}>
+          <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: '#6b7280' }}>
             Choose a book to quiz on
           </label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             <select
               value={selectedBook}
               onChange={(e) => setSelectedBook(e.target.value)}
               style={{
                 flex: 1,
-                borderRadius: 999,
-                border: '1px solid #e5e7eb',
-                padding: '6px 10px',
+                borderRadius: 12,
+                border: '1px solid rgba(0,0,0,0.15)',
+                padding: '10px 12px',
                 fontSize: 14,
+                background: 'white',
               }}
             >
               {books.map((b) => (
@@ -2217,10 +2382,11 @@ function HomeScreen(props: {
               onChange={(e) => setSelectedChapter(e.target.value)}
               style={{
                 width: 150,
-                borderRadius: 999,
-                border: '1px solid #e5e7eb',
-                padding: '6px 10px',
+                borderRadius: 12,
+                border: '1px solid rgba(0,0,0,0.15)',
+                padding: '10px 12px',
                 fontSize: 14,
+                background: 'white',
               }}
             >
               <option value="">Whole book</option>
@@ -2239,24 +2405,45 @@ function HomeScreen(props: {
                 const safeChapter = ch && ch > 0 ? ch : undefined;
                 const max = bookMaxChapters[selectedBook];
                 if (safeChapter && max && safeChapter > max) {
-                  window.alert(
-                    selectedBook + ' only has ' + max + ' chapters.',
-                  );
+                  window.alert(selectedBook + ' only has ' + max + ' chapters.');
                   return;
                 }
                 props.onStartBookQuiz(selectedBook, safeChapter);
               }}
               style={{
-                padding: '6px 14px',
+                padding: '8px 18px',
                 borderRadius: 999,
                 border: 'none',
                 backgroundColor: '#2563eb',
                 color: 'white',
                 fontSize: 14,
+                fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
-              Start
+              Start Quiz
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const trimmed = selectedChapter.trim();
+                const ch = trimmed ? Number(trimmed) : 1;
+                const safeChapter = ch && ch > 0 ? ch : 1;
+                const url = `/read?start=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':1')}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
+                window.location.href = url;
+              }}
+              style={{
+                padding: '8px 18px',
+                borderRadius: 999,
+                border: '1px solid rgba(0,0,0,0.15)',
+                backgroundColor: 'white',
+                color: '#374151',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              🎧 Listen first
             </button>
           </div>
         </div>
