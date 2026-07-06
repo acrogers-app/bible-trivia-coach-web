@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { applySettingsToDocument, loadSettings, onSettingsChanged, type AppSettings } from '../../lib/appSettings';
+import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
 
 type VerseLine = { chapter: number; verse: number; text: string };
 
@@ -70,6 +71,17 @@ export default function ReadPage() {
   const [lines, setLines] = useState<VerseLine[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
+  const [readMarkedToday, setReadMarkedToday] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return (
+        window.localStorage.getItem('btc_reading_last_completed') ===
+        getTodayKey()
+      );
+    } catch {
+      return false;
+    }
+  });
   const [ttsState, setTtsState] = useState<'idle'|'speaking'|'paused'>('idle');
   const [activeIdx, setActiveIdx] = useState<number|null>(null);
   const [activeChar, setActiveChar] = useState<number|null>(null);
@@ -140,6 +152,16 @@ export default function ReadPage() {
       setLines(Array.isArray(data?.lines) ? data.lines : []);
     } catch(e) { setLines([]); setError(e instanceof Error ? e.message : 'Failed.'); }
     finally { setLoading(false); }
+  }
+
+  function markAsRead() {
+    try {
+      window.localStorage.setItem('btc_reading_last_completed', getTodayKey());
+    } catch {
+      // ignore
+    }
+    updateStreakForToday();
+    setReadMarkedToday(true);
   }
 
   function stop() {
@@ -348,6 +370,27 @@ export default function ReadPage() {
         {!boundarySupported && ttsState !== 'idle' && (
           <div style={{ marginTop:10, fontSize:12, color:'var(--btc-text-muted)' }}>
             Word highlighting not available for this voice/browser. Verse highlighting is active instead.
+          </div>
+        )}
+
+        {lines.length > 0 && (
+          <div style={{ marginTop: 16, textAlign: 'center' }}>
+            {readMarkedToday ? (
+              <p style={{ fontSize: 14, margin: 0, color: 'var(--btc-text-muted)' }}>
+                ✓ Today&rsquo;s reading is complete — well done taking time in
+                God&rsquo;s Word.
+              </p>
+            ) : (
+              <button type="button" onClick={markAsRead} style={{
+                padding: '10px 16px', borderRadius: 12, cursor: 'pointer',
+                fontWeight: 800,
+                background: 'var(--btc-accent-soft)',
+                color: 'var(--btc-accent)',
+                border: '1.5px solid var(--btc-accent)',
+              }}>
+                Mark as read
+              </button>
+            )}
           </div>
         )}
       </div>

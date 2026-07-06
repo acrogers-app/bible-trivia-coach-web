@@ -10,6 +10,7 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { loadSettings } from '../../lib/appSettings';
+import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -243,16 +244,7 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
   return plan.days[index];
 }
 
-function getDayKey(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-function getTodayKey(): string {
-  return getDayKey(new Date());
-}
+// getDayKey/getTodayKey live in src/lib/streakUtils.ts
 
 type ScriptureScope = {
   book: string;
@@ -1194,28 +1186,6 @@ function markDailyChallengeCompletedForToday(title: string) {
   }
 }
 
-function updateStreakOnQuizComplete() {
-  if (typeof window === 'undefined') return;
-  try {
-    const today = getTodayKey();
-    const d = new Date();
-    d.setDate(d.getDate() - 1);
-    const yesterday = getDayKey(d);
-
-    const lastDate = window.localStorage.getItem('btc_streak_last_date');
-    if (lastDate === today) return;
-
-    const raw = window.localStorage.getItem('btc_streak');
-    const current = raw ? Number(raw) || 0 : 0;
-    const next = lastDate === yesterday ? current + 1 : 1;
-
-    window.localStorage.setItem('btc_streak', String(next));
-    window.localStorage.setItem('btc_streak_last_date', today);
-  } catch {
-    // ignore
-  }
-}
-
 const MISSED_IDS_KEY = 'btc_missed_question_ids';
 const MISSED_PRACTICE_TITLE = 'Practice: Revisit';
 
@@ -1534,7 +1504,7 @@ export default function PlayPage() {
     setLastQuestions(questions);
     setLastAnswers(answers);
     markDailyChallengeCompletedForToday(title);
-    updateStreakOnQuizComplete();
+    updateStreakForToday();
     updateMissedQuestionIds(title, answers);
 
     // btc:analytics
@@ -1850,6 +1820,18 @@ function HomeScreen(props: {
   const [missedCount] = useState<number>(() => {
     if (typeof window === 'undefined') return 0;
     return readMissedQuestionIds().length;
+  });
+
+  const [readingDoneToday] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return (
+        window.localStorage.getItem('btc_reading_last_completed') ===
+        getTodayKey()
+      );
+    } catch {
+      return false;
+    }
   });
 
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
@@ -2233,7 +2215,7 @@ function HomeScreen(props: {
       <Section title="Today" tint="#dbeafe">
         {today && (
           <Row
-            title={`Daily Reading: ${today.title}`}
+            title={`${readingDoneToday ? '✓ ' : ''}Daily Reading: ${today.title}`}
             subtitle={`${today.start} – ${today.end}`}
             onClick={props.onOpenDailyReading}
           />
