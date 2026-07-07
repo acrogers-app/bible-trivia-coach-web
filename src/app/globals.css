@@ -218,3 +218,52 @@ html[data-btc-reduce-motion="1"] * {
 .btc-quiz-option:active {
   transform: scale(0.98);
 }
+
+/* ── UX polish: design tokens ─────────────────────────────── */
+:root {
+  --btc-accent: #2563eb;
+  --btc-accent-deep: #1d4ed8;
+  --btc-ink: #111827;
+  --btc-text-subtle: #4b5563;
+  --btc-success: #16a34a;
+  --btc-success-soft: #dcfce7;
+}
+
+/* ── Shared buttons ───────────────────────────────────────── */
+.btc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--btc-accent);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 80ms ease;
+}
+.btc-btn:active { transform: scale(0.97); }
+.btc-btn-success { background-color: var(--btc-success); }
+.btc-btn-warm { background-color: #d97706; }
+.btc-btn-dark { background-color: var(--btc-ink); }
+.btc-btn-secondary {
+  background-color: #ffffff;
+  color: var(--btc-ink);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ── Quiz micro-feedback ──────────────────────────────────── */
+@keyframes btcPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.btc-quiz-option.btc-pop { animation: btcPop 300ms ease; }
+
+/* ── Results screen ───────────────────────────────────────── */
+@keyframes btcFillGrow { from { width: 0%; } }
+.btc-xp-fill { animation: btcFillGrow 900ms ease-out; }

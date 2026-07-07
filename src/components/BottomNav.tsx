@@ -5,10 +5,52 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { applySettingsToDocument, loadSettings, onSettingsChanged } from '../lib/appSettings';
 
+function BoltIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function BookIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 6c-1.5-1.6-3.8-2.5-6.5-2.5-.9 0-1.7.1-2.5.3v14.9c.8-.2 1.6-.3 2.5-.3 2.7 0 5 .9 6.5 2.5 1.5-1.6 3.8-2.5 6.5-2.5.9 0 1.7.1 2.5.3V3.8c-.8-.2-1.6-.3-2.5-.3-2.7 0-5 .9-6.5 2.5Zm0 0v14.9"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function GearIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M12 2.8v2.4m0 13.6v2.4m6.5-15.9-1.7 1.7M7.2 16.8l-1.7 1.7m15.7-6.5h-2.4M5.2 12H2.8m15.9 6.5-1.7-1.7M7.2 7.2 5.5 5.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const items = [
-  { href: '/play',     label: 'Play',     icon: '⚡' },
-  { href: '/read',     label: 'Read',     icon: '📖' },
-  { href: '/settings', label: 'Settings', icon: '⚙️'  },
+  { href: '/play',     label: 'Play',     icon: <BoltIcon /> },
+  { href: '/read',     label: 'Read',     icon: <BookIcon /> },
+  { href: '/settings', label: 'Settings', icon: <GearIcon /> },
 ];
 
 export default function BottomNav() {
@@ -62,7 +104,7 @@ export default function BottomNav() {
                 minHeight: 60,
               }}
             >
-              <span style={{ fontSize: 22, lineHeight: 1 }}>{it.icon}</span>
+              <span style={{ lineHeight: 1, display: 'inline-flex' }}>{it.icon}</span>
               <span style={{ fontSize: 13, fontWeight: active ? 700 : 500 }}>
                 {it.label}
               </span>
