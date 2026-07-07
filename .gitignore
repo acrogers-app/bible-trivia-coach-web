@@ -92,3 +92,10 @@ public/**/*.bak.*
 # IDE state from native development (Android Studio / Xcode)
 android/.idea/
 ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# Release signing — never commit keystores or credentials
+android/keystore.properties
+*.jks
+*.keystore
+ios/App/*.ipa
+ios/App/*.xcarchive
