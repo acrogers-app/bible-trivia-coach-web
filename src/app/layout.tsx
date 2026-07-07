@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Bible Trivia Coach",
   },
   icons: {
-    apple: "/bsc2.png",
+    apple: "/icons/apple-touch-icon.png",
   },
   openGraph: {
     title: "Bible Trivia Coach",
