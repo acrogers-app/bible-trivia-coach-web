@@ -15,7 +15,9 @@
   "dependencies": {
     "@capacitor/android": "^8.4.1",
     "@capacitor/core": "^8.4.1",
+    "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.4.1",
+    "@capacitor/preferences": "^8.0.1",
     "better-sqlite3": "^12.10.1",
     "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",

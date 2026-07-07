@@ -10,6 +10,7 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { apiUrl } from '../../lib/apiBase';
+import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
 
@@ -3021,15 +3022,6 @@ function coachReaction(isCorrect: boolean, questionIndex: number): string {
   return lines[questionIndex % lines.length];
 }
 
-function hapticTap(isCorrect: boolean) {
-  try {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate(isCorrect ? 12 : [8, 40, 8]);
-    }
-  } catch {
-    // ignore — haptics are a bonus, never a requirement
-  }
-}
 
 function QuizOptionButton(props: {
   option: string;
