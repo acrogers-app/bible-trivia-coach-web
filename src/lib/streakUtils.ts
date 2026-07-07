@@ -2,6 +2,7 @@
 
 const STREAK_KEY = 'btc_streak';
 const STREAK_LAST_DATE_KEY = 'btc_streak_last_date';
+const STREAK_BEST_KEY = 'btc_best_streak';
 
 export function getDayKey(d: Date): string {
   const y = d.getFullYear();
@@ -33,7 +34,26 @@ export function updateStreakForToday() {
 
     window.localStorage.setItem(STREAK_KEY, String(next));
     window.localStorage.setItem(STREAK_LAST_DATE_KEY, today);
+
+    const rawBest = window.localStorage.getItem(STREAK_BEST_KEY);
+    const best = rawBest ? Number(rawBest) || 0 : 0;
+    if (next > best) {
+      window.localStorage.setItem(STREAK_BEST_KEY, String(next));
+    }
   } catch {
     // ignore
+  }
+}
+
+// Current + best streak for display. Never used to scold — a lapsed
+// streak simply reads as day one again.
+export function getStreakInfo(): { current: number; best: number } {
+  if (typeof window === 'undefined') return { current: 0, best: 0 };
+  try {
+    const current = Number(window.localStorage.getItem(STREAK_KEY)) || 0;
+    const best = Number(window.localStorage.getItem(STREAK_BEST_KEY)) || 0;
+    return { current, best: Math.max(best, current) };
+  } catch {
+    return { current: 0, best: 0 };
   }
 }

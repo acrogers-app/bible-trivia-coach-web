@@ -10,7 +10,7 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { loadSettings } from '../../lib/appSettings';
-import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
+import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -539,7 +539,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
             Big picture of {bookSummary.title}
           </div>
           <div
-            style={{ fontSize: 13, color: '#111827', marginBottom: 4 }}
+            style={{ fontSize: 13, color: 'var(--btc-ink)', marginBottom: 4 }}
           >
             {bookSummary.summary}
           </div>
@@ -584,7 +584,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
           </div>
           {reflection.verseFocus && (
             <div
-              style={{ fontSize: 12, color: '#4b5563', marginBottom: 4 }}
+              style={{ fontSize: 12, color: 'var(--btc-text-subtle)', marginBottom: 4 }}
             >
               Focus passage: {reflection.verseFocus}
             </div>
@@ -595,7 +595,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
                 paddingLeft: 20,
                 margin: 0,
                 fontSize: 13,
-                color: '#111827',
+                color: 'var(--btc-ink)',
               }}
             >
               {reflection.prompts.map((p) => (
@@ -646,6 +646,9 @@ function FixedSummaryScreen(props: {
       return null;
     }
   });
+
+  // Streak was already updated in onFinished, so this reads today's value
+  const [streakInfo] = useState(() => getStreakInfo());
 
   // Confetti for perfect scores
   useEffect(() => {
@@ -778,9 +781,9 @@ function FixedSummaryScreen(props: {
 
   // Scripture badge milestones
   const milestones = [
-    { label: 'Solid start', threshold: 60 },
-    { label: 'Strong run', threshold: 80 },
-    { label: 'Near perfect', threshold: 95 },
+    { label: 'Solid start', threshold: 60, icon: '🌱' },
+    { label: 'Strong run', threshold: 80, icon: '🌿' },
+    { label: 'Near perfect', threshold: 95, icon: '⭐' },
   ] as const;
 
   const badgesUnlocked = milestones.filter(
@@ -803,12 +806,12 @@ function FixedSummaryScreen(props: {
         borderRadius: 16,
         backgroundColor: '#f3f4f6',
         border: '1px solid #e5e7eb',
-        color: '#111827',
+        color: 'var(--btc-ink)',
       };
 
   const subtleTextColor = isPerfect
     ? 'rgba(255,255,255,0.9)'
-    : '#4b5563';
+    : 'var(--btc-text-subtle)';
 
   const coachLine = getQuizSummaryLine(percent);
 
@@ -840,7 +843,7 @@ function FixedSummaryScreen(props: {
           fontSize: 22,
           fontWeight: 800,
           marginBottom: 4,
-          color: '#111827',
+          color: 'var(--btc-ink)',
         }}
       >
         Quiz Summary
@@ -854,24 +857,64 @@ function FixedSummaryScreen(props: {
 
       <div style={{ position: 'relative', marginBottom: 16 }}>
         <div style={cardStyle}>
-          {/* Score */}
+          {/* Score ring */}
           <div
             style={{
-              fontSize: 32,
-              fontWeight: 800,
-              marginBottom: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              marginBottom: 12,
             }}
           >
-            {correct}/{total}
-          </div>
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              marginBottom: 10,
-            }}
-          >
-            {percent}% correct
+            <div
+              style={{
+                width: 92,
+                height: 92,
+                borderRadius: '50%',
+                flexShrink: 0,
+                background: `conic-gradient(${
+                  isPerfect ? '#fefce8' : percent >= 60 ? 'var(--btc-success)' : '#f59e0b'
+                } ${percent * 3.6}deg, ${
+                  isPerfect ? 'rgba(255,255,255,0.25)' : '#e5e7eb'
+                } 0deg)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div
+                style={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  backgroundColor: isPerfect ? 'rgba(22,163,74,0.95)' : '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 22,
+                  fontWeight: 800,
+                }}
+              >
+                {correct}/{total}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>
+                {percent}% correct
+              </div>
+              {isNewBest && (
+                <div
+                  style={{
+                    marginTop: 2,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: isPerfect ? '#fefce8' : 'var(--btc-success)',
+                  }}
+                >
+                  ⭐ New personal best!
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Scripture badges */}
@@ -883,7 +926,7 @@ function FixedSummaryScreen(props: {
               flexWrap: 'wrap',
             }}
           >
-            {milestones.map((m, idx) => {
+            {milestones.map((m) => {
               const unlocked = percent >= m.threshold;
               const bg = unlocked
                 ? isPerfect
@@ -903,31 +946,40 @@ function FixedSummaryScreen(props: {
                   : '#0f172a'
                 : isPerfect
                 ? '#e5e7eb'
-                : '#6b7280';
+                : 'var(--btc-text-muted)';
 
               return (
                 <div
                   key={m.label}
                   style={{
-                    minWidth: 80,
-                    padding: '6px 10px',
-                    borderRadius: 999,
+                    minWidth: 84,
+                    padding: '8px 12px',
+                    borderRadius: 14,
                     backgroundColor: bg,
                     border,
                     fontSize: 11,
                     textAlign: 'center',
+                    opacity: unlocked ? 1 : 0.75,
                   }}
                 >
                   <div
                     style={{
+                      fontSize: 20,
+                      lineHeight: 1.2,
+                      filter: unlocked ? 'none' : 'grayscale(1)',
+                    }}
+                  >
+                    {m.icon}
+                  </div>
+                  <div
+                    style={{
                       fontWeight: 700,
-                      marginBottom: 2,
+                      marginTop: 2,
                       color: textColor,
                     }}
                   >
-                    {unlocked ? '✓' : '•'} Badge {idx + 1}
+                    {m.label}
                   </div>
-                  <div style={{ color: textColor }}>{m.label}</div>
                 </div>
               );
             })}
@@ -985,6 +1037,31 @@ function FixedSummaryScreen(props: {
           >
             Coach&apos;s note: {coachLine}
           </div>
+
+          {/* Gentle streak + come-back-tomorrow hook */}
+          {streakInfo.current > 0 && (
+            <div
+              style={{
+                marginTop: 12,
+                padding: '10px 12px',
+                borderRadius: 12,
+                backgroundColor: isPerfect
+                  ? 'rgba(255,255,255,0.15)'
+                  : '#fef3c7',
+                border: isPerfect ? 'none' : '1px solid #fde68a',
+                fontSize: 13,
+                color: isPerfect ? '#fefce8' : '#92400e',
+              }}
+            >
+              🕯️ Day {streakInfo.current}
+              {' with God’s Word'}
+              {streakInfo.best > streakInfo.current
+                ? ` · best: ${streakInfo.best}`
+                : ''}
+              {' — '}tomorrow&apos;s reading and a fresh challenge will be
+              waiting for you.
+            </div>
+          )}
         </div>
       </div>
 
@@ -992,7 +1069,7 @@ function FixedSummaryScreen(props: {
       <div
         style={{
           fontSize: 13,
-          color: '#4b5563',
+          color: 'var(--btc-text-subtle)',
           marginBottom: 8,
         }}
       >
@@ -1000,19 +1077,7 @@ function FixedSummaryScreen(props: {
           Best on this quiz:{' '}
           {best ? (
             <>
-              {best.correct}/{best.total}{' '}
-              {isNewBest && (
-                <span
-                  style={{
-                    marginLeft: 4,
-                    fontSize: 11,
-                    color: '#16a34a',
-                    fontWeight: 600,
-                  }}
-                >
-                  New best!
-                </span>
-              )}
+              {best.correct}/{best.total}
             </>
           ) : (
             '—'
@@ -1027,7 +1092,7 @@ function FixedSummaryScreen(props: {
             <div
               style={{
                 fontSize: 12,
-                color: '#4b5563',
+                color: 'var(--btc-text-subtle)',
               }}
             >
               Level {level}{' '}
@@ -1038,13 +1103,14 @@ function FixedSummaryScreen(props: {
             <div
               style={{
                 marginTop: 4,
-                height: 6,
+                height: 10,
                 borderRadius: 999,
                 backgroundColor: '#e5e7eb',
                 overflow: 'hidden',
               }}
             >
               <div
+                className="btc-xp-fill"
                 style={{
                   width: `${levelPercent}%`,
                   height: '100%',
@@ -1065,16 +1131,9 @@ function FixedSummaryScreen(props: {
         <div style={{ marginTop: 12 }}>
           <button
             type="button"
+            className="btc-btn btc-btn-secondary"
             onClick={() => setShowReview((s) => !s)}
-            style={{
-              padding: '8px 14px',
-              borderRadius: 999,
-              border: '1px solid #e5e7eb',
-              backgroundColor: '#f9fafb',
-              cursor: 'pointer',
-              fontSize: 13,
-              color: '#111827',
-            }}
+            style={{ fontSize: 14 }}
           >
             {showReview
               ? 'Hide missed questions'
@@ -1107,7 +1166,7 @@ function FixedSummaryScreen(props: {
                   fontSize: 12,
                   fontWeight: 600,
                   marginBottom: 4,
-                  color: '#6b7280',
+                  color: 'var(--btc-text-muted)',
                 }}
               >
                 Missed question {idx + 1}
@@ -1131,7 +1190,7 @@ function FixedSummaryScreen(props: {
                 <div
                   style={{
                     fontSize: 12,
-                    color: '#4b5563',
+                    color: 'var(--btc-text-subtle)',
                     marginTop: 4,
                   }}
                 >
@@ -1142,7 +1201,7 @@ function FixedSummaryScreen(props: {
                 <div
                   style={{
                     fontSize: 12,
-                    color: '#4b5563',
+                    color: 'var(--btc-text-subtle)',
                     marginTop: 4,
                   }}
                 >
@@ -1159,15 +1218,8 @@ function FixedSummaryScreen(props: {
 
       <button
         onClick={props.onBackHome}
-        style={{
-          padding: '10px 16px',
-          borderRadius: 999,
-          border: 'none',
-          backgroundColor: '#111827',
-          marginTop: 24,
-          color: 'white',
-          cursor: 'pointer',
-        }}
+        className="btc-btn btc-btn-dark"
+        style={{ marginTop: 24 }}
       >
         Back to Home
       </button>
@@ -1771,16 +1823,8 @@ function HomeScreen(props: {
   const coachTip = getTodayCoachTip();
   const dailyNudgeText = getDailyChallengeNudgeLine();
 
-  const [streak] = useState<number | null>(() => {
-    if (typeof window === 'undefined') return null;
-    try {
-      const raw = window.localStorage.getItem('btc_streak');
-      const num = raw ? Number(raw) || 0 : 0;
-      return num > 0 ? num : null;
-    } catch {
-      return null;
-    }
-  });
+  const [streakInfo] = useState(() => getStreakInfo());
+  const streak = streakInfo.current > 0 ? streakInfo.current : null;
 
   const [lifetimeCorrect] = useState<number | null>(() => {
     if (typeof window === 'undefined') return null;
@@ -2033,21 +2077,30 @@ function HomeScreen(props: {
                   marginTop: 8,
                   display: 'inline-flex',
                   alignItems: 'center',
-                  padding: '4px 10px',
+                  gap: 6,
+                  padding: '6px 12px',
                   borderRadius: 999,
-                  backgroundColor: '#e0f2fe',
-                  fontSize: 12,
-                  color: '#1e293b',
+                  backgroundColor: '#fef3c7',
+                  border: '1px solid #fde68a',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: '#92400e',
                 }}
               >
-                Streak: {streak} day{streak === 1 ? '' : 's'} in a row
+                🕯️ Day {streak}
+                {' with God’s Word'}
+                {streakInfo.best > streak && (
+                  <span style={{ fontWeight: 500, opacity: 0.85 }}>
+                    · best: {streakInfo.best}
+                  </span>
+                )}
               </div>
             )}
             <div
               style={{
                 marginTop: 6,
                 fontSize: 12,
-                color: '#4b5563',
+                color: 'var(--btc-text-subtle)',
               }}
             >
               {playerName ? (
@@ -2061,7 +2114,7 @@ function HomeScreen(props: {
                       marginLeft: 4,
                       border: 'none',
                       background: 'transparent',
-                      color: '#2563eb',
+                      color: 'var(--btc-accent)',
                       cursor: 'pointer',
                       fontSize: 12,
                       padding: 0,
@@ -2079,10 +2132,11 @@ function HomeScreen(props: {
                     borderRadius: 999,
                     border: '1px solid #d1d5db',
                     background: '#ffffff',
-                    color: '#111827',
+                    color: 'var(--btc-ink)',
                     cursor: 'pointer',
-                    fontSize: 12,
-                    padding: '4px 10px',
+                    fontSize: 13,
+                    padding: '12px 16px',
+                    minHeight: 44,
                   }}
                 >
                   Tap here to add your name
@@ -2113,62 +2167,70 @@ function HomeScreen(props: {
             )}
           </div>
 
-          <div
-            style={{
-              flexShrink: 0,
-              maxWidth: 192,
-            }}
-          >
-            <Image
-              src="/bsc2.png"
-              alt="Bible Trivia Coach"
-              width={192}
-              height={192}
-              priority
-              style={{ width: '100%', height: 'auto' }}
-            />
-          </div>
         </div>
 
-        {/* Daily challenge nudge */}
-        {!dailyChallengeCompletedToday && (
-          <div
+        {/* Daily challenge hero (daily-challenge-nudge) */}
+        <div
+          style={{
+            marginTop: 14,
+            padding: 16,
+            borderRadius: 20,
+            border: '1px solid #c7d2fe',
+            background: 'linear-gradient(135deg, #eef2ff, #e0f2fe)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            flexWrap: 'wrap',
+          }}
+        >
+          <Image
+            src="/bsc2.png"
+            alt="Bible Trivia Coach"
+            width={104}
+            height={104}
+            priority
             style={{
-              marginTop: 12,
-              padding: '6px 10px',
-              borderRadius: 999,
-              backgroundColor: '#dcfce7',
-              border: '1px solid #bbf7d0',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              fontSize: 12,
-              color: '#166534',
-              gap: 8,
-              flexWrap: 'wrap',
+              width: 104,
+              height: 104,
+              borderRadius: 16,
+              flexShrink: 0,
             }}
-          >
-            <span>
-              {dailyNudgeText ||
-                "Today’s 5-question challenge is ready—just a few minutes in God’s Word."}
-            </span>
-            <button
-              type="button"
-              onClick={props.onStartDailyQuiz}
-              style={{
-                padding: '4px 10px',
-                borderRadius: 999,
-                border: 'none',
-                backgroundColor: '#16a34a',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
+          />
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--btc-ink)' }}>
+              ⚡ Daily Challenge
+              {dailyChallengeCompletedToday && <span> ✅</span>}
+            </div>
+            <p
+              className="btc-text-muted"
+              style={{ margin: '4px 0 10px', fontSize: 13 }}
             >
-              Start
-            </button>
+              {dailyChallengeCompletedToday
+                ? 'Done for today — well planted! Fresh questions tomorrow.'
+                : dailyNudgeText ||
+                  'Today’s 5-question challenge is ready—just a few minutes in God’s Word.'}
+            </p>
+            {!dailyChallengeCompletedToday ? (
+              <button
+                type="button"
+                className="btc-btn"
+                onClick={props.onStartDailyQuiz}
+                style={{ width: '100%', minHeight: 52, fontSize: 16 }}
+              >
+                Start today&apos;s challenge
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btc-btn btc-btn-secondary"
+                onClick={props.onStartQuickQuiz}
+                style={{ width: '100%' }}
+              >
+                Play a Quick Quiz instead
+              </button>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Revisit missed questions (review-missed) */}
         {missedCount > 0 && (
@@ -2195,16 +2257,9 @@ function HomeScreen(props: {
             </span>
             <button
               type="button"
+              className="btc-btn btc-btn-warm"
               onClick={props.onStartMissedPractice}
-              style={{
-                padding: '4px 10px',
-                borderRadius: 999,
-                border: 'none',
-                backgroundColor: '#d97706',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
+              style={{ fontSize: 14 }}
             >
               Revisit
             </button>
@@ -2355,7 +2410,7 @@ function HomeScreen(props: {
         <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
         <Section title="By Book" tint="#e0f2fe">
         <div style={{ padding: '12px 16px' }}>
-          <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: '#6b7280' }}>
+          <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: 'var(--btc-text-muted)' }}>
             Choose a book to quiz on
           </label>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
@@ -2410,16 +2465,8 @@ function HomeScreen(props: {
                 }
                 props.onStartBookQuiz(selectedBook, safeChapter);
               }}
-              style={{
-                padding: '8px 18px',
-                borderRadius: 999,
-                border: 'none',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
+              className="btc-btn"
+              style={{ fontSize: 14 }}
             >
               Start Quiz
             </button>
@@ -2432,16 +2479,8 @@ function HomeScreen(props: {
                 const url = `/read?start=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':1')}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
                 window.location.href = url;
               }}
-              style={{
-                padding: '8px 18px',
-                borderRadius: 999,
-                border: '1px solid rgba(0,0,0,0.15)',
-                backgroundColor: 'white',
-                color: '#374151',
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
+              className="btc-btn btc-btn-secondary"
+              style={{ fontSize: 14 }}
             >
               🎧 Listen first
             </button>
@@ -2460,7 +2499,7 @@ function HomeScreen(props: {
             <span>💡</span>
             <span>Coach&apos;s tip</span>
           </summary>
-          <div style={{ padding:'8px 14px 12px', fontSize:13, color:'#4b5563' }}>
+          <div style={{ padding:'8px 14px 12px', fontSize:13, color:'var(--btc-text-subtle)' }}>
             {coachTip}
           </div>
         </details>
@@ -2583,18 +2622,18 @@ function Row(props: {
         alignItems: 'center',
         marginBottom: 10,
         cursor: 'pointer',
-        color: '#111827',
+        color: 'var(--btc-ink)',
       }}
     >
       <div>
         <div style={{ fontWeight: 600, fontSize: 15 }}>{props.title}</div>
         {props.subtitle && (
-          <div style={{ fontSize: 13, color: '#4b5563' }}>
+          <div style={{ fontSize: 13, color: 'var(--btc-text-subtle)' }}>
             {props.subtitle}
           </div>
         )}
       </div>
-      <span style={{ color: '#4b5563', fontSize: 18 }}>›</span>
+      <span style={{ color: 'var(--btc-text-subtle)', fontSize: 18 }}>›</span>
     </button>
   );
 }
@@ -2609,7 +2648,7 @@ function DisabledRow(props: { title: string }) {
         padding: '10px 16px',
         border: '1px dashed #9ca3af',
         marginBottom: 10,
-        color: '#6b7280',
+        color: 'var(--btc-text-muted)',
         fontSize: 14,
       }}
     >
@@ -2783,7 +2822,7 @@ function DailyReadingScreen(props: {
     <div>
       <BackButton onClick={props.onBack} />
       <h2>Daily Reading</h2>
-      <p style={{ color: '#4b5563', marginBottom: 8 }}>{day.title}</p>
+      <p style={{ color: 'var(--btc-text-subtle)', marginBottom: 8 }}>{day.title}</p>
       <p className="btc-text-muted" style={{ marginBottom: 12 }}>
         {day.start} – {day.end}
       </p>
@@ -2795,7 +2834,7 @@ function DailyReadingScreen(props: {
             padding: 16,
             borderRadius: 16,
             backgroundColor: '#eef2ff',
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           Loading passage…
@@ -2840,7 +2879,7 @@ function DailyReadingScreen(props: {
                 style={{
                   marginBottom: 6,
                   fontSize: 15,
-                  color: '#111827',
+                  color: 'var(--btc-ink)',
                 }}
               >
                 <span
@@ -2934,7 +2973,7 @@ function DailyReadingScreen(props: {
             padding: '10px 16px',
             borderRadius: 999,
             border: 'none',
-            backgroundColor: '#2563eb',
+            backgroundColor: 'var(--btc-accent)',
             color: 'white',
             cursor: 'pointer',
           }}
@@ -2949,6 +2988,34 @@ function DailyReadingScreen(props: {
 // ---- Quiz + inline passage ----
 
 const QUIZ_OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+// Coach reactions (coach-voice-text): rotate by question index so the
+// voice stays varied but stable across re-renders.
+const COACH_CORRECT_LINES = [
+  'Correct! 🎉',
+  'Yes! Well done. 🙌',
+  'Beautiful — that’s the one!',
+  'You got it — another seed planted.',
+];
+const COACH_MISS_LINES = [
+  'Not quite — nice try!',
+  'Close! Now it’ll stick even better.',
+  'Good effort — the answer is highlighted.',
+];
+function coachReaction(isCorrect: boolean, questionIndex: number): string {
+  const lines = isCorrect ? COACH_CORRECT_LINES : COACH_MISS_LINES;
+  return lines[questionIndex % lines.length];
+}
+
+function hapticTap(isCorrect: boolean) {
+  try {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      navigator.vibrate(isCorrect ? 12 : [8, 40, 8]);
+    }
+  } catch {
+    // ignore — haptics are a bonus, never a requirement
+  }
+}
 
 function QuizOptionButton(props: {
   option: string;
@@ -2968,21 +3035,25 @@ function QuizOptionButton(props: {
   if (selected !== null) {
     if (isSelected && isCorrect) {
       bg = '#bbf7d0';
-      border = '1px solid #16a34a';
+      border = '1px solid var(--btc-success)';
     } else if (isSelected && !isCorrect) {
       bg = '#fecaca';
       border = '1px solid #dc2626';
     } else if (showFeedback && isCorrect) {
-      bg = '#dcfce7';
-      border = '1px solid #16a34a';
+      bg = 'var(--btc-success-soft)';
+      border = '1px solid var(--btc-success)';
     }
   }
 
   const tappable = selected === null && !props.disabled;
+  const revealedCorrect = selected !== null && showFeedback && isCorrect;
   return (
     <button
-      className="btc-quiz-option"
-      onClick={() => props.onSelect(index)}
+      className={`btc-quiz-option${revealedCorrect ? ' btc-pop' : ''}`}
+      onClick={() => {
+        if (tappable) hapticTap(index === correctIndex);
+        props.onSelect(index);
+      }}
       style={{
         width: '100%',
         textAlign: 'left',
@@ -2991,7 +3062,7 @@ function QuizOptionButton(props: {
         backgroundColor: bg,
         border,
         cursor: tappable ? 'pointer' : 'default',
-        color: '#111827',
+        color: 'var(--btc-ink)',
         display: 'flex',
         alignItems: 'center',
         gap: 10,
@@ -3005,7 +3076,7 @@ function QuizOptionButton(props: {
           borderRadius: 999,
           border: '1px solid #c7d2fe',
           backgroundColor: '#eef2ff',
-          color: '#1d4ed8',
+          color: 'var(--btc-accent-deep)',
           fontSize: 12,
           fontWeight: 700,
           display: 'inline-flex',
@@ -3096,13 +3167,13 @@ function QuizScreen(props: {
   }
 
   return (
-    <div style={{ color: '#111827' }}>
+    <div style={{ color: 'var(--btc-ink)' }}>
       <BackButton onClick={props.onBack} />
       <h2>{title}</h2>
       <div
         style={{
           fontSize: 13,
-          color: '#4b5563',
+          color: 'var(--btc-text-subtle)',
           marginBottom: 12,
           display: 'flex',
           justifyContent: 'space-between',
@@ -3139,7 +3210,7 @@ function QuizScreen(props: {
           style={{
             fontSize: 16,
             fontWeight: 600,
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           {q.text}
@@ -3169,9 +3240,9 @@ function QuizScreen(props: {
               color: selected === q.correctIndex ? '#15803d' : '#b91c1c',
             }}
           >
-            {selected === q.correctIndex ? 'Correct! 🎉' : 'Not quite — nice try!'}
+            {coachReaction(selected === q.correctIndex, index)}
           </div>
-          <div style={{ fontSize: 14, color: '#111827' }}>
+          <div style={{ fontSize: 14, color: 'var(--btc-ink)' }}>
             {q.explanation}
           </div>
           {selected !== q.correctIndex && passageRef && !showPassage && (
@@ -3183,7 +3254,7 @@ function QuizScreen(props: {
                 borderRadius: 999,
                 border: '1px solid #c7d2fe',
                 backgroundColor: '#eef2ff',
-                color: '#1d4ed8',
+                color: 'var(--btc-accent-deep)',
                 fontSize: 13,
                 cursor: 'pointer',
               }}
@@ -3205,7 +3276,7 @@ function QuizScreen(props: {
             padding: '8px 16px',
             borderRadius: 999,
             border: 'none',
-            backgroundColor: selected === null ? '#9ca3af' : '#2563eb',
+            backgroundColor: selected === null ? '#9ca3af' : 'var(--btc-accent)',
             color: 'white',
             cursor: selected === null ? 'default' : 'pointer',
           }}
@@ -3292,7 +3363,7 @@ function FamilySetupScreen(props: {
             fontSize: 13,
             fontWeight: 600,
             marginBottom: 8,
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           Players (2–6)
@@ -3344,7 +3415,7 @@ function FamilySetupScreen(props: {
                 borderRadius: 999,
                 border: '1px dashed #9ca3af',
                 backgroundColor: '#ffffff',
-                color: '#111827',
+                color: 'var(--btc-ink)',
                 padding: '6px 10px',
                 fontSize: 13,
                 cursor: 'pointer',
@@ -3371,7 +3442,7 @@ function FamilySetupScreen(props: {
             fontSize: 13,
             fontWeight: 600,
             marginBottom: 8,
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           Number of questions
@@ -3394,7 +3465,7 @@ function FamilySetupScreen(props: {
           style={{
             marginTop: 4,
             fontSize: 12,
-            color: '#6b7280',
+            color: 'var(--btc-text-muted)',
           }}
         >
           Recommended: 10–20 questions for a fun family game.
@@ -3408,7 +3479,7 @@ function FamilySetupScreen(props: {
           padding: '10px 16px',
           borderRadius: 999,
           border: 'none',
-          backgroundColor: '#2563eb',
+          backgroundColor: 'var(--btc-accent)',
           color: 'white',
           cursor: 'pointer',
           fontSize: 14,
@@ -3490,13 +3561,13 @@ function FamilyGameScreen(props: {
   }
 
   return (
-    <div style={{ color: '#111827' }}>
+    <div style={{ color: 'var(--btc-ink)' }}>
       <BackButton onClick={props.onBackHome} />
       <h2>Family Night</h2>
       {!finished && (
         <p
           style={{
-            color: '#4b5563',
+            color: 'var(--btc-text-subtle)',
             marginBottom: 8,
             fontSize: 13,
           }}
@@ -3522,7 +3593,7 @@ function FamilyGameScreen(props: {
               style={{
                 fontSize: 16,
                 fontWeight: 600,
-                color: '#111827',
+                color: 'var(--btc-ink)',
               }}
             >
               {q.text}
@@ -3554,11 +3625,9 @@ function FamilyGameScreen(props: {
                     selected === q.correctIndex ? '#15803d' : '#b91c1c',
                 }}
               >
-                {selected === q.correctIndex
-                  ? 'Correct! 🎉'
-                  : 'Not quite — nice try!'}
+                {coachReaction(selected === q.correctIndex, currentIndex)}
               </div>
-              <div style={{ fontSize: 14, color: '#111827' }}>
+              <div style={{ fontSize: 14, color: 'var(--btc-ink)' }}>
                 {q.explanation}
               </div>
             </div>
@@ -3578,7 +3647,7 @@ function FamilyGameScreen(props: {
             <div
               style={{
                 fontSize: 12,
-                color: '#4b5563',
+                color: 'var(--btc-text-subtle)',
               }}
             >
               Scores:{' '}
@@ -3597,7 +3666,7 @@ function FamilyGameScreen(props: {
                 borderRadius: 999,
                 border: 'none',
                 backgroundColor:
-                  selected === null ? '#9ca3af' : '#2563eb',
+                  selected === null ? '#9ca3af' : 'var(--btc-accent)',
                 color: 'white',
                 cursor: selected === null ? 'default' : 'pointer',
               }}
@@ -3647,7 +3716,7 @@ function FamilyGameScreen(props: {
                 <span
                   style={{
                     fontWeight: p.score === topScore ? 700 : 500,
-                    color: p.score === topScore ? '#166534' : '#111827',
+                    color: p.score === topScore ? '#166534' : 'var(--btc-ink)',
                   }}
                 >
                   {p.name}
@@ -3661,7 +3730,7 @@ function FamilyGameScreen(props: {
             style={{
               marginTop: 8,
               fontSize: 13,
-              color: '#4b5563',
+              color: 'var(--btc-text-subtle)',
             }}
           >
             Great game! Everyone planted more of God&apos;s Word tonight.
@@ -3675,7 +3744,7 @@ function FamilyGameScreen(props: {
               padding: '10px 16px',
               borderRadius: 999,
               border: 'none',
-              backgroundColor: '#111827',
+              backgroundColor: 'var(--btc-ink)',
               color: 'white',
               cursor: 'pointer',
               fontSize: 14,
@@ -3874,7 +3943,7 @@ function PassageInline(props: {
           >
             Read a related passage about Scripture
           </div>
-          <div style={{ fontSize: 12, color: '#4b5563' }}>
+          <div style={{ fontSize: 12, color: 'var(--btc-text-subtle)' }}>
             {refStart} – {refEnd}
           </div>
         </div>
@@ -3926,7 +3995,7 @@ function PassageInline(props: {
             style={{
               border: 'none',
               background: 'transparent',
-              color: '#6b7280',
+              color: 'var(--btc-text-muted)',
               fontSize: 16,
               cursor: 'pointer',
               padding: 2,
@@ -3944,7 +4013,7 @@ function PassageInline(props: {
         }}
       >
         {loading && (
-          <div style={{ fontSize: 13, color: '#4b5563' }}>
+          <div style={{ fontSize: 13, color: 'var(--btc-text-subtle)' }}>
             Loading passage…
           </div>
         )}
@@ -3964,7 +4033,7 @@ function PassageInline(props: {
                 ref={(el) => {
                   verseRefs.current[idx] = el;
                 }}
-                style={{ marginBottom: 4, fontSize: 13, color: '#111827' }}
+                style={{ marginBottom: 4, fontSize: 13, color: 'var(--btc-ink)' }}
               >
                 <span
                   style={{
@@ -4011,7 +4080,7 @@ function BackButton(props: { onClick: () => void }) {
       style={{
         border: 'none',
         background: 'transparent',
-        color: '#4b5563',
+        color: 'var(--btc-text-subtle)',
         fontSize: 14,
         padding: 0,
         marginBottom: 8,
