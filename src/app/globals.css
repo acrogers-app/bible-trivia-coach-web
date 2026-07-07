@@ -209,3 +209,12 @@ html[data-btc-reduce-motion="1"] * {
   transition: none !important;
   animation: none !important;
 }
+
+/* Quiz answer options */
+.btc-quiz-option {
+  transition: background-color 150ms ease, border-color 150ms ease,
+    transform 80ms ease;
+}
+.btc-quiz-option:active {
+  transform: scale(0.98);
+}
