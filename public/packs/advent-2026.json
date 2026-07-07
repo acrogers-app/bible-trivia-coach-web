@@ -1,0 +1,501 @@
+{
+  "id": "advent-2026",
+  "name": "Advent 2026",
+  "description": "A 25-question journey through the Christmas story — from ancient prophecy to the birth of Jesus.",
+  "version": "1.0.0",
+  "tags": [
+    "advent",
+    "christmas",
+    "nativity",
+    "seasonal"
+  ],
+  "questions": [
+    {
+      "id": "isaiah-7-6",
+      "difficulty": "easy",
+      "category": "Prophecy",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What is the name of the child mentioned in Isaiah 7:14?",
+      "options": [
+        "Emmanuel",
+        "Isaiah",
+        "Josiah",
+        "Hezekiah"
+      ],
+      "correctIndex": 0,
+      "explanation": "Verse 14 names the child Immanuel, meaning 'God with us,' signifying God's presence and promise.",
+      "refStart": "Isaiah 7:14",
+      "refEnd": "Isaiah 7:14"
+    },
+    {
+      "id": "isaiah-9-1",
+      "difficulty": "easy",
+      "category": "Prophecy",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "In Isaiah 9, what promise is given to those walking in darkness?",
+      "options": [
+        "They will see a great light",
+        "They will find peace on earth",
+        "They will be delivered from enemies",
+        "They will inherit the kingdom"
+      ],
+      "correctIndex": 0,
+      "explanation": "Isaiah 9:2 states that those walking in darkness will see a great light, symbolizing hope and divine revelation.",
+      "refStart": "Isaiah 9:1",
+      "refEnd": "Isaiah 9:2"
+    },
+    {
+      "id": "isaiah-9-4",
+      "difficulty": "easy",
+      "category": "Prophecy",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What action does Isaiah 9:4 say God will do to the oppressors of Israel?",
+      "options": [
+        "Flood their land",
+        "Break their yoke and bar",
+        "Send them into exile",
+        "Destroy their armies"
+      ],
+      "correctIndex": 1,
+      "explanation": "Isaiah 9:4 states that God will break the yoke of their burden and the bar of their shoulders, symbolizing liberation from oppressors.",
+      "refStart": "Isaiah 9:4",
+      "refEnd": "Isaiah 9:4"
+    },
+    {
+      "id": "micah-5-1",
+      "difficulty": "easy",
+      "category": "Prophecy",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "According to Micah 5:1, who is the ruler's origin described as?",
+      "options": [
+        "From Bethlehem",
+        "From Jerusalem",
+        "From Egypt",
+        "From Nazareth"
+      ],
+      "correctIndex": 0,
+      "explanation": "Micah 5:2 states that the ruler's origin is from Bethlehem Ephrathah, emphasizing the prophecy of a ruler coming from that small town.",
+      "refStart": "Micah 5:1",
+      "refEnd": "Micah 5:2"
+    },
+    {
+      "id": "micah-5-gen1",
+      "text": "Who was being addressed in Micah 5:2?",
+      "options": [
+        "The city of Naphtali",
+        "The tribe of Judah",
+        "Bethlehem Ephrathah, a small clan among the clans of Judah",
+        "The people of Israel"
+      ],
+      "explanation": "This is stated in Micah 5:2, where God speaks directly to Bethlehem Ephrathah saying \"But you, Bethlehem Ephrathah....\"",
+      "difficulty": "easy",
+      "category": "Prophecy",
+      "refStart": "Micah 5:1",
+      "refEnd": "Micah 5:10",
+      "playful": false,
+      "sourceType": "scripture",
+      "correctIndex": 2
+    },
+    {
+      "id": "matthew-1-1",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What does the opening of Matthew 1 primarily focus on?",
+      "options": [
+        "The genealogy of Jesus Christ",
+        "The birth of Jesus in Bethlehem",
+        "The announcement of Jesus' coming",
+        "A description of Jesus' ministry"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew 1 begins with the genealogy of Jesus, tracing his lineage from Abraham to David and through generations, establishing his royal and Jewish heritage (Matthew 1:1-17).",
+      "refStart": "Matthew 1:1",
+      "refEnd": "Matthew 1:17"
+    },
+    {
+      "id": "matthew-1-5",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What is significant about the lineage listed in Matthew 1:1–17?",
+      "options": [
+        "It traces Jesus' military ancestry",
+        "It emphasizes Jesus' royal and legal descent",
+        "It shows Jesus' connection to pagan nations",
+        "It focuses on Jesus' spiritual talents"
+      ],
+      "correctIndex": 1,
+      "explanation": "Matthew's genealogy emphasizes Jesus' royal and legal descent through Joseph, highlighting his royal Davidic lineage (Matthew 1:1-17).",
+      "refStart": "Matthew 1:1",
+      "refEnd": "Matthew 1:17"
+    },
+    {
+      "id": "matthew-1-8",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What is the main purpose of Matthew 1's genealogy?",
+      "options": [
+        "To demonstrate Jesus' spiritual purity",
+        "To establish Jesus' legal and royal lineage",
+        "To recount Jesus' childhood",
+        "To share Jesus' teachings"
+      ],
+      "correctIndex": 1,
+      "explanation": "The genealogy in Matthew 1 aims to establish Jesus' legal right to the throne of David, confirming his messianic credentials (Matthew 1:1-17).",
+      "refStart": "Matthew 1:1",
+      "refEnd": "Matthew 1:17"
+    },
+    {
+      "id": "luke-2-2",
+      "difficulty": "easy",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "Where was Jesus born according to Luke 2?",
+      "options": [
+        "Nazareth",
+        "Bethany",
+        "Bethlehem",
+        "Jerusalem"
+      ],
+      "correctIndex": 2,
+      "explanation": "Luke 2:4-7 describes Jesus being born in Bethlehem, the city of David, because Joseph was of the house and lineage of David.",
+      "refStart": "Luke 2:4",
+      "refEnd": "Luke 2:7"
+    },
+    {
+      "id": "isaiah-7-5",
+      "difficulty": "medium",
+      "category": "Prophecy",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "Why did Isaiah tell Ahaz not to ask for a sign from the Lord?",
+      "options": [
+        "Because he was already confident",
+        "Because God did not want to reveal Himself",
+        "Because trusting God was the sign",
+        "Because signs are not necessary"
+      ],
+      "correctIndex": 2,
+      "explanation": "Verse 11 shows Isaiah urging Ahaz to ask for a sign, but God tells him not to test the Lord. Isaiah emphasizes that trusting God's promise itself is the sign.",
+      "refStart": "Isaiah 7:11",
+      "refEnd": "Isaiah 7:12"
+    },
+    {
+      "id": "luke-1-2",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What is the purpose of Luke's Gospel as stated in Luke 1:1-4?",
+      "options": [
+        "To provide a historical account",
+        "To give an orderly account so readers may know the certainty",
+        "To teach about the law",
+        "To recount Jesus's miracles"
+      ],
+      "correctIndex": 1,
+      "explanation": "Luke writes so that Theophilus may know the certainty of the teachings he received (Luke 1:4).",
+      "refStart": "Luke 1:1",
+      "refEnd": "Luke 1:4"
+    },
+    {
+      "id": "luke-1-3",
+      "difficulty": "medium",
+      "category": "History",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "Which priest's division is mentioned in Luke 1:5?",
+      "options": [
+        "Aaron's division",
+        "Zechariah's division",
+        "Abijah's division",
+        "Elijah's division"
+      ],
+      "correctIndex": 2,
+      "explanation": "Zechariah belonged to the priestly division of Abijah, as mentioned in Luke 1:5.",
+      "refStart": "Luke 1:5",
+      "refEnd": "Luke 1:6"
+    },
+    {
+      "id": "luke-1-5",
+      "difficulty": "medium",
+      "category": "Stories",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What was Zechariah's initial response to the angel's message about his future son?",
+      "options": [
+        "Frightened",
+        "Doubted",
+        "Pleased",
+        "Unaware"
+      ],
+      "correctIndex": 1,
+      "explanation": "Zechariah doubted the angel's words because of his and his wife’s old age (Luke 1:18).",
+      "refStart": "Luke 1:18",
+      "refEnd": "Luke 1:20"
+    },
+    {
+      "id": "luke_shepherds_sign",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "text": "In Luke 2, what sign did the angels give the shepherds?",
+      "options": [
+        "A baby wrapped in cloths and lying in a manger",
+        "A star over Bethlehem",
+        "A scroll in the temple",
+        "A crown on a throne"
+      ],
+      "correctIndex": 0,
+      "explanation": "Luke 2:12 gives this sign to the shepherds.",
+      "refStart": "Luke 2:12",
+      "refEnd": "Luke 2:12"
+    },
+    {
+      "id": "luke-2-3",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "Who were the first to hear the announcement of Jesus' birth from the angels?",
+      "options": [
+        "The shepherds",
+        "The Wise Men",
+        "The priests",
+        "The Pharisees"
+      ],
+      "correctIndex": 0,
+      "explanation": "Luke 2:8-9 describes shepherds tending their flocks who are visited by angels announcing the birth of Jesus.",
+      "refStart": "Luke 2:8",
+      "refEnd": "Luke 2:9"
+    },
+    {
+      "id": "luke-2-4",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What phrase did the angel use to describe Jesus' arrival?",
+      "options": [
+        "A Savior for all",
+        "A Savior, who is Christ the Lord",
+        "A Messiah has come",
+        "The King of Israel"
+      ],
+      "correctIndex": 1,
+      "explanation": "Luke 2:11 records the angel proclaiming Jesus as 'a Savior, who is Christ the Lord,' highlighting His divine role.",
+      "refStart": "Luke 2:11",
+      "refEnd": "Luke 2:11"
+    },
+    {
+      "id": "luke-2-8",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "According to Luke 2, what was Mary’s reaction after the shepherds visited her?",
+      "options": [
+        "She marveled and reflected",
+        "She dismissed their message",
+        "She immediately left for Jerusalem",
+        "She told everyone in the town"
+      ],
+      "correctIndex": 0,
+      "explanation": "Luke 2:18-19 describes Mary pondering all these things in her heart after hearing and seeing the shepherds' report.",
+      "refStart": "Luke 2:18",
+      "refEnd": "Luke 2:19"
+    },
+    {
+      "id": "matthew-2-2",
+      "difficulty": "medium",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What was the main purpose of the wise men’s visit?",
+      "options": [
+        "To offer gifts and worship Jesus",
+        "To warn Herod of danger",
+        "To deliver a message from the king",
+        "To verify Jesus’ location"
+      ],
+      "correctIndex": 0,
+      "explanation": "The wise men came to worship Jesus and offer gifts, as stated in verses 10-11.",
+      "refStart": "Matthew 2:10",
+      "refEnd": "Matthew 2:11"
+    },
+    {
+      "id": "matthew-2-4",
+      "difficulty": "medium",
+      "category": "History",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What was Herod’s plan after learning about the child?",
+      "options": [
+        "To kill Jesus",
+        "To send gifts",
+        "To build a monument",
+        "To visit Jesus secretly"
+      ],
+      "correctIndex": 0,
+      "explanation": "Herod secretly plotted to kill Jesus to eliminate any threat to his throne (verses 13-16).",
+      "refStart": "Matthew 2:13",
+      "refEnd": "Matthew 2:16"
+    },
+    {
+      "id": "matthew-2-5",
+      "difficulty": "medium",
+      "category": "History",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "Where did Joseph, Mary, and Jesus go after fleeing Herod?",
+      "options": [
+        "Egypt",
+        "Nazareth",
+        "Jerusalem",
+        "Bethlehem"
+      ],
+      "correctIndex": 0,
+      "explanation": "Joseph was warned in a dream to escape to Egypt with Mary and Jesus, fulfilling prophecy (verse 13-15).",
+      "refStart": "Matthew 2:13",
+      "refEnd": "Matthew 2:15"
+    },
+    {
+      "id": "magi_value_not_stated",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "text": "Does Matthew state the monetary value of the wise men’s gifts?",
+      "options": [
+        "No, the value is not stated",
+        "Yes, it gives an exact number",
+        "Yes, it lists the market price",
+        "Yes, it gives the value in denarii"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew lists the gifts, but does not state a monetary value.",
+      "refStart": "Matthew 2:11",
+      "refEnd": "Matthew 2:11",
+      "playful": true
+    },
+    {
+      "id": "matthew-2-6",
+      "difficulty": "hard",
+      "category": "Biblical references",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What prophecy did Matthew say was fulfilled by Jesus’ return from Egypt?",
+      "options": [
+        "Out of Egypt I called My Son",
+        "A ruler from Bethlehem",
+        "A suffering Servant",
+        "A light to the Gentiles"
+      ],
+      "correctIndex": 0,
+      "explanation": "Matthew quotes Hosea 11:1 to show Jesus' return from Egypt fulfilled this prophecy (verse 15).",
+      "refStart": "Matthew 2:15",
+      "refEnd": "Matthew 2:15"
+    },
+    {
+      "id": "john_1_1",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "text": "In John 1:1, what does the verse say about the Word?",
+      "options": [
+        "The Word was with God, and the Word was God",
+        "The Word was created by angels",
+        "The Word was only a prophet",
+        "The Word was a song in the temple"
+      ],
+      "correctIndex": 0,
+      "explanation": "John 1:1 states the Word was with God and was God.",
+      "refStart": "John 1:1",
+      "refEnd": "John 1:1"
+    },
+    {
+      "id": "john-1-3",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "According to John 1, what was the Word’s relationship to God?",
+      "options": [
+        "The Word is a messenger from God",
+        "The Word was with God and is God",
+        "The Word was created by God",
+        "The Word is simply a teaching"
+      ],
+      "correctIndex": 1,
+      "explanation": "John 1:1 states that 'The Word was with God, and the Word was God,' affirming the divine nature of the Word.",
+      "refStart": "John 1:1",
+      "refEnd": "John 1:2"
+    },
+    {
+      "id": "john-1-6",
+      "difficulty": "hard",
+      "category": "Gospels",
+      "playful": false,
+      "sourceType": "scripture",
+      "learnMore": "",
+      "sources": [],
+      "text": "What is the significance of Jesus being called 'the Word' in John 1?",
+      "options": [
+        "He is the speaking prophet",
+        "He reveals God’s nature and will",
+        "He is the lawgiver",
+        "He is the preacher"
+      ],
+      "correctIndex": 1,
+      "explanation": "Referring to Jesus as 'the Word' signifies that He reveals God's very nature and communicates God's will to the world, as mentioned throughout John 1.",
+      "refStart": "John 1:1",
+      "refEnd": "John 1:14"
+    }
+  ]
+}
