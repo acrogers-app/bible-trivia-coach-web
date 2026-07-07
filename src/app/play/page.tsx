@@ -9,6 +9,7 @@ import {
 } from '@/lib/coachVoice';
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
+import { apiUrl } from '../../lib/apiBase';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
 
@@ -2711,9 +2712,9 @@ function DailyReadingScreen(props: {
       try {
         setLoading(true);
         setError(null);
-        const url = `/api/passage?start=${encodeURIComponent(
+        const url = apiUrl(`/api/passage?start=${encodeURIComponent(
           day.start,
-        )}&end=${encodeURIComponent(day.end)}`;
+        )}&end=${encodeURIComponent(day.end)}`);
         const res = await fetch(url);
         const data = await res.json();
         if (!res.ok) {
@@ -3830,9 +3831,9 @@ function PassageInline(props: {
       try {
         setLoading(true);
         setError(null);
-        const url = `/api/passage?start=${encodeURIComponent(
+        const url = apiUrl(`/api/passage?start=${encodeURIComponent(
           refStart,
-        )}&end=${encodeURIComponent(refEnd)}`;
+        )}&end=${encodeURIComponent(refEnd)}`);
         const res = await fetch(url);
         const data = await res.json();
         if (!res.ok) {

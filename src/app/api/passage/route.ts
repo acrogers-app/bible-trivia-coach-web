@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { corsHeaders, corsPreflightResponse } from '../../../lib/cors';
 import path from 'path';
 import Database from 'better-sqlite3';
 
@@ -166,7 +167,7 @@ function normalizeRefInput(ref: string) {
   return t;
 }
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const startRaw = searchParams.get('start');
   const endRaw = searchParams.get('end');
@@ -238,4 +239,16 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(req: NextRequest) {
+  const res = await handleGet(req);
+  for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
+    res.headers.set(k, v);
+  }
+  return res;
+}
+
+export function OPTIONS(req: NextRequest) {
+  return corsPreflightResponse(req.headers.get('origin'));
 }

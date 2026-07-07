@@ -8,9 +8,14 @@
     "start": "next start",
     "lint": "eslint",
     "validate:questions": "node scripts/validateQuestions.mjs",
-    "check": "npm run lint && npm run build && npm run validate:questions"
+    "check": "npm run lint && npm run build && npm run validate:questions",
+    "build:mobile": "node scripts/buildMobile.mjs",
+    "cap:sync": "npm run build:mobile && npx cap sync"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1",
     "better-sqlite3": "^12.10.1",
     "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
@@ -21,6 +26,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.4.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
