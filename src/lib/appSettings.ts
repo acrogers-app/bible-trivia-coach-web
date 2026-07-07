@@ -17,6 +17,8 @@ export type AppSettings = {
   readerAutoFollow: boolean;
   readerShowAllVoices: boolean;
   analyticsEnabled: boolean;
+  // native app only: gentle 8:00 AM daily-challenge reminder (opt-in)
+  dailyReminderEnabled: boolean;
 };
 
 export const defaultSettings: AppSettings = {
@@ -33,6 +35,7 @@ export const defaultSettings: AppSettings = {
   readerAutoFollow: true,
   readerShowAllVoices: false,
   analyticsEnabled: true,
+  dailyReminderEnabled: false,
 };
 
 const KEY = 'btc:settings:v3';

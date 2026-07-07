@@ -9,6 +9,11 @@ import {
   loadSettings,
   saveSettings,
 } from '../../lib/appSettings';
+import {
+  disableDailyNudge,
+  enableDailyNudge,
+  isNativeApp,
+} from '../../lib/dailyNudge';
 
 type VoiceOpt = SpeechSynthesisVoice;
 
@@ -81,6 +86,7 @@ export default function SettingsPage() {
   const [draft, setDraft] = useState<AppSettings>(() => loadSettings());
   const [voices, setVoices] = useState<VoiceOpt[]>([]);
   const [status, setStatus] = useState<string>('');
+  const [isNative] = useState<boolean>(() => isNativeApp());
 
   useEffect(() => {
     applySettingsToDocument(saved);
@@ -146,10 +152,33 @@ export default function SettingsPage() {
   }
 
   function save() {
+    const reminderTurnedOn =
+      draft.dailyReminderEnabled && !saved.dailyReminderEnabled;
+    const reminderTurnedOff =
+      !draft.dailyReminderEnabled && saved.dailyReminderEnabled;
+
     saveSettings(draft);
     setSaved({ ...draft });
     applySettingsToDocument(draft);
     setStatus('Saved.');
+
+    if (reminderTurnedOn) {
+      void enableDailyNudge().then((ok) => {
+        if (ok) {
+          setStatus('Saved. See you tomorrow at 8:00. 🕯️');
+        } else {
+          const reverted = { ...draft, dailyReminderEnabled: false };
+          saveSettings(reverted);
+          setSaved(reverted);
+          setDraft(reverted);
+          setStatus(
+            'Saved, but the reminder needs notification permission — allow notifications in your device settings, then try again.',
+          );
+        }
+      });
+    } else if (reminderTurnedOff) {
+      void disableDailyNudge();
+    }
   }
   function cancel() {
     setDraft(saved);
@@ -230,6 +259,24 @@ export default function SettingsPage() {
                 </span>
               </span>
             </label>
+            {isNative && (
+              <label style={row}>
+                <input
+                  type="checkbox"
+                  checked={draft.dailyReminderEnabled}
+                  onChange={(e) =>
+                    update({ dailyReminderEnabled: e.target.checked })
+                  }
+                />
+                <span>
+                  <strong>Daily reminder</strong>
+                  <span className="btc-text-muted" style={{ fontSize: 12, display: 'block', marginTop: 2 }}>
+                    One gentle nudge at 8:00 each morning. Never more, never
+                    any guilt.
+                  </span>
+                </span>
+              </label>
+            )}
           </div>
 
           <div style={preview}>
