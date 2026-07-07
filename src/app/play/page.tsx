@@ -2948,6 +2948,78 @@ function DailyReadingScreen(props: {
 
 // ---- Quiz + inline passage ----
 
+const QUIZ_OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+function QuizOptionButton(props: {
+  option: string;
+  index: number;
+  selected: number | null;
+  correctIndex: number;
+  showFeedback: boolean;
+  disabled?: boolean;
+  onSelect: (i: number) => void;
+}) {
+  const { option, index, selected, correctIndex, showFeedback } = props;
+  const isSelected = selected === index;
+  const isCorrect = index === correctIndex;
+  let bg = '#ffffff';
+  let border = '1px solid #9ca3af';
+
+  if (selected !== null) {
+    if (isSelected && isCorrect) {
+      bg = '#bbf7d0';
+      border = '1px solid #16a34a';
+    } else if (isSelected && !isCorrect) {
+      bg = '#fecaca';
+      border = '1px solid #dc2626';
+    } else if (showFeedback && isCorrect) {
+      bg = '#dcfce7';
+      border = '1px solid #16a34a';
+    }
+  }
+
+  const tappable = selected === null && !props.disabled;
+  return (
+    <button
+      className="btc-quiz-option"
+      onClick={() => props.onSelect(index)}
+      style={{
+        width: '100%',
+        textAlign: 'left',
+        padding: '12px 14px',
+        borderRadius: 12,
+        backgroundColor: bg,
+        border,
+        cursor: tappable ? 'pointer' : 'default',
+        color: '#111827',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+      }}
+    >
+      <span
+        style={{
+          flexShrink: 0,
+          width: 24,
+          height: 24,
+          borderRadius: 999,
+          border: '1px solid #c7d2fe',
+          backgroundColor: '#eef2ff',
+          color: '#1d4ed8',
+          fontSize: 12,
+          fontWeight: 700,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {QUIZ_OPTION_LETTERS[index] ?? index + 1}
+      </span>
+      <span>{option}</span>
+    </button>
+  );
+}
+
 function QuizScreen(props: {
   title: string;
   questions: TriviaQuestion[];
@@ -2972,6 +3044,11 @@ function QuizScreen(props: {
 
   const q = questions[index];
   const isLast = index === questions.length - 1;
+
+  // Keep the header (progress, score, Home) in view for every question
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [index]);
 
   function handleSelect(optionIndex: number) {
     if (selected !== null) return;
@@ -2999,8 +3076,9 @@ function QuizScreen(props: {
         q.refStart.trim() !== '' &&
         q.refEnd.trim() !== '';
       if (hasRef && q.refStart && q.refEnd) {
+        // Offer the passage behind a toggle instead of auto-expanding it,
+        // so the Next button stays within reach
         setPassageRef({ start: q.refStart, end: q.refEnd });
-        setShowPassage(true);
       }
     }
   }
@@ -3053,8 +3131,8 @@ function QuizScreen(props: {
           marginBottom: 16,
           padding: 14,
           borderRadius: 16,
-          backgroundColor: '#ffffff',
-          border: '1px solid #9ca3af',
+          backgroundColor: '#eef2ff',
+          border: '1px solid #c7d2fe',
         }}
       >
         <div
@@ -3069,44 +3147,17 @@ function QuizScreen(props: {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {q.options.map((opt, i) => {
-          const isSelected = selected === i;
-          const isCorrect = i === q.correctIndex;
-          let bg = '#ffffff';
-          let border = '1px solid #9ca3af';
-
-          if (selected !== null) {
-            if (isSelected && isCorrect) {
-              bg = '#bbf7d0';
-              border = '1px solid #16a34a';
-            } else if (isSelected && !isCorrect) {
-              bg = '#fecaca';
-              border = '1px solid #dc2626';
-            } else if (showFeedback && isCorrect) {
-              bg = '#dcfce7';
-              border = '1px solid #16a34a';
-            }
-          }
-
-          return (
-            <button
-              key={i}
-              onClick={() => handleSelect(i)}
-              style={{
-                width: '100%',
-                textAlign: 'left',
-                padding: '10px 12px',
-                borderRadius: 12,
-                backgroundColor: bg,
-                border,
-                cursor: selected === null ? 'pointer' : 'default',
-                color: '#111827',
-              }}
-            >
-              {opt}
-            </button>
-          );
-        })}
+        {q.options.map((opt, i) => (
+          <QuizOptionButton
+            key={i}
+            option={opt}
+            index={i}
+            selected={selected}
+            correctIndex={q.correctIndex}
+            showFeedback={showFeedback}
+            onSelect={handleSelect}
+          />
+        ))}
       </div>
 
       {showFeedback && (
@@ -3118,20 +3169,32 @@ function QuizScreen(props: {
               color: selected === q.correctIndex ? '#15803d' : '#b91c1c',
             }}
           >
-            {selected === q.correctIndex ? 'Correct!' : 'Not quite'}
+            {selected === q.correctIndex ? 'Correct! 🎉' : 'Not quite — nice try!'}
           </div>
           <div style={{ fontSize: 14, color: '#111827' }}>
             {q.explanation}
           </div>
+          {selected !== q.correctIndex && passageRef && !showPassage && (
+            <button
+              onClick={() => setShowPassage(true)}
+              style={{
+                marginTop: 10,
+                padding: '8px 14px',
+                borderRadius: 999,
+                border: '1px solid #c7d2fe',
+                backgroundColor: '#eef2ff',
+                color: '#1d4ed8',
+                fontSize: 13,
+                cursor: 'pointer',
+              }}
+            >
+              📖 Read this passage (
+              {passageRef.start}
+              {passageRef.end !== passageRef.start ? ` – ${passageRef.end}` : ''}
+              )
+            </button>
+          )}
         </div>
-      )}
-
-      {showPassage && passageRef && (
-        <PassageInline
-          refStart={passageRef.start}
-          refEnd={passageRef.end}
-          onClose={() => setShowPassage(false)}
-        />
       )}
 
       <div style={{ marginTop: 24, textAlign: 'right' }}>
@@ -3150,6 +3213,14 @@ function QuizScreen(props: {
           {isLast ? 'Finish' : 'Next'}
         </button>
       </div>
+
+      {showPassage && passageRef && (
+        <PassageInline
+          refStart={passageRef.start}
+          refEnd={passageRef.end}
+          onClose={() => setShowPassage(false)}
+        />
+      )}
     </div>
   );
 }
@@ -3370,6 +3441,11 @@ function FamilyGameScreen(props: {
   const isLast = currentIndex === totalQuestions - 1;
   const currentPlayer = props.players[currentPlayerIndex];
 
+  // Keep the header (progress, turn, Home) in view for every question
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentIndex]);
+
   function handleSelect(optionIndex: number) {
     if (selected !== null || finished) return;
     setSelected(optionIndex);
@@ -3438,8 +3514,8 @@ function FamilyGameScreen(props: {
               marginBottom: 16,
               padding: 14,
               borderRadius: 16,
-              backgroundColor: '#ffffff',
-              border: '1px solid #9ca3af',
+              backgroundColor: '#eef2ff',
+              border: '1px solid #c7d2fe',
             }}
           >
             <div
@@ -3454,45 +3530,18 @@ function FamilyGameScreen(props: {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {q.options.map((opt, i) => {
-              const isSelected = selected === i;
-              const isCorrect = i === q.correctIndex;
-              let bg = '#ffffff';
-              let border = '1px solid #9ca3af';
-
-              if (selected !== null) {
-                if (isSelected && isCorrect) {
-                  bg = '#bbf7d0';
-                  border = '1px solid #16a34a';
-                } else if (isSelected && !isCorrect) {
-                  bg = '#fecaca';
-                  border = '1px solid #dc2626';
-                } else if (showFeedback && isCorrect) {
-                  bg = '#dcfce7';
-                  border = '1px solid #16a34a';
-                }
-              }
-
-              return (
-                <button
-                  key={i}
-                  onClick={() => handleSelect(i)}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '10px 12px',
-                    borderRadius: 12,
-                    backgroundColor: bg,
-                    border,
-                    cursor:
-                      selected === null && !finished ? 'pointer' : 'default',
-                    color: '#111827',
-                  }}
-                >
-                  {opt}
-                </button>
-              );
-            })}
+            {q.options.map((opt, i) => (
+              <QuizOptionButton
+                key={i}
+                option={opt}
+                index={i}
+                selected={selected}
+                correctIndex={q.correctIndex}
+                showFeedback={showFeedback}
+                disabled={finished}
+                onSelect={handleSelect}
+              />
+            ))}
           </div>
 
           {showFeedback && (
@@ -3505,7 +3554,9 @@ function FamilyGameScreen(props: {
                     selected === q.correctIndex ? '#15803d' : '#b91c1c',
                 }}
               >
-                {selected === q.correctIndex ? 'Correct!' : 'Not quite'}
+                {selected === q.correctIndex
+                  ? 'Correct! 🎉'
+                  : 'Not quite — nice try!'}
               </div>
               <div style={{ fontSize: 14, color: '#111827' }}>
                 {q.explanation}
