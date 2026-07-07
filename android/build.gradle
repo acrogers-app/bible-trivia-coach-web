@@ -22,6 +22,15 @@ allprojects {
         google()
         mavenCentral()
     }
+
+    // This repo lives on an exFAT volume, where macOS materializes file
+    // metadata as AppleDouble (._*) files mid-build and Android resource
+    // parsing fails on them ("._drawable is not a directory"). Build
+    // outputs must land on a native APFS filesystem instead.
+    layout.buildDirectory = new File(
+        System.getProperty('user.home'),
+        '.gradle-builds/bible-trivia-coach/' + project.path.replace(':', '_')
+    )
 }
 
 task clean(type: Delete) {
