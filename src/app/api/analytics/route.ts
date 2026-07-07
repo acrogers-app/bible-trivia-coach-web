@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { corsHeaders, corsPreflightResponse } from '../../../lib/cors';
 
 export const runtime = 'nodejs';
 
@@ -137,7 +138,7 @@ function sanitizePayload(body: unknown): QuizAnalyticsPayload | null {
   };
 }
 
-export async function POST(req: NextRequest) {
+async function handlePost(req: NextRequest) {
   // Reject declared-oversized bodies before reading them.
   const declaredSize = Number(req.headers.get('content-length'));
   if (Number.isFinite(declaredSize) && declaredSize > MAX_BODY_BYTES) {
@@ -172,5 +173,17 @@ export async function POST(req: NextRequest) {
     console.error('[analytics]', err instanceof Error ? err.message : err);
     return NextResponse.json({ ok: true, skipped: true });
   }
+}
+
+export async function POST(req: NextRequest) {
+  const res = await handlePost(req);
+  for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
+    res.headers.set(k, v);
+  }
+  return res;
+}
+
+export function OPTIONS(req: NextRequest) {
+  return corsPreflightResponse(req.headers.get('origin'));
 }
 

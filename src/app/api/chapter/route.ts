@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { corsHeaders, corsPreflightResponse } from '../../../lib/cors';
 import path from 'path';
 import Database from 'better-sqlite3';
 
@@ -60,7 +61,7 @@ function normalizeBookNameInput(name: string): string {
   return t;
 }
 
-export async function GET(req: NextRequest) {
+async function handleGet(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const bookRaw = searchParams.get('book');
   const chapterRaw = searchParams.get('chapter');
@@ -102,4 +103,16 @@ export async function GET(req: NextRequest) {
     console.error(err);
     return NextResponse.json({ error: 'Failed to load chapter' }, { status: 500 });
 }
+}
+
+export async function GET(req: NextRequest) {
+  const res = await handleGet(req);
+  for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
+    res.headers.set(k, v);
+  }
+  return res;
+}
+
+export function OPTIONS(req: NextRequest) {
+  return corsPreflightResponse(req.headers.get('origin'));
 }

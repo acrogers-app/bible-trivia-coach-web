@@ -3,6 +3,7 @@
  * No PII. Only questionId, correct/wrong, difficulty, refs.
  */
 import { loadSettings } from './appSettings';
+import { apiUrl } from './apiBase';
 
 export type QuizAnswerEvent = {
   questionId:   string;
@@ -36,7 +37,7 @@ export function sendQuizAnalytics(payload: QuizAnalyticsPayload): void {
     if (settings.analyticsEnabled === false) return;
 
     // Fire-and-forget — keepalive ensures delivery even during page navigation
-    fetch('/api/analytics', {
+    fetch(apiUrl('/api/analytics'), {
       method:    'POST',
       headers:   { 'Content-Type': 'application/json' },
       body:      JSON.stringify(payload),

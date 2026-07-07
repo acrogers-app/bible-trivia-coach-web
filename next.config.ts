@@ -1,6 +1,18 @@
 import type { NextConfig } from "next";
 
+// BUILD_TARGET=capacitor produces a static export for the mobile shell
+// (no server; /api/* calls go to NEXT_PUBLIC_API_BASE instead).
+const isCapacitorBuild = process.env.BUILD_TARGET === "capacitor";
+
 const nextConfig: NextConfig = {
+  ...(isCapacitorBuild
+    ? {
+        output: "export" as const,
+        // next/image optimization needs a server
+        images: { unoptimized: true },
+      }
+    : {}),
+
   // Make better-sqlite3 available in Next.js serverless functions
   serverExternalPackages: ["better-sqlite3"],
 

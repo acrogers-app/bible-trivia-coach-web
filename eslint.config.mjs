@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Capacitor native projects (contain copied minified web assets):
+    "ios/**",
+    "android/**",
     // Claude Code worktrees and local tooling:
     ".claude/**",
     // Local backup / snapshot files we do not want to lint:

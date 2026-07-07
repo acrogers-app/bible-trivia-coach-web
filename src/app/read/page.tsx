@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import BottomNav from '../../components/BottomNav';
 import { applySettingsToDocument, loadSettings, onSettingsChanged, type AppSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
+import { apiUrl } from '../../lib/apiBase';
 
 type VerseLine = { chapter: number; verse: number; text: string };
 
@@ -113,7 +114,7 @@ export default function ReadPage() {
         if (m) { setBook(m[1]); setChapter(parseInt(m[2],10)); }
         setError(null); setLoading(true); stop();
         try {
-          const res = await fetch(`/api/passage?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+          const res = await fetch(apiUrl(`/api/passage?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`));
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw new Error(data?.error || `Failed (${res.status})`);
           setLines(Array.isArray(data?.lines) ? data.lines : []);
@@ -138,7 +139,7 @@ export default function ReadPage() {
     setError(null); setLoading(true); stop();
     try {
       if (mode === 'chapter') {
-        const res = await fetch(`/api/chapter?book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(String(chapter))}`);
+        const res = await fetch(apiUrl(`/api/chapter?book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(String(chapter))}`));
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error || `Failed (${res.status})`);
         setLines(Array.isArray(data?.lines) ? data.lines : []);
@@ -146,7 +147,7 @@ export default function ReadPage() {
       }
       const sv = startVerse;
       const ev = endVerse === '' ? startVerse : Number(endVerse);
-      const res = await fetch(`/api/passage?start=${encodeURIComponent(`${book} ${chapter}:${sv}`)}&end=${encodeURIComponent(`${book} ${chapter}:${ev}`)}`);
+      const res = await fetch(apiUrl(`/api/passage?start=${encodeURIComponent(`${book} ${chapter}:${sv}`)}&end=${encodeURIComponent(`${book} ${chapter}:${ev}`)}`));
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || `Failed (${res.status})`);
       setLines(Array.isArray(data?.lines) ? data.lines : []);
