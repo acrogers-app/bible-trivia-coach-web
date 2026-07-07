@@ -3091,6 +3091,44 @@ function QuizOptionButton(props: {
   );
 }
 
+function StickyNextBar(props: {
+  visible: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  if (!props.visible) return null;
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        // clears the 71px bottom nav; safe-area for iPhone home indicator
+        bottom: 'calc(80px + env(safe-area-inset-bottom))',
+        zIndex: 999,
+        padding: '0 16px',
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{ maxWidth: 520, margin: '0 auto' }}>
+        <button
+          onClick={props.onClick}
+          className="btc-btn"
+          style={{
+            width: '100%',
+            minHeight: 52,
+            fontSize: 16,
+            pointerEvents: 'auto',
+            boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
+          }}
+        >
+          {props.label} →
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function QuizScreen(props: {
   title: string;
   questions: TriviaQuestion[];
@@ -3167,7 +3205,13 @@ function QuizScreen(props: {
   }
 
   return (
-    <div style={{ color: 'var(--btc-ink)' }}>
+    <div
+      style={{
+        color: 'var(--btc-ink)',
+        // keep explanation clear of the sticky Next bar
+        paddingBottom: selected !== null ? 150 : 0,
+      }}
+    >
       <BackButton onClick={props.onBack} />
       <h2>{title}</h2>
       <div
@@ -3268,23 +3312,6 @@ function QuizScreen(props: {
         </div>
       )}
 
-      <div style={{ marginTop: 24, textAlign: 'right' }}>
-        <button
-          onClick={handleNext}
-          disabled={selected === null}
-          style={{
-            padding: '8px 16px',
-            borderRadius: 999,
-            border: 'none',
-            backgroundColor: selected === null ? '#9ca3af' : 'var(--btc-accent)',
-            color: 'white',
-            cursor: selected === null ? 'default' : 'pointer',
-          }}
-        >
-          {isLast ? 'Finish' : 'Next'}
-        </button>
-      </div>
-
       {showPassage && passageRef && (
         <PassageInline
           refStart={passageRef.start}
@@ -3292,6 +3319,12 @@ function QuizScreen(props: {
           onClose={() => setShowPassage(false)}
         />
       )}
+
+      <StickyNextBar
+        visible={selected !== null}
+        label={isLast ? 'Finish' : 'Next'}
+        onClick={handleNext}
+      />
     </div>
   );
 }
@@ -3561,7 +3594,13 @@ function FamilyGameScreen(props: {
   }
 
   return (
-    <div style={{ color: 'var(--btc-ink)' }}>
+    <div
+      style={{
+        color: 'var(--btc-ink)',
+        // keep explanation clear of the sticky Next bar
+        paddingBottom: selected !== null && !finished ? 150 : 0,
+      }}
+    >
       <BackButton onClick={props.onBackHome} />
       <h2>Family Night</h2>
       {!finished && (
@@ -3636,44 +3675,24 @@ function FamilyGameScreen(props: {
           <div
             style={{
               marginTop: 24,
-              textAlign: 'right',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 8,
-              flexWrap: 'wrap',
+              fontSize: 12,
+              color: 'var(--btc-text-subtle)',
             }}
           >
-            <div
-              style={{
-                fontSize: 12,
-                color: 'var(--btc-text-subtle)',
-              }}
-            >
-              Scores:{' '}
-              {combined.map((p, idx) => (
-                <span key={p.id} style={{ marginRight: 8 }}>
-                  <span style={{ fontWeight: 600 }}>{p.name}</span>:{' '}
-                  {scores[idx]}
-                </span>
-              ))}
-            </div>
-            <button
-              onClick={handleNext}
-              disabled={selected === null}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 999,
-                border: 'none',
-                backgroundColor:
-                  selected === null ? '#9ca3af' : 'var(--btc-accent)',
-                color: 'white',
-                cursor: selected === null ? 'default' : 'pointer',
-              }}
-            >
-              {isLast ? 'Finish game' : 'Next question'}
-            </button>
+            Scores:{' '}
+            {combined.map((p, idx) => (
+              <span key={p.id} style={{ marginRight: 8 }}>
+                <span style={{ fontWeight: 600 }}>{p.name}</span>:{' '}
+                {scores[idx]}
+              </span>
+            ))}
           </div>
+
+          <StickyNextBar
+            visible={selected !== null && !finished}
+            label={isLast ? 'Finish game' : 'Next question'}
+            onClick={handleNext}
+          />
         </>
       )}
 

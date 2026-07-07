@@ -219,7 +219,7 @@ html[data-btc-reduce-motion="1"] * {
   transform: scale(0.98);
 }
 
-/* ── UX polish: design tokens ─────────────────────────────── */
+/* UX polish: design tokens */
 :root {
   --btc-accent: #2563eb;
   --btc-accent-deep: #1d4ed8;
@@ -229,7 +229,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-success-soft: #dcfce7;
 }
 
-/* ── Shared buttons ───────────────────────────────────────── */
+/* Shared buttons */
 .btc-btn {
   display: inline-flex;
   align-items: center;
@@ -256,7 +256,7 @@ html[data-btc-reduce-motion="1"] * {
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-/* ── Quiz micro-feedback ──────────────────────────────────── */
+/* Quiz micro-feedback */
 @keyframes btcPop {
   0% { transform: scale(1); }
   50% { transform: scale(1.04); }
@@ -264,6 +264,6 @@ html[data-btc-reduce-motion="1"] * {
 }
 .btc-quiz-option.btc-pop { animation: btcPop 300ms ease; }
 
-/* ── Results screen ───────────────────────────────────────── */
+/* Results screen */
 @keyframes btcFillGrow { from { width: 0%; } }
 .btc-xp-fill { animation: btcFillGrow 900ms ease-out; }
