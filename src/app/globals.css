@@ -257,12 +257,12 @@ html[data-btc-reduce-motion="1"] * {
 }
 
 /* Quiz micro-feedback */
-@keyframes btcPop {
+@keyframes btc-pop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+  50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
-.btc-quiz-option.btc-pop { animation: btcPop 300ms ease; }
+.btc-quiz-option.btc-pop { animation: btc-pop 300ms ease-out; }
 
 /* Results screen */
 @keyframes btcFillGrow { from { width: 0%; } }

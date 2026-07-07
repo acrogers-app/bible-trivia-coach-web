@@ -244,6 +244,16 @@ function todaysReadingDay(plan: ReadingPlan | null): ReadingDay | null {
   return plan.days[index];
 }
 
+function tomorrowsReadingDay(plan: ReadingPlan | null): ReadingDay | null {
+  if (!plan || !plan.days.length) return null;
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const diffMs = now.getTime() - startOfYear.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  const index = diffDays % plan.days.length;
+  return plan.days[index];
+}
+
 // getDayKey/getTodayKey live in src/lib/streakUtils.ts
 
 type ScriptureScope = {
@@ -618,6 +628,13 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
 
 // ---- Fixed summary with safe math + review-missed ----
 
+function celebrationLine(percent: number): string {
+  if (percent === 100) return 'Perfect! 🌟 You really know this passage!';
+  if (percent >= 80) return 'Great work! 🎉 Keep going!';
+  if (percent >= 60) return 'Nice effort! 📖 Each quiz builds knowledge';
+  return 'Keep at it! 💪 God’s Word takes time';
+}
+
 function FixedSummaryScreen(props: {
   title: string;
   total: number;
@@ -625,6 +642,7 @@ function FixedSummaryScreen(props: {
   onBackHome: () => void;
   questions?: TriviaQuestion[];
   answers?: AnswerRecord[] | null;
+  tomorrowReadingTitle?: string | null;
 }) {
   const rawCorrect = typeof props.correct === 'number' ? props.correct : 0;
   const rawTotal = typeof props.total === 'number' ? props.total : 0;
@@ -997,37 +1015,29 @@ function FixedSummaryScreen(props: {
               : `You unlocked ${badgesUnlocked} of ${milestones.length} Scripture badges on this quiz.`}
           </div>
 
-          {/* Encouragement */}
-          {isPerfect ? (
-            <div style={{ marginTop: 4 }}>
-              <div
-                className="btc-perfect-heading"
-                style={{
-                  fontSize: 18,
-                  fontWeight: 800,
-                  letterSpacing: 0.3,
-                  marginBottom: 4,
-                }}
-              >
-                Perfect score{playerName ? `, ${playerName}` : ''}!
-              </div>
-              <div style={{ fontSize: 13 }}>
-                Keep planting God&apos;s Word deeply in your heart—He rewards those who
-                diligently seek Him (Hebrews 11:6).
-              </div>
+          {/* Encouragement — tiered by score */}
+          <div style={{ marginTop: 4 }}>
+            <div
+              className={isPerfect ? 'btc-perfect-heading' : undefined}
+              style={{
+                fontSize: 18,
+                fontWeight: 800,
+                letterSpacing: 0.3,
+                marginBottom: 4,
+              }}
+            >
+              {celebrationLine(percent)}
             </div>
-          ) : (
             <div
               style={{
                 fontSize: 13,
                 color: isPerfect ? 'inherit' : '#374151',
               }}
             >
-              Every question is another seed of Scripture planted—nice
-              progress{playerName ? `, ${playerName}` : ''}! God rewards those who diligently seek Him (Hebrews
-              11:6).
+              {playerName ? `Nice progress, ${playerName}! ` : ''}God rewards
+              those who diligently seek Him (Hebrews 11:6).
             </div>
-          )}
+          </div>
           <div
             style={{
               marginTop: 6,
@@ -1058,8 +1068,11 @@ function FixedSummaryScreen(props: {
               {streakInfo.best > streakInfo.current
                 ? ` · best: ${streakInfo.best}`
                 : ''}
-              {' — '}tomorrow&apos;s reading and a fresh challenge will be
-              waiting for you.
+              {' — come back tomorrow'}
+              {props.tomorrowReadingTitle
+                ? ` for ${props.tomorrowReadingTitle}`
+                : ''}
+              {' and a fresh challenge.'}
             </div>
           )}
         </div>
@@ -1773,6 +1786,7 @@ export default function PlayPage() {
             correct={screen.correct}
             questions={lastQuestions ?? undefined}
             answers={lastAnswers ?? undefined}
+            tomorrowReadingTitle={tomorrowsReadingDay(plan)?.title ?? null}
             onBackHome={() => setScreen({ name: 'home' })}
           />
         )}
@@ -2992,15 +3006,14 @@ const QUIZ_OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 // Coach reactions (coach-voice-text): rotate by question index so the
 // voice stays varied but stable across re-renders.
 const COACH_CORRECT_LINES = [
-  'Correct! 🎉',
   'Yes! Well done. 🙌',
-  'Beautiful — that’s the one!',
-  'You got it — another seed planted.',
+  'That’s right! Keep it up ✨',
+  'Nailed it! 🌟',
+  'Well remembered! 📖',
 ];
 const COACH_MISS_LINES = [
-  'Not quite — nice try!',
-  'Close! Now it’ll stick even better.',
-  'Good effort — the answer is highlighted.',
+  'Close! This one’s worth re-reading 📖',
+  'Good try — the answer’s highlighted above',
 ];
 function coachReaction(isCorrect: boolean, questionIndex: number): string {
   const lines = isCorrect ? COACH_CORRECT_LINES : COACH_MISS_LINES;
