@@ -88,3 +88,7 @@ scripts/fix_*.py
 public/**/._*
 public/**/*.before-*.json
 public/**/*.bak.*
+
+# IDE state from native development (Android Studio / Xcode)
+android/.idea/
+ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
