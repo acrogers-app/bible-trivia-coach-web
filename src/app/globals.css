@@ -54,7 +54,8 @@ body {
     max-width: 100%;
     min-height: 100vh;
     border-radius: 0;
-    padding: 1.25rem 1rem 1.75rem;
+    /* extra top padding clears the iOS status bar (env() is 0 on web/Android) */
+    padding: calc(1.25rem + env(safe-area-inset-top)) 1rem 1.75rem;
     box-shadow: none;
   }
 }
