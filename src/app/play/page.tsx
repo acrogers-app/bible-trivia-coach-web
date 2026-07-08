@@ -10,6 +10,7 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { apiUrl } from '../../lib/apiBase';
+import { Capacitor } from '@capacitor/core';
 import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
@@ -2841,7 +2842,9 @@ function DailyReadingScreen(props: {
                     <span
                       key={tIdx}
                       style={{
-                        backgroundColor: highlighted ? '#bfdbfe' : undefined,
+                        backgroundColor: highlighted ? '#FFD600' : undefined,
+                        color: highlighted ? '#111' : undefined,
+                        fontWeight: highlighted ? 700 : undefined,
                         borderRadius: highlighted ? 4 : undefined,
                       }}
                     >
@@ -3294,8 +3297,11 @@ function FamilySetupScreen(props: {
       return;
     }
     const num = Number(questionCount);
-    const safe =
-      Number.isFinite(num) && num >= 5 && num <= 30 ? Math.floor(num) : 10;
+    if (!Number.isFinite(num) || num < 5 || num > 30) {
+      window.alert('Please choose between 5 and 30 questions.');
+      return;
+    }
+    const safe = Math.floor(num);
     const players: FamilyPlayer[] = trimmed.map((name, idx) => ({
       id: String(idx + 1),
       name,
@@ -4003,7 +4009,9 @@ function PassageInline(props: {
                     <span
                       key={tIdx}
                       style={{
-                        backgroundColor: highlighted ? '#bfdbfe' : undefined,
+                        backgroundColor: highlighted ? '#FFD600' : undefined,
+                        color: highlighted ? '#111' : undefined,
+                        fontWeight: highlighted ? 700 : undefined,
                         borderRadius: highlighted ? 4 : undefined,
                       }}
                     >
@@ -4022,6 +4030,9 @@ function PassageInline(props: {
 // ---- Back button ----
 
 function BackButton(props: { onClick: () => void }) {
+  // The webview draws under the iOS status bar (viewport-fit=cover);
+  // keep the button below it. 44px minimum clears the status bar on iOS.
+  const isIOS = Capacitor.getPlatform() === 'ios';
   return (
     <button
       onClick={props.onClick}
@@ -4031,6 +4042,9 @@ function BackButton(props: { onClick: () => void }) {
         color: 'var(--btc-text-subtle)',
         fontSize: 14,
         padding: 0,
+        paddingTop: isIOS
+          ? 'max(env(safe-area-inset-top), 44px)'
+          : 'env(safe-area-inset-top, 0px)',
         marginBottom: 8,
         cursor: 'pointer',
       }}

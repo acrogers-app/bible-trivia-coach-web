@@ -130,6 +130,21 @@ export default function ReadPage() {
     try { listen(); } catch {}
   }, [lines.length]); // eslint-disable-line
 
+  // Stop speech when the user hides or leaves the page
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.hidden) stop();
+    };
+    const onBeforeUnload = () => stop();
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('beforeunload', onBeforeUnload);
+      stop();
+    };
+  }, []); // eslint-disable-line
+
   const progress = useMemo(() => {
     if (!lines.length || activeIdx == null) return 0;
     return Math.round(((activeIdx+1)/lines.length)*100);
