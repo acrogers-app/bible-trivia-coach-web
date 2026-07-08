@@ -116,6 +116,7 @@ type Screen =
       sourceType: SourceType;
     }
   | { name: 'summary'; title: string; total: number; correct: number }
+  | { name: 'book-picker' }
   | { name: 'family-setup' }
   | { name: 'family-game'; players: FamilyPlayer[]; questions: TriviaQuestion[] };
 
@@ -1726,6 +1727,13 @@ export default function PlayPage() {
                 sourceType: 'scripture',
               })
             }
+            onOpenBookPicker={() => setScreen({ name: 'book-picker' })}
+          />
+        )}
+
+        {!loading && !error && screen.name === 'book-picker' && (
+          <BookPickerScreen
+            onBack={() => setScreen({ name: 'home' })}
             onStartBookQuiz={(book, chapter) => {
               if (!pack) {
                 window.alert('Questions are still loading.');
@@ -1814,6 +1822,150 @@ export default function PlayPage() {
 
 // ---- Home ----
 
+const BIBLE_BOOKS = [
+  'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua',
+  'Judges', 'Ruth', '1 Samuel', '2 Samuel', '1 Kings', '2 Kings',
+  '1 Chronicles', '2 Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job',
+  'Psalms', 'Proverbs', 'Ecclesiastes', 'Song of Solomon', 'Isaiah',
+  'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos',
+  'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai',
+  'Zechariah', 'Malachi', 'Matthew', 'Mark', 'Luke', 'John', 'Acts',
+  'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians',
+  'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians',
+  '1 Timothy', '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James',
+  '1 Peter', '2 Peter', '1 John', '2 John', '3 John', 'Jude', 'Revelation',
+];
+
+const BOOK_MAX_CHAPTERS: Record<string, number> = {
+  Genesis: 50, Exodus: 40, Leviticus: 27, Numbers: 36, Deuteronomy: 34,
+  Joshua: 24, Judges: 21, Ruth: 4, '1 Samuel': 31, '2 Samuel': 24,
+  '1 Kings': 22, '2 Kings': 25, '1 Chronicles': 29, '2 Chronicles': 36,
+  Ezra: 10, Nehemiah: 13, Esther: 10, Job: 42, Psalms: 150, Proverbs: 31,
+  Ecclesiastes: 12, 'Song of Solomon': 8, Isaiah: 66, Jeremiah: 52,
+  Lamentations: 5, Ezekiel: 48, Daniel: 12, Hosea: 14, Joel: 3, Amos: 9,
+  Obadiah: 1, Jonah: 4, Micah: 7, Nahum: 3, Habakkuk: 3, Zephaniah: 3,
+  Haggai: 2, Zechariah: 14, Malachi: 4, Matthew: 28, Mark: 16, Luke: 24,
+  John: 21, Acts: 28, Romans: 16, '1 Corinthians': 16, '2 Corinthians': 13,
+  Galatians: 6, Ephesians: 6, Philippians: 4, Colossians: 4,
+  '1 Thessalonians': 5, '2 Thessalonians': 3, '1 Timothy': 6,
+  '2 Timothy': 4, Titus: 3, Philemon: 1, Hebrews: 13, James: 5,
+  '1 Peter': 5, '2 Peter': 3, '1 John': 5, '2 John': 1, '3 John': 1,
+  Jude: 1, Revelation: 22,
+};
+
+// ---- Quiz by Book: dedicated picker screen ----
+
+function BookPickerScreen(props: {
+  onBack: () => void;
+  onStartBookQuiz: (book: string, chapter?: number) => void;
+}) {
+  const [selectedBook, setSelectedBook] = useState<string>('Genesis');
+  const [selectedChapter, setSelectedChapter] = useState<string>('');
+  const maxChapters = BOOK_MAX_CHAPTERS[selectedBook] ?? 0;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const selectStyle = {
+    width: '100%',
+    borderRadius: 12,
+    border: '1px solid rgba(0,0,0,0.15)',
+    padding: '12px',
+    fontSize: 15,
+    background: 'white',
+    color: 'var(--btc-ink)',
+  } as const;
+
+  return (
+    <div style={{ color: 'var(--btc-ink)' }}>
+      <BackButton onClick={props.onBack} />
+      <h2>Quiz by Book</h2>
+      <p className="btc-text-muted" style={{ marginBottom: 16, fontSize: 14 }}>
+        Pick any book — or a single chapter — for a 10-question quiz.
+      </p>
+
+      <label
+        style={{
+          display: 'block',
+          fontSize: 13,
+          marginBottom: 6,
+          color: 'var(--btc-text-muted)',
+        }}
+      >
+        Book
+      </label>
+      <select
+        value={selectedBook}
+        onChange={(e) => {
+          setSelectedBook(e.target.value);
+          setSelectedChapter('');
+        }}
+        style={selectStyle}
+      >
+        {BIBLE_BOOKS.map((b) => (
+          <option key={b} value={b}>
+            {b}
+          </option>
+        ))}
+      </select>
+
+      <label
+        style={{
+          display: 'block',
+          fontSize: 13,
+          margin: '14px 0 6px',
+          color: 'var(--btc-text-muted)',
+        }}
+      >
+        Chapter
+      </label>
+      <select
+        value={selectedChapter}
+        onChange={(e) => setSelectedChapter(e.target.value)}
+        style={selectStyle}
+      >
+        <option value="">Whole book</option>
+        {Array.from({ length: maxChapters }, (_, i) => i + 1).map((ch) => (
+          <option key={ch} value={String(ch)}>
+            Chapter {ch}
+          </option>
+        ))}
+      </select>
+
+      <button
+        type="button"
+        onClick={() => {
+          const trimmed = selectedChapter.trim();
+          const ch = trimmed ? Number(trimmed) : undefined;
+          const safeChapter = ch && ch > 0 ? ch : undefined;
+          props.onStartBookQuiz(selectedBook, safeChapter);
+        }}
+        className="btc-btn"
+        style={{ width: '100%', minHeight: 52, fontSize: 16, marginTop: 20 }}
+      >
+        Start Quiz
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          const trimmed = selectedChapter.trim();
+          const ch = trimmed ? Number(trimmed) : 1;
+          const safeChapter = ch && ch > 0 ? ch : 1;
+          const url = `/read?start=${encodeURIComponent(
+            selectedBook + ' ' + safeChapter + ':1',
+          )}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
+          window.location.href = url;
+        }}
+        className="btc-btn btc-btn-secondary"
+        style={{ width: '100%', marginTop: 10 }}
+      >
+        🎧 Listen first
+      </button>
+    </div>
+  );
+}
+
 function HomeScreen(props: {
   today: ReadingDay | null;
   pack: TriviaPack | null;
@@ -1827,7 +1979,7 @@ function HomeScreen(props: {
   onOpenFamilyNight: () => void;
   onStartHistoryQuiz: () => void;
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
-  onStartBookQuiz: (book: string, chapter?: number) => void;
+  onOpenBookPicker: () => void;
   onStartMissedPractice: () => void;
   dailyChallengeCompleted?: boolean;
 }) {
@@ -1894,147 +2046,6 @@ function HomeScreen(props: {
     }
   });
 
-  const [selectedBook, setSelectedBook] = useState<string>('Genesis');
-  const [selectedChapter, setSelectedChapter] = useState<string>('');
-
-  const books = [
-    'Genesis',
-    'Exodus',
-    'Leviticus',
-    'Numbers',
-    'Deuteronomy',
-    'Joshua',
-    'Judges',
-    'Ruth',
-    '1 Samuel',
-    '2 Samuel',
-    '1 Kings',
-    '2 Kings',
-    '1 Chronicles',
-    '2 Chronicles',
-    'Ezra',
-    'Nehemiah',
-    'Esther',
-    'Job',
-    'Psalms',
-    'Proverbs',
-    'Ecclesiastes',
-    'Song of Solomon',
-    'Isaiah',
-    'Jeremiah',
-    'Lamentations',
-    'Ezekiel',
-    'Daniel',
-    'Hosea',
-    'Joel',
-    'Amos',
-    'Obadiah',
-    'Jonah',
-    'Micah',
-    'Nahum',
-    'Habakkuk',
-    'Zephaniah',
-    'Haggai',
-    'Zechariah',
-    'Malachi',
-    'Matthew',
-    'Mark',
-    'Luke',
-    'John',
-    'Acts',
-    'Romans',
-    '1 Corinthians',
-    '2 Corinthians',
-    'Galatians',
-    'Ephesians',
-    'Philippians',
-    'Colossians',
-    '1 Thessalonians',
-    '2 Thessalonians',
-    '1 Timothy',
-    '2 Timothy',
-    'Titus',
-    'Philemon',
-    'Hebrews',
-    'James',
-    '1 Peter',
-    '2 Peter',
-    '1 John',
-    '2 John',
-    '3 John',
-    'Jude',
-    'Revelation',
-  ];
-
-  const bookMaxChapters: Record<string, number> = {
-    Genesis: 50,
-    Exodus: 40,
-    Leviticus: 27,
-    Numbers: 36,
-    Deuteronomy: 34,
-    Joshua: 24,
-    Judges: 21,
-    Ruth: 4,
-    '1 Samuel': 31,
-    '2 Samuel': 24,
-    '1 Kings': 22,
-    '2 Kings': 25,
-    '1 Chronicles': 29,
-    '2 Chronicles': 36,
-    Ezra: 10,
-    Nehemiah: 13,
-    Esther: 10,
-    Job: 42,
-    Psalms: 150,
-    Proverbs: 31,
-    Ecclesiastes: 12,
-    'Song of Solomon': 8,
-    Isaiah: 66,
-    Jeremiah: 52,
-    Lamentations: 5,
-    Ezekiel: 48,
-    Daniel: 12,
-    Hosea: 14,
-    Joel: 3,
-    Amos: 9,
-    Obadiah: 1,
-    Jonah: 4,
-    Micah: 7,
-    Nahum: 3,
-    Habakkuk: 3,
-    Zephaniah: 3,
-    Haggai: 2,
-    Zechariah: 14,
-    Malachi: 4,
-    Matthew: 28,
-    Mark: 16,
-    Luke: 24,
-    John: 21,
-    Acts: 28,
-    Romans: 16,
-    '1 Corinthians': 16,
-    '2 Corinthians': 13,
-    Galatians: 6,
-    Ephesians: 6,
-    Philippians: 4,
-    Colossians: 4,
-    '1 Thessalonians': 5,
-    '2 Thessalonians': 3,
-    '1 Timothy': 6,
-    '2 Timothy': 4,
-    Titus: 3,
-    Philemon: 1,
-    Hebrews: 13,
-    James: 5,
-    '1 Peter': 5,
-    '2 Peter': 3,
-    '1 John': 5,
-    '2 John': 1,
-    '3 John': 1,
-    Jude: 1,
-    Revelation: 22,
-  };
-
   const [playerName, setPlayerName] = useState<string | null>(() => {
     if (typeof window === 'undefined') return null;
     try {
@@ -2063,8 +2074,6 @@ function HomeScreen(props: {
       setPlayerName(trimmed || null);
     }
   }
-
-  const maxChapters = bookMaxChapters[selectedBook] ?? 0;
 
   return (
     <div>
@@ -2386,11 +2395,7 @@ function HomeScreen(props: {
 
           <button
             type="button"
-            onClick={() => {
-              const el = document.getElementById('btc-by-book-anchor');
-              if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
-              else window.location.href = '/play?action=scroll&target=btc-by-book-anchor';
-            }}
+            onClick={props.onOpenBookPicker}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90 }}
           >
@@ -2421,88 +2426,6 @@ function HomeScreen(props: {
             <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>Easy / Medium / Hard / Mixed</div>
           </button>
         </div>
-
-        {/* ── By Book (scrolls here when tile tapped) ───────────── */}
-        <div id="btc-by-book-anchor" style={{ marginTop:16 }} />
-        <Section title="By Book" tint="#e0f2fe">
-        <div style={{ padding: '12px 16px' }}>
-          <label style={{ display: 'block', fontSize: 13, marginBottom: 10, color: 'var(--btc-text-muted)' }}>
-            Choose a book to quiz on
-          </label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-            <select
-              value={selectedBook}
-              onChange={(e) => setSelectedBook(e.target.value)}
-              style={{
-                flex: 1,
-                borderRadius: 12,
-                border: '1px solid rgba(0,0,0,0.15)',
-                padding: '10px 12px',
-                fontSize: 14,
-                background: 'white',
-              }}
-            >
-              {books.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedChapter}
-              onChange={(e) => setSelectedChapter(e.target.value)}
-              style={{
-                width: 150,
-                borderRadius: 12,
-                border: '1px solid rgba(0,0,0,0.15)',
-                padding: '10px 12px',
-                fontSize: 14,
-                background: 'white',
-              }}
-            >
-              <option value="">Whole book</option>
-              {Array.from({ length: maxChapters }, (_, i) => i + 1).map(
-                (ch) => (
-                  <option key={ch} value={String(ch)}>
-                    Chapter {ch}
-                  </option>
-                ),
-              )}
-            </select>
-            <button
-              onClick={() => {
-                const trimmed = selectedChapter.trim();
-                const ch = trimmed ? Number(trimmed) : undefined;
-                const safeChapter = ch && ch > 0 ? ch : undefined;
-                const max = bookMaxChapters[selectedBook];
-                if (safeChapter && max && safeChapter > max) {
-                  window.alert(selectedBook + ' only has ' + max + ' chapters.');
-                  return;
-                }
-                props.onStartBookQuiz(selectedBook, safeChapter);
-              }}
-              className="btc-btn"
-              style={{ fontSize: 14 }}
-            >
-              Start Quiz
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                const trimmed = selectedChapter.trim();
-                const ch = trimmed ? Number(trimmed) : 1;
-                const safeChapter = ch && ch > 0 ? ch : 1;
-                const url = `/read?start=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':1')}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
-                window.location.href = url;
-              }}
-              className="btc-btn btc-btn-secondary"
-              style={{ fontSize: 14 }}
-            >
-              🎧 Listen first
-            </button>
-          </div>
-        </div>
-      </Section>
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
