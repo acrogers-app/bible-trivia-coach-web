@@ -10,7 +10,6 @@ import {
 import BottomNav from '../../components/BottomNav';
 import { sendQuizAnalytics, makeSessionId } from '../../lib/analytics';
 import { apiUrl } from '../../lib/apiBase';
-import { Capacitor } from '@capacitor/core';
 import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
@@ -4030,9 +4029,6 @@ function PassageInline(props: {
 // ---- Back button ----
 
 function BackButton(props: { onClick: () => void }) {
-  // The webview draws under the iOS status bar (viewport-fit=cover);
-  // keep the button below it. 44px minimum clears the status bar on iOS.
-  const isIOS = Capacitor.getPlatform() === 'ios';
   return (
     <button
       onClick={props.onClick}
@@ -4042,9 +4038,6 @@ function BackButton(props: { onClick: () => void }) {
         color: 'var(--btc-text-subtle)',
         fontSize: 14,
         padding: 0,
-        paddingTop: isIOS
-          ? 'max(env(safe-area-inset-top), 44px)'
-          : 'env(safe-area-inset-top, 0px)',
         marginBottom: 8,
         cursor: 'pointer',
       }}
