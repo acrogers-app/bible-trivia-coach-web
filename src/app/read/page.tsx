@@ -409,6 +409,12 @@ export default function ReadPage() {
             )}
           </div>
         )}
+
+        {lines.length > 0 && (
+          <p style={{ marginTop: 14, fontSize: 12, textAlign: 'center', color: 'var(--btc-text-muted)' }}>
+            Scripture quotations are from the World English Bible (WEB), public domain.
+          </p>
+        )}
       </div>
     </div>
   );
