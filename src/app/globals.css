@@ -60,6 +60,32 @@ body {
   }
 }
 
+/* iPad portrait and up: wider canvas, roomier card (phones unaffected) */
+@media (min-width: 768px) {
+  .btc-root {
+    padding: 2.5rem 2rem;
+  }
+  .btc-card {
+    max-width: 720px;
+    padding: 2.25rem 2.5rem 2.75rem;
+    font-size: 17px;
+  }
+}
+
+/* iPad landscape / desktop */
+@media (min-width: 1024px) {
+  .btc-card {
+    max-width: 800px;
+  }
+}
+
+/* Wide desktop */
+@media (min-width: 1280px) {
+  .btc-card {
+    max-width: 880px;
+  }
+}
+
 /* Bible Trivia Coach typography tokens */
 :root {
   --btc-font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
