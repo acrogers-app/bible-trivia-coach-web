@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://biblestudy.webeuseful.com"),
   title: "Bible Study Coach",
   description:
     "Daily Bible quizzes, reading plans, and Scripture coaching — learn God's Word one verse at a time.",
