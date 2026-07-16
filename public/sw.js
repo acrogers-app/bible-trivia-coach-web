@@ -1,4 +1,4 @@
-/* Bible Trivia Coach service worker.
+/* Bible Study Coach service worker.
  *
  * Strategies:
  *  - /api/*                → network-first (fresh when online, cached fallback offline)

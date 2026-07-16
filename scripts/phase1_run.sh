@@ -3,7 +3,7 @@ set -e
 cd /Volumes/Nvme4TB/projects/BibleTriviaCoach/bible-trivia-coach-web
 
 echo "========================================"
-echo " Phase 1: Bible Trivia Coach Data Fix"
+echo " Phase 1: Bible Study Coach Data Fix"
 echo "========================================"
 
 # 1. Fix bad refs

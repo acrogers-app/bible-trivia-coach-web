@@ -40,7 +40,7 @@ export async function enableDailyNudge(): Promise<boolean> {
       notifications: [
         {
           id: NUDGE_ID,
-          title: 'Bible Trivia Coach',
+          title: 'Bible Study Coach',
           body: NUDGE_BODIES[dayOfYear % NUDGE_BODIES.length],
           schedule: { on: { hour: 8, minute: 0 }, allowWhileIdle: true },
         },

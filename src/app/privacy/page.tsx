@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Bible Trivia Coach',
+  title: 'Privacy Policy — Bible Study Coach',
   description:
-    'How Bible Trivia Coach handles your data: everything important stays on your device, and quiz analytics are anonymous and optional.',
+    'How Bible Study Coach handles your data: everything important stays on your device, and quiz analytics are anonymous and optional.',
 };
 
 const sectionStyle = { marginTop: 28 } as const;
@@ -34,13 +34,13 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p style={{ ...textStyle, color: 'var(--btc-text-muted)' }}>
-          Bible Trivia Coach · Effective July 8, 2026
+          Bible Study Coach · Effective July 8, 2026
         </p>
 
         <section style={sectionStyle}>
           <h2 style={headingStyle}>The short version</h2>
           <p style={textStyle}>
-            Bible Trivia Coach is designed to work without knowing who you are.
+            Bible Study Coach is designed to work without knowing who you are.
             There are no accounts, no sign-in, and no ads. Your name, streaks,
             and scores stay on your device. The only data that ever leaves your
             device is anonymous quiz statistics — and you can turn those off in
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Children</h2>
           <p style={textStyle}>
-            Bible Trivia Coach is made for all ages, including families
+            Bible Study Coach is made for all ages, including families
             playing together. Because we collect no personal information from
             anyone, we collect none from children either.
           </p>

@@ -1,4 +1,4 @@
-# Releasing Bible Trivia Coach to the app stores
+# Releasing Bible Study Coach to the app stores
 
 Both release flows start the same way — build the web bundle and sync it
 into the native projects:

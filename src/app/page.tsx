@@ -56,7 +56,7 @@ export default function HomePage() {
                 marginBottom: 16,
               }}
             >
-              Bible Trivia Coach guides you through short Gospel readings and
+              Bible Study Coach guides you through short Gospel readings and
               low‑pressure quizzes, so you remember more of what you read
               without streaks or guilt.
             </p>
@@ -115,7 +115,7 @@ export default function HomePage() {
             >
               <Image
         src="/bsc2.png"
-        alt="Bible Trivia Coach illustration"
+        alt="Bible Study Coach illustration"
         width={320}
         height={240}
         className="w-full h-auto max-w-xs mx-auto"
@@ -256,7 +256,7 @@ export default function HomePage() {
               marginBottom: 10,
             }}
           >
-            Bible Trivia Coach works well if you&apos;re:
+            Bible Study Coach works well if you&apos;re:
           </p>
           <ul
             style={{

@@ -1,4 +1,4 @@
-# Bible Trivia Coach – Assistant Brief
+# Bible Study Coach – Assistant Brief
 
 ## Repo
 
@@ -9,7 +9,7 @@
 
 ## Product
 
-Bible Trivia Coach helps people make Scripture stick through gentle daily readings and low-pressure quizzes.
+Bible Study Coach helps people make Scripture stick through gentle daily readings and low-pressure quizzes.
 
 - Short daily Gospel reading + quiz.
 - Scripture and Bible-history question packs.

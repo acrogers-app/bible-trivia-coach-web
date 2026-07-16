@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.acrogers.bibletriviacoach',
-  appName: 'Bible Trivia Coach',
+  appName: 'Bible Study Coach',
   webDir: 'out',
 };
 

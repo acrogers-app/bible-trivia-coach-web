@@ -114,7 +114,7 @@ def save_generated(questions: list):
 
 # ── System prompt ────────────────────────────────────────────────────────────
 SYSTEM_PROMPT = """You are an expert Bible trivia question generator for the
-Bible Trivia Coach app — used by children, adults, and seniors.
+Bible Study Coach app — used by children, adults, and seniors.
 
 Your job: given a Bible passage, generate factual multiple-choice questions.
 

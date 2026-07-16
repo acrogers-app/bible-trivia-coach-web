@@ -1,6 +1,6 @@
 {
-  "name": "Bible Trivia Coach",
-  "short_name": "BTC",
+  "name": "Bible Study Coach",
+  "short_name": "BSC",
   "description": "Daily Bible quizzes, reading plans, and Scripture coaching",
   "start_url": "/play",
   "display": "standalone",

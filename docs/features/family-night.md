@@ -1,7 +1,7 @@
 # Feature: family-night
 
 Goal:
-- Let families or small groups play Bible Trivia Coach together in the same room, taking turns answering questions and seeing a shared scoreboard.
+- Let families or small groups play Bible Study Coach together in the same room, taking turns answering questions and seeing a shared scoreboard.
 
 User story:
 - "On family night, we want to enter our names, take turns answering questions on the TV or iPad, and see who did best—without needing multiple devices."

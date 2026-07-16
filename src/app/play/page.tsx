@@ -1650,14 +1650,14 @@ export default function PlayPage() {
 
         {loading && (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-            <h1>Bible Trivia Coach</h1>
+            <h1>Bible Study Coach</h1>
             <p className="btc-text-muted">Loading questions…</p>
           </div>
         )}
 
         {!loading && error && (
           <div style={{ padding: '1rem' }}>
-            <h1>Bible Trivia Coach</h1>
+            <h1>Bible Study Coach</h1>
             <p
               style={{
                 color: '#b91c1c',
@@ -2092,9 +2092,9 @@ function HomeScreen(props: {
           }}
         >
           <div>
-            <h1>Bible Trivia Coach</h1>
+            <h1>Bible Study Coach</h1>
             <p className="btc-text-muted" style={{ marginTop: 4 }}>
-              Daily Scripture and Bible history quizzes.
+              Daily Scripture reading and gentle Bible study.
             </p>
             {streak != null && (
               <div
@@ -2210,7 +2210,7 @@ function HomeScreen(props: {
         >
           <Image
             src="/bsc2.png"
-            alt="Bible Trivia Coach"
+            alt="Bible Study Coach"
             width={104}
             height={104}
             priority

@@ -174,12 +174,12 @@ function interactiveQuizHtml() {
     <p class="score" id="finalScore"></p>
     <p>From Isaiah's promise to the Word made flesh &mdash; you've walked the
        whole story. May it dwell in you richly this season.</p>
-    <p style="font-size:.9rem">Hungry for more? Bible Trivia Coach has free
+    <p style="font-size:.9rem">Hungry for more? Bible Study Coach has free
        daily readings and quizzes all year round.</p>
     <a class="cta" href="https://bible-trivia-coach-web.vercel.app">Keep playing free &rarr;</a>
   </div>
 
-  <footer>Bible Trivia Coach &middot; May God's Word dwell in you richly. (Colossians 3:16)</footer>
+  <footer>Bible Study Coach &middot; May God's Word dwell in you richly. (Colossians 3:16)</footer>
 </div>
 
 <script>
@@ -307,7 +307,7 @@ function pageShell(title, subtitle, body) {
 </header>
 ${body}
 <footer>
-  <p>Bible Trivia Coach &middot; bible-trivia-coach-web.vercel.app</p>
+  <p>Bible Study Coach &middot; bible-trivia-coach-web.vercel.app</p>
   <p>May God's Word dwell in you richly this Advent. (Colossians 3:16)</p>
 </footer>
 </body>
@@ -333,7 +333,7 @@ const keyBody =
     })
     .join("\n");
 
-const readme = `Bible Trivia Coach — Advent 2026 Question Pack
+const readme = `Bible Study Coach — Advent 2026 Question Pack
 ================================================
 
 Thank you for picking up this pack! Here's what's inside:
@@ -348,7 +348,7 @@ Thank you for picking up this pack! Here's what's inside:
                                 or group settings.
   advent-2026.json              The same 25 questions in machine-readable
                                 form, ready for a future in-app import in
-                                Bible Trivia Coach.
+                                Bible Study Coach.
 
 The journey
 -----------
@@ -411,7 +411,7 @@ classes, or your own quiet mornings. Gentle difficulty ramp — starts easy,
 grows a little more challenging as Christmas approaches. No streaks, no
 guilt; miss a day and just pick back up.
 
-From the makers of Bible Trivia Coach — free daily quizzes at
+From the makers of Bible Study Coach — free daily quizzes at
 https://bible-trivia-coach-web.vercel.app
 `;
 

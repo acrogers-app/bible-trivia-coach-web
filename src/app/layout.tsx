@@ -15,20 +15,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bible Trivia Coach",
+  title: "Bible Study Coach",
   description:
     "Daily Bible quizzes, reading plans, and Scripture coaching — learn God's Word one verse at a time.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Bible Trivia Coach",
+    title: "Bible Study Coach",
   },
   icons: {
     apple: "/icons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Bible Trivia Coach",
+    title: "Bible Study Coach",
     description:
       "Daily Bible quizzes, reading plans, and Scripture coaching — learn God's Word one verse at a time.",
     type: "website",

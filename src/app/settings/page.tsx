@@ -282,7 +282,7 @@ export default function SettingsPage() {
           <div style={preview}>
             <div style={{ fontWeight: 900, marginBottom: 6 }}>Preview</div>
             <div className="btc-text-muted">
-              Bible Trivia Coach helps you read, listen, and learn with gentle daily challenges.
+              Bible Study Coach helps you read, listen, and learn with gentle daily challenges.
             </div>
           </div>
         </div>
