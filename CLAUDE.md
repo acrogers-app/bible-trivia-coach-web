@@ -17,3 +17,10 @@
 ## Vercel deployment budget
 
 Vercel deployments are capped at 100/24 hours. During overnight or heavy sessions monitor usage at dashboard.webeuseful.com. Never exceed 80 deployments in 24 hours without checking first.
+
+
+## Payments & domains (operational rules)
+
+- Never rotate Stripe keys without explicit written permission.
+- Never add domains without checking if they are registered first.
+- Always verify domains exist before referencing them in code.
