@@ -12,3 +12,8 @@
 - **No deploys or production changes.** Never deploy, trigger production builds, change production configuration, or push to `main`.
 - **Run lint/tests after changes and report results.** After code changes, run `npm run check` (or the relevant subset) and report the actual results, including failures.
 - **Prefer minimal, reversible changes.** Make the smallest change that solves the problem and avoid edits that are hard to undo.
+
+
+## Vercel deployment budget
+
+Vercel deployments are capped at 100/24 hours. During overnight or heavy sessions monitor usage at dashboard.webeuseful.com. Never exceed 80 deployments in 24 hours without checking first.
