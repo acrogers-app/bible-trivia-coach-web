@@ -7,8 +7,16 @@
  *  - page navigations      → network-first, falling back to the cached shell
  */
 
-const CACHE_NAME = 'btc-v1';
-const PRECACHE_URLS = ['/play', '/read', '/manifest.webmanifest', '/bsc2.png'];
+const CACHE_NAME = 'btc-v2';
+const PRECACHE_URLS = [
+  '/',
+  '/play',
+  '/read',
+  '/levels',
+  '/settings',
+  '/manifest.webmanifest',
+  '/bsc2.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -46,7 +54,7 @@ function isDataFile(url) {
   );
 }
 
-async function networkFirst(request, fallbackUrl) {
+async function networkFirst(request, fallbackUrls = []) {
   const cache = await caches.open(CACHE_NAME);
   try {
     const response = await fetch(request);
@@ -55,7 +63,7 @@ async function networkFirst(request, fallbackUrl) {
   } catch {
     const cached = await cache.match(request);
     if (cached) return cached;
-    if (fallbackUrl) {
+    for (const fallbackUrl of fallbackUrls) {
       const fallback = await cache.match(fallbackUrl);
       if (fallback) return fallback;
     }
@@ -107,8 +115,14 @@ self.addEventListener('fetch', (event) => {
   }
 
   if (request.mode === 'navigate') {
-    const fallback = url.pathname.startsWith('/read') ? '/read' : '/play';
-    event.respondWith(networkFirst(request, fallback));
+    // Offline fallback chain for deep links: the section's precached shell,
+    // then the cached home page as a last resort for never-visited pages.
+    const p = url.pathname;
+    let section = '/play';
+    if (p.startsWith('/read')) section = '/read';
+    else if (p.startsWith('/levels')) section = '/levels';
+    else if (p.startsWith('/settings')) section = '/settings';
+    event.respondWith(networkFirst(request, [section, '/']));
     return;
   }
 });

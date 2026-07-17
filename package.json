@@ -19,6 +19,7 @@
     "@capacitor/ios": "^8.4.1",
     "@capacitor/local-notifications": "^8.2.0",
     "@capacitor/preferences": "^8.0.1",
+    "@vercel/analytics": "^2.0.1",
     "better-sqlite3": "^12.10.1",
     "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
