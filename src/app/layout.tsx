@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     canonical: "./",
   },
   manifest: "/manifest.webmanifest",
+  verification: {
+    google: "VEYgF3XyH5DfIINg6ciXSC-X4LP6PQHCH4UBWYIM-FE",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
