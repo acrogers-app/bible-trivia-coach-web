@@ -1,7 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 import {
   getTodayCoachTip,
   getQuizSummaryLine,
@@ -13,6 +19,26 @@ import { apiUrl } from '../../lib/apiBase';
 import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
+import {
+  APP_VERSION,
+  VERSION_SEEN_KEY,
+  FAMILY_SAFETY_SEEN_KEY,
+  PLAYER_NAME_KEY,
+  BIBLE_NAMES,
+  avatarFor,
+  randomBibleName,
+  PATHS,
+  recordPathResult,
+  isPathUnlocked,
+  pathForQuizTitle,
+  parsePathProgress,
+  PATH_PROGRESS_LS_KEY,
+  playTick,
+  readLS,
+  writeLS,
+  subscribeLS,
+  type PathKey,
+} from '../../lib/gameFx';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -1645,8 +1671,9 @@ export default function PlayPage() {
   return (
     <div className="btc-root" style={{ paddingBottom: 110 }}>
       <BottomNav />
+      <WhatsNewModal />
       <div className="btc-card">
-      
+
 
         {loading && (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
@@ -1728,6 +1755,16 @@ export default function PlayPage() {
               })
             }
             onOpenBookPicker={() => setScreen({ name: 'book-picker' })}
+            onStartPathQuiz={(key) => {
+              const path = PATHS.find((p) => p.key === key);
+              if (!path) return;
+              startQuiz({
+                title: `Path: ${path.label}`,
+                count: path.count,
+                level: path.level,
+                sourceType: 'scripture',
+              });
+            }}
           />
         )}
 
@@ -1777,15 +1814,17 @@ export default function PlayPage() {
             title={screen.title}
             questions={screen.questions}
             onBack={() => setScreen({ name: 'home' })}
-            onFinished={(correct, total, answers) =>
+            onFinished={(correct, total, answers) => {
+              const pathKey = pathForQuizTitle(screen.title);
+              if (pathKey) recordPathResult(pathKey, correct, total);
               showSummary(
                 screen.title,
                 screen.questions,
                 total,
                 correct,
                 answers,
-              )
-            }
+              );
+            }}
           />
         )}
 
@@ -1981,6 +2020,7 @@ function HomeScreen(props: {
   onStartLevelQuiz: (level: QuizLevel, count: number) => void;
   onOpenBookPicker: () => void;
   onStartMissedPractice: () => void;
+  onStartPathQuiz: (key: PathKey) => void;
   dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
@@ -2194,8 +2234,30 @@ function HomeScreen(props: {
 
         </div>
 
+        {/* Streak protection: gentle heads-up when today would break it */}
+        {streak != null &&
+          !dailyChallengeCompletedToday &&
+          !readingDoneToday && (
+            <div
+              style={{
+                marginTop: 10,
+                padding: '8px 12px',
+                borderRadius: 12,
+                backgroundColor: '#fff7ed',
+                border: '1px solid #fdba74',
+                fontSize: 13,
+                color: '#9a3412',
+                fontWeight: 600,
+              }}
+            >
+              ⚠️ Your {streak}-day streak is at risk! You haven&apos;t studied
+              today — the Daily Challenge below keeps it alive.
+            </div>
+          )}
+
         {/* Daily challenge hero (daily-challenge-nudge) */}
         <div
+          className="coach-card"
           style={{
             marginTop: 14,
             padding: 16,
@@ -2427,6 +2489,30 @@ function HomeScreen(props: {
           </button>
         </div>
 
+        {/* ── Your Path: difficulty progression (device-local) ───── */}
+        <PathSection onStartPathQuiz={props.onStartPathQuiz} />
+
+        {/* ── Bible Coach Pro teaser (no gating — placeholder only) ─ */}
+        <div
+          className="pro-locked"
+          style={{
+            marginTop: 14,
+            padding: 14,
+            borderRadius: 16,
+            border: '1px solid rgba(0,0,0,0.10)',
+            background: 'linear-gradient(135deg, #fefce8, #fff7ed)',
+          }}
+        >
+          <div style={{ fontWeight: 800 }}>🔒 Bible Coach Pro</div>
+          <div
+            className="btc-text-muted"
+            style={{ marginTop: 4, fontSize: 12 }}
+          >
+            Unlock unlimited challenges, all difficulty levels, family game
+            history, and more. Coming soon!
+          </div>
+        </div>
+
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
           border:'1px solid rgba(0,0,0,0.07)', background:'rgba(254,249,195,0.6)' }}
@@ -2449,6 +2535,85 @@ function HomeScreen(props: {
   );
 }
 
+
+// ---- Your Path: difficulty progression ----
+// Complete each path (≥70%) to unlock the next. Progress lives in
+// localStorage only ('btc-difficulty-progress').
+
+function PathSection(props: { onStartPathQuiz: (key: PathKey) => void }) {
+  // Raw string snapshot keeps useSyncExternalStore referentially stable;
+  // parsing happens in useMemo keyed on it.
+  const rawProgress = useSyncExternalStore(
+    subscribeLS,
+    () => readLS(PATH_PROGRESS_LS_KEY),
+    () => null,
+  );
+  const progress = useMemo(() => parsePathProgress(rawProgress), [rawProgress]);
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <div style={{ fontWeight: 800, marginBottom: 8 }}>🗺️ Your Path</div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(145px, 1fr))',
+          gap: 10,
+        }}
+      >
+        {PATHS.map((p, idx) => {
+          const unlocked = isPathUnlocked(p.key, progress);
+          const entry = progress[p.key];
+          const prevLabel = idx > 0 ? PATHS[idx - 1].label : null;
+          return (
+            <button
+              key={p.key}
+              type="button"
+              disabled={!unlocked}
+              onClick={() => {
+                if (unlocked) props.onStartPathQuiz(p.key);
+              }}
+              style={{
+                textAlign: 'left',
+                padding: 14,
+                borderRadius: 16,
+                cursor: unlocked ? 'pointer' : 'default',
+                border: entry?.completed
+                  ? '1.5px solid #86efac'
+                  : '1px solid rgba(0,0,0,0.10)',
+                background: entry?.completed
+                  ? 'rgba(34,197,94,0.06)'
+                  : 'white',
+                minHeight: 96,
+                opacity: unlocked ? 1 : 0.55,
+              }}
+            >
+              <div style={{ fontSize: 24, marginBottom: 4 }}>
+                {unlocked ? p.emoji : '🔒'}
+              </div>
+              <div style={{ fontWeight: 800 }}>
+                {p.label}
+                {entry?.completed && <span style={{ marginLeft: 6 }}>✅</span>}
+              </div>
+              <div
+                className="btc-text-muted"
+                style={{ marginTop: 4, fontSize: 12 }}
+              >
+                {unlocked
+                  ? entry?.bestPercent
+                    ? `${p.desc} · best ${entry.bestPercent}%`
+                    : p.desc
+                  : `Complete ${prevLabel} to unlock!`}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <div className="btc-text-muted" style={{ marginTop: 6, fontSize: 12 }}>
+        Score 70% or better to complete a path and unlock the next.
+      </div>
+    </div>
+  );
+}
 
 // ---- Day Picker Row ----
 function DayPickerRow(props: {
@@ -2926,6 +3091,233 @@ function DailyReadingScreen(props: {
   );
 }
 
+// ---- v1.2.0 game-feel shared pieces ----
+
+/** "What's New" — shown once per version (localStorage bible-version-seen). */
+function WhatsNewModal() {
+  // localStorage as external store (repo lint: no setState-in-effect reads).
+  // Server snapshot pretends "seen" so nothing flashes during SSR/hydration.
+  const seen = useSyncExternalStore(
+    subscribeLS,
+    () => readLS(VERSION_SEEN_KEY),
+    () => APP_VERSION,
+  );
+
+  function dismiss() {
+    writeLS(VERSION_SEEN_KEY, APP_VERSION);
+  }
+
+  if (seen === APP_VERSION) return null;
+  return (
+    <div className="btc-modal-overlay" role="dialog" aria-modal="true">
+      <div className="btc-modal">
+        <h3>🎉 What&apos;s New in v{APP_VERSION.split('.').slice(0, 2).join('.')}</h3>
+        <div className="btc-modal-row">
+          <span className="icon">👥</span>
+          <span>
+            <strong>Family Night upgraded!</strong>
+            <br />
+            Choose Bible character names — plus a new scoreboard and winner
+            celebration.
+          </span>
+        </div>
+        <div className="btc-modal-row">
+          <span className="icon">🎮</span>
+          <span>
+            <strong>Game-like experience</strong>
+            <br />
+            Animated buttons and timer, streak counter, starry sky.
+          </span>
+        </div>
+        <div className="btc-modal-row">
+          <span className="icon">🔒</span>
+          <span>
+            <strong>Safety improvements</strong>
+            <br />
+            Privacy notice for families — no real names ever required.
+          </span>
+        </div>
+        <button
+          type="button"
+          className="btc-btn"
+          style={{ width: '100%', marginTop: 12 }}
+          onClick={dismiss}
+        >
+          Let&apos;s Play! →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** Family Night safety notice — shown once (localStorage bible-family-safety-seen). */
+function FamilySafetyNotice(props: { onDismiss: () => void }) {
+  return (
+    <div className="btc-modal-overlay" role="dialog" aria-modal="true">
+      <div className="btc-modal">
+        <h3>👨‍👩‍👧 Family Night — Safe Play</h3>
+        <div className="btc-modal-row">
+          <span className="icon">✅</span>
+          <span>
+            <strong>Bible nicknames only</strong>
+            <br />
+            No real names used
+          </span>
+        </div>
+        <div className="btc-modal-row">
+          <span className="icon">✅</span>
+          <span>
+            <strong>Stays on this device</strong>
+            <br />
+            Nothing is sent online
+          </span>
+        </div>
+        <div className="btc-modal-row">
+          <span className="icon">✅</span>
+          <span>
+            <strong>No accounts needed</strong>
+            <br />
+            No sign-in, no tracking
+          </span>
+        </div>
+        <div className="btc-modal-row">
+          <span className="icon">✅</span>
+          <span>
+            <strong>Anyone can play</strong>
+            <br />
+            All ages, all Bible levels
+          </span>
+        </div>
+        <button
+          type="button"
+          className="btc-btn"
+          style={{ width: '100%', marginTop: 12 }}
+          onClick={props.onDismiss}
+        >
+          Start Family Night →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** 50 drifting/twinkling stars. Deterministic pseudo-random layout so the
+ *  server and client render identical markup (no hydration mismatch). */
+function starRand(i: number, salt: number): number {
+  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+const STARFIELD = Array.from({ length: 50 }, (_, i) => ({
+  left: starRand(i, 1) * 100,
+  top: starRand(i, 2) * 100,
+  size: 1 + starRand(i, 3) * 2.2,
+  gold: starRand(i, 4) < 0.35,
+  tw: 2 + starRand(i, 5) * 4,
+  dr: 25 + starRand(i, 6) * 35,
+}));
+
+function Starfield() {
+  const stars = STARFIELD;
+  return (
+    <div className="btc-starfield" aria-hidden="true">
+      {stars.map((s, i) => (
+        <span
+          key={i}
+          className={`btc-star${s.gold ? ' gold' : ''}`}
+          style={{
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            width: s.size,
+            height: s.size,
+            ['--twinkle-dur' as string]: `${s.tw}s`,
+            ['--drift-dur' as string]: `${s.dr}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** 3D game-show answer button (used by solo quiz + Family Night). */
+function GameAnswerButton(props: {
+  option: string;
+  index: number;
+  selected: number | null;
+  correctIndex: number;
+  disabled?: boolean;
+  onSelect: (i: number) => void;
+}) {
+  const { option, index, selected, correctIndex } = props;
+  const revealed = selected !== null;
+  const isCorrect = index === correctIndex;
+  const isSelected = selected === index;
+  let cls = 'answer-btn';
+  if (revealed) {
+    if (isCorrect) cls += ' correct';
+    else if (isSelected) cls += ' wrong';
+    else cls += ' dimmed';
+  }
+  const tappable = !revealed && !props.disabled;
+  return (
+    <button
+      type="button"
+      className={cls}
+      disabled={!tappable}
+      onClick={() => {
+        if (!tappable) return;
+        hapticTap(isCorrect);
+        props.onSelect(index);
+      }}
+    >
+      <span className="answer-letter">
+        {QUIZ_OPTION_LETTERS[index] ?? index + 1}
+      </span>
+      <span>{option}</span>
+    </button>
+  );
+}
+
+const QUESTION_SECONDS = 20;
+
+/** Countdown bar: green → yellow → red (+ gentle pulse and soft tick at the end).
+ *  When it reaches 0 nothing is auto-failed — Coach just nudges a best guess. */
+function TimerBar(props: { secondsLeft: number; total: number }) {
+  const pct = Math.max(0, Math.min(100, (props.secondsLeft / props.total) * 100));
+  const cls =
+    props.secondsLeft <= 5 ? 'timer-bar danger' : pct <= 50 ? 'timer-bar warn' : 'timer-bar';
+  return (
+    <div className="timer-track" aria-hidden="true">
+      <div className={cls} style={{ width: `${pct}%` }} />
+    </div>
+  );
+}
+
+/** Medal-style mini leaderboard for Family Night. */
+function MiniLeaderboard(props: {
+  entries: { id: string; name: string; score: number }[];
+  compact?: boolean;
+}) {
+  const medals = ['🥇', '🥈', '🥉'];
+  const sorted = [...props.entries].sort((a, b) => b.score - a.score);
+  const top = sorted.length ? sorted[0].score : 0;
+  return (
+    <div style={{ marginTop: props.compact ? 12 : 0 }}>
+      {sorted.map((p, i) => (
+        <div
+          key={p.id}
+          className={`btc-podium-row${p.score === top && top > 0 ? ' leader' : ''}`}
+        >
+          <span style={{ fontWeight: 700 }}>
+            {medals[i] ?? '·'} {avatarFor(p.name)} {p.name}
+          </span>
+          <span style={{ fontWeight: 800 }}>{p.score} pts</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ---- Quiz + inline passage ----
 
 const QUIZ_OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -2947,80 +3339,6 @@ function coachReaction(isCorrect: boolean, questionIndex: number): string {
   return lines[questionIndex % lines.length];
 }
 
-
-function QuizOptionButton(props: {
-  option: string;
-  index: number;
-  selected: number | null;
-  correctIndex: number;
-  showFeedback: boolean;
-  disabled?: boolean;
-  onSelect: (i: number) => void;
-}) {
-  const { option, index, selected, correctIndex, showFeedback } = props;
-  const isSelected = selected === index;
-  const isCorrect = index === correctIndex;
-  let bg = '#ffffff';
-  let border = '1px solid #9ca3af';
-
-  if (selected !== null) {
-    if (isSelected && isCorrect) {
-      bg = '#bbf7d0';
-      border = '1px solid var(--btc-success)';
-    } else if (isSelected && !isCorrect) {
-      bg = '#fecaca';
-      border = '1px solid #dc2626';
-    } else if (showFeedback && isCorrect) {
-      bg = 'var(--btc-success-soft)';
-      border = '1px solid var(--btc-success)';
-    }
-  }
-
-  const tappable = selected === null && !props.disabled;
-  const revealedCorrect = selected !== null && showFeedback && isCorrect;
-  return (
-    <button
-      className={`btc-quiz-option${revealedCorrect ? ' btc-pop' : ''}`}
-      onClick={() => {
-        if (tappable) hapticTap(index === correctIndex);
-        props.onSelect(index);
-      }}
-      style={{
-        width: '100%',
-        textAlign: 'left',
-        padding: '12px 14px',
-        borderRadius: 12,
-        backgroundColor: bg,
-        border,
-        cursor: tappable ? 'pointer' : 'default',
-        color: 'var(--btc-ink)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-      }}
-    >
-      <span
-        style={{
-          flexShrink: 0,
-          width: 24,
-          height: 24,
-          borderRadius: 999,
-          border: '1px solid #c7d2fe',
-          backgroundColor: '#eef2ff',
-          color: 'var(--btc-accent-deep)',
-          fontSize: 12,
-          fontWeight: 700,
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {QUIZ_OPTION_LETTERS[index] ?? index + 1}
-      </span>
-      <span>{option}</span>
-    </button>
-  );
-}
 
 function StickyNextBar(props: {
   visible: boolean;
@@ -3076,6 +3394,50 @@ function QuizScreen(props: {
   const [correctCount, setCorrectCount] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
 
+  // Game feel: arcade points, streak, per-question countdown
+  const [points, setPoints] = useState(0);
+  const [displayPoints, setDisplayPoints] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [fly, setFly] = useState<{ key: number; text: string } | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(QUESTION_SECONDS);
+  const reduceMotionRef = useRef(false);
+
+  useEffect(() => {
+    reduceMotionRef.current = loadSettings().reduceMotion;
+  }, []);
+
+  // Score counts up toward the real total instead of jumping
+  useEffect(() => {
+    if (displayPoints >= points) return;
+    const step = Math.max(1, Math.ceil((points - displayPoints) / 6));
+    const t = setTimeout(
+      () => setDisplayPoints((d) => Math.min(points, d + step)),
+      40,
+    );
+    return () => clearTimeout(t);
+  }, [points, displayPoints]);
+
+  // Clear the flying "+N" after its animation
+  useEffect(() => {
+    if (!fly) return;
+    const t = setTimeout(() => setFly(null), 900);
+    return () => clearTimeout(t);
+  }, [fly]);
+
+  // Countdown: pauses once an answer is picked; soft tick in the last 5s.
+  // Hitting 0 never auto-fails — Coach keeps it low-pressure.
+  useEffect(() => {
+    if (selected !== null || secondsLeft <= 0) return;
+    const t = setTimeout(() => {
+      setSecondsLeft((s) => {
+        const next = s - 1;
+        if (next <= 5 && next > 0 && !reduceMotionRef.current) playTick();
+        return next;
+      });
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [secondsLeft, selected]);
+
   const [showPassage, setShowPassage] = useState(false);
   const [passageRef, setPassageRef] = useState<{
     start: string;
@@ -3109,7 +3471,14 @@ function QuizScreen(props: {
 
     if (isCorrect) {
       setCorrectCount((c) => c + 1);
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      // 10 pts per correct answer, +5 streak bonus from the 2nd in a row
+      const gained = 10 + (newStreak >= 2 ? 5 : 0);
+      setPoints((p) => p + gained);
+      setFly({ key: Date.now(), text: `+${gained}` });
     } else {
+      setStreak(0);
       const hasRef =
         q.refStart &&
         q.refEnd &&
@@ -3132,6 +3501,7 @@ function QuizScreen(props: {
       setShowFeedback(false);
       setShowPassage(false);
       setPassageRef(null);
+      setSecondsLeft(QUESTION_SECONDS);
     }
   }
 
@@ -3145,22 +3515,6 @@ function QuizScreen(props: {
     >
       <BackButton onClick={props.onBack} />
       <h2>{title}</h2>
-      <div
-        style={{
-          fontSize: 13,
-          color: 'var(--btc-text-subtle)',
-          marginBottom: 12,
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        <span>
-          Question {index + 1} of {questions.length}
-        </span>
-        <span>
-          Score: {correctCount}/{questions.length}
-        </span>
-      </div>
 
       {verseRefStr && (
         <div style={{ marginBottom: 16 }}>
@@ -3172,76 +3526,139 @@ function QuizScreen(props: {
         </div>
       )}
 
-      <div
-        style={{
-          marginBottom: 16,
-          padding: 14,
-          borderRadius: 16,
-          backgroundColor: '#eef2ff',
-          border: '1px solid #c7d2fe',
-        }}
-      >
+      <div className="btc-game">
+        <Starfield />
         <div
           style={{
-            fontSize: 16,
-            fontWeight: 600,
-            color: 'var(--btc-ink)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12,
+            marginBottom: 4,
           }}
         >
-          {q.text}
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {q.options.map((opt, i) => (
-          <QuizOptionButton
-            key={i}
-            option={opt}
-            index={i}
-            selected={selected}
-            correctIndex={q.correctIndex}
-            showFeedback={showFeedback}
-            onSelect={handleSelect}
-          />
-        ))}
-      </div>
-
-      {showFeedback && (
-        <div style={{ marginTop: 16 }}>
-          <div
-            style={{
-              fontWeight: 600,
-              marginBottom: 4,
-              color: selected === q.correctIndex ? '#15803d' : '#b91c1c',
-            }}
-          >
-            {coachReaction(selected === q.correctIndex, index)}
+          <div>
+            <div style={{ fontSize: 13, color: 'var(--game-muted)' }}>
+              Question {index + 1} of {questions.length}
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--game-muted)' }}>
+              {correctCount} correct
+            </div>
+            {streak >= 2 && (
+              <div className="btc-streak-flame" style={{ marginTop: 6 }}>
+                🔥 {streak} in a row!
+              </div>
+            )}
           </div>
-          <div style={{ fontSize: 14, color: 'var(--btc-ink)' }}>
-            {q.explanation}
-          </div>
-          {selected !== q.correctIndex && passageRef && !showPassage && (
-            <button
-              onClick={() => setShowPassage(true)}
+          <div style={{ position: 'relative', textAlign: 'right' }}>
+            <div className="score-display">{displayPoints}</div>
+            <div
               style={{
-                marginTop: 10,
-                padding: '8px 14px',
-                borderRadius: 999,
-                border: '1px solid #c7d2fe',
-                backgroundColor: '#eef2ff',
-                color: 'var(--btc-accent-deep)',
-                fontSize: 13,
-                cursor: 'pointer',
+                fontSize: 10,
+                color: 'var(--game-muted)',
+                letterSpacing: 3,
+                fontWeight: 700,
               }}
             >
-              📖 Read this passage (
-              {passageRef.start}
-              {passageRef.end !== passageRef.start ? ` – ${passageRef.end}` : ''}
-              )
-            </button>
-          )}
+              PTS
+            </div>
+            {fly && (
+              <span
+                key={fly.key}
+                className="btc-points-fly"
+                style={{ right: 0, top: -4 }}
+              >
+                {fly.text}
+              </span>
+            )}
+          </div>
         </div>
-      )}
+
+        <TimerBar secondsLeft={secondsLeft} total={QUESTION_SECONDS} />
+        {secondsLeft <= 0 && selected === null && (
+          <div
+            style={{
+              fontSize: 13,
+              color: '#ffc266',
+              fontWeight: 600,
+              marginBottom: 10,
+            }}
+          >
+            ⏰ Time! Take your best guess — no pressure.
+          </div>
+        )}
+
+        <div className="question-card" key={index}>
+          <div
+            style={{ fontSize: 16, fontWeight: 600, color: 'var(--game-ink)' }}
+          >
+            {q.text}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {q.options.map((opt, i) => (
+            <GameAnswerButton
+              key={i}
+              option={opt}
+              index={i}
+              selected={selected}
+              correctIndex={q.correctIndex}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+
+        {showFeedback && (
+          <div style={{ marginTop: 16 }}>
+            <div
+              style={{
+                fontWeight: 700,
+                marginBottom: 4,
+                color: selected === q.correctIndex ? '#7be87a' : '#ff9d9d',
+              }}
+            >
+              {coachReaction(selected === q.correctIndex, index)}
+            </div>
+            <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
+              {q.explanation}
+            </div>
+            {selected === q.correctIndex &&
+              q.refStart &&
+              q.refStart.trim() !== '' && (
+                <div className="verse-reveal">
+                  📖 {q.refStart}
+                  {q.refEnd && q.refEnd.trim() !== '' && q.refEnd !== q.refStart
+                    ? ` – ${q.refEnd}`
+                    : ''}{' '}
+                  — God&apos;s Word, well remembered.
+                </div>
+              )}
+            {selected !== q.correctIndex && passageRef && !showPassage && (
+              <button
+                onClick={() => setShowPassage(true)}
+                style={{
+                  marginTop: 10,
+                  padding: '8px 14px',
+                  borderRadius: 999,
+                  border: '1px solid rgba(255,255,255,0.35)',
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  color: '#dbe4ff',
+                  fontSize: 13,
+                  cursor: 'pointer',
+                }}
+              >
+                📖 Read this passage (
+                {passageRef.start}
+                {passageRef.end !== passageRef.start
+                  ? ` – ${passageRef.end}`
+                  : ''}
+                )
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       {showPassage && passageRef && (
         <PassageInline
@@ -3268,31 +3685,53 @@ function FamilySetupScreen(props: {
 }) {
   const [names, setNames] = useState<string[]>(['', '']);
   const [questionCount, setQuestionCount] = useState<string>('10');
+  // Safety notice: shown once, ever (bible-family-safety-seen).
+  // localStorage as external store; server snapshot "seen" → no SSR flash.
+  const safetySeen = useSyncExternalStore(
+    subscribeLS,
+    () => readLS(FAMILY_SAFETY_SEEN_KEY) === 'true',
+    () => true,
+  );
+  const showSafety = !safetySeen;
+
+  function dismissSafety() {
+    writeLS(FAMILY_SAFETY_SEEN_KEY, 'true');
+  }
 
   function updateName(index: number, value: string) {
     setNames((prev) => {
       const next = [...prev];
-      next[index] = value;
+      next[index] = value.slice(0, 15);
       return next;
     });
   }
 
-  function addPlayer() {
-    setNames((prev) => (prev.length >= 6 ? prev : [...prev, '']));
+  function addPlayer(prefill?: string) {
+    setNames((prev) =>
+      prev.length >= 6 ? prev : [...prev, (prefill ?? '').slice(0, 15)],
+    );
   }
 
   function removePlayer(index: number) {
     setNames((prev) => (prev.length <= 2 ? prev : prev.filter((_, i) => i !== index)));
   }
 
+  // Tapping a Bible name fills the first empty slot, or adds a player.
+  function pickBibleName(name: string) {
+    setNames((prev) => {
+      const emptyIdx = prev.findIndex((n) => n.trim() === '');
+      if (emptyIdx >= 0) {
+        const next = [...prev];
+        next[emptyIdx] = name;
+        return next;
+      }
+      return prev.length >= 6 ? prev : [...prev, name];
+    });
+  }
+
   function handleStart() {
-    const trimmed = names.map((n) => n.trim()).filter(Boolean);
-    if (trimmed.length < 2) {
-      window.alert('Please enter at least 2 names for Family Night.');
-      return;
-    }
-    if (trimmed.length > 6) {
-      window.alert('Family Night supports up to 6 players.');
+    if (names.length < 2) {
+      window.alert('Family Night needs at least 2 players.');
       return;
     }
     const num = Number(questionCount);
@@ -3301,19 +3740,32 @@ function FamilySetupScreen(props: {
       return;
     }
     const safe = Math.floor(num);
-    const players: FamilyPlayer[] = trimmed.map((name, idx) => ({
+    // Blank slots get a fun random Bible name — real names never required
+    const finalNames: string[] = [];
+    for (const raw of names) {
+      const trimmed = raw.trim().slice(0, 15);
+      finalNames.push(trimmed || randomBibleName(finalNames));
+    }
+    try {
+      localStorage.setItem(PLAYER_NAME_KEY, finalNames[0]);
+    } catch {}
+    const players: FamilyPlayer[] = finalNames.map((name, idx) => ({
       id: String(idx + 1),
       name,
     }));
     props.onStart(players, safe);
   }
 
+  const pickedLower = new Set(names.map((n) => n.trim().toLowerCase()));
+
   return (
     <div>
+      {showSafety && <FamilySafetyNotice onDismiss={dismissSafety} />}
       <BackButton onClick={props.onBack} />
       <h2>Family Night setup</h2>
       <p className="btc-text-muted" style={{ marginBottom: 12, fontSize: 14 }}>
-        Enter names and choose how many questions to play together.
+        Choose Bible names and how many questions to play together. Nicknames
+        only — everything stays on this device.
       </p>
 
       <div
@@ -3341,10 +3793,14 @@ function FamilySetupScreen(props: {
               key={idx}
               style={{ display: 'flex', gap: 8, alignItems: 'center' }}
             >
+              <span style={{ fontSize: 20, width: 26, textAlign: 'center' }}>
+                {name.trim() ? avatarFor(name) : '·'}
+              </span>
               <input
                 type="text"
                 value={name}
-                placeholder={`Player ${idx + 1}`}
+                maxLength={15}
+                placeholder={`Player ${idx + 1} — pick a name below`}
                 onChange={(e) => updateName(idx, e.target.value)}
                 style={{
                   flex: 1,
@@ -3376,7 +3832,7 @@ function FamilySetupScreen(props: {
           {names.length < 6 && (
             <button
               type="button"
-              onClick={addPlayer}
+              onClick={() => addPlayer()}
               style={{
                 marginTop: 4,
                 borderRadius: 999,
@@ -3392,6 +3848,41 @@ function FamilySetupScreen(props: {
               + Add player
             </button>
           )}
+        </div>
+
+        <div
+          style={{
+            marginTop: 12,
+            fontSize: 13,
+            fontWeight: 700,
+            color: 'var(--btc-ink)',
+          }}
+        >
+          Choose your Bible name! 🌟
+        </div>
+        <div className="btc-name-grid">
+          {BIBLE_NAMES.map((b) => {
+            const picked = pickedLower.has(b.name.toLowerCase());
+            return (
+              <button
+                key={b.name}
+                type="button"
+                className={`btc-name-chip${picked ? ' picked' : ''}`}
+                onClick={() => {
+                  if (!picked) pickBibleName(b.name);
+                }}
+              >
+                {b.avatar} {b.name}
+              </button>
+            );
+          })}
+        </div>
+        <div
+          className="btc-text-muted"
+          style={{ marginTop: 8, fontSize: 12 }}
+        >
+          Or type any fun nickname (max 15 characters). No real names, no
+          emails, no ages — blank players get a surprise Bible name.
         </div>
       </div>
 
@@ -3510,12 +4001,45 @@ function FamilyGameScreen(props: {
     setCurrentPlayerIndex((i) => (i + 1) % props.players.length);
   }
 
+  // "Play Again" — same questions, fresh scores. Nothing is stored anywhere.
+  function playAgain() {
+    setScores(props.players.map(() => 0));
+    setCurrentIndex(0);
+    setCurrentPlayerIndex(0);
+    setSelected(null);
+    setShowFeedback(false);
+    setFinished(false);
+  }
+
+  // Confetti for the winner screen (skipped when reduce-motion is on)
+  useEffect(() => {
+    if (!finished) return;
+    if (loadSettings().reduceMotion) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const confetti = (await import('canvas-confetti')).default;
+        if (cancelled) return;
+        confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 } });
+        setTimeout(() => {
+          if (!cancelled)
+            confetti({ particleCount: 60, spread: 100, origin: { y: 0.4 } });
+        }, 350);
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [finished]);
+
   const combined = props.players.map((p, idx) => ({
     ...p,
     score: scores[idx],
   }));
   const sorted = [...combined].sort((a, b) => b.score - a.score);
   const topScore = sorted.length ? sorted[0].score : 0;
+  const winners = sorted.filter((p) => p.score === topScore);
+  const isTie = winners.length > 1;
 
   if (!q) {
     return (
@@ -3537,51 +4061,44 @@ function FamilyGameScreen(props: {
     >
       <BackButton onClick={props.onBackHome} />
       <h2>Family Night</h2>
-      {!finished && (
-        <p
-          style={{
-            color: 'var(--btc-text-subtle)',
-            marginBottom: 8,
-            fontSize: 13,
-          }}
-        >
-          Question {currentIndex + 1} of {totalQuestions} ·{' '}
-          <span style={{ fontWeight: 600 }}>{currentPlayer.name}&apos;s</span>{' '}
-          turn
-        </p>
-      )}
 
       {!finished && (
-        <>
-          <div
+        <div className="btc-game">
+          <Starfield />
+          <p
             style={{
-              marginBottom: 16,
-              padding: 14,
-              borderRadius: 16,
-              backgroundColor: '#eef2ff',
-              border: '1px solid #c7d2fe',
+              color: 'var(--game-muted)',
+              marginBottom: 8,
+              fontSize: 13,
             }}
           >
+            Question {currentIndex + 1} of {totalQuestions} ·{' '}
+            <span style={{ fontWeight: 700, color: 'var(--game-ink)' }}>
+              {avatarFor(currentPlayer.name)} {currentPlayer.name}&apos;s
+            </span>{' '}
+            turn
+          </p>
+
+          <div className="question-card" key={currentIndex}>
             <div
               style={{
                 fontSize: 16,
                 fontWeight: 600,
-                color: 'var(--btc-ink)',
+                color: 'var(--game-ink)',
               }}
             >
               {q.text}
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {q.options.map((opt, i) => (
-              <QuizOptionButton
+              <GameAnswerButton
                 key={i}
                 option={opt}
                 index={i}
                 selected={selected}
                 correctIndex={q.correctIndex}
-                showFeedback={showFeedback}
                 disabled={finished}
                 onSelect={handleSelect}
               />
@@ -3592,119 +4109,108 @@ function FamilyGameScreen(props: {
             <div style={{ marginTop: 16 }}>
               <div
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 700,
                   marginBottom: 4,
                   color:
-                    selected === q.correctIndex ? '#15803d' : '#b91c1c',
+                    selected === q.correctIndex ? '#7be87a' : '#ff9d9d',
                 }}
               >
                 {coachReaction(selected === q.correctIndex, currentIndex)}
               </div>
-              <div style={{ fontSize: 14, color: 'var(--btc-ink)' }}>
+              <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
                 {q.explanation}
               </div>
+              <MiniLeaderboard entries={combined} compact />
             </div>
           )}
-
-          <div
-            style={{
-              marginTop: 24,
-              fontSize: 12,
-              color: 'var(--btc-text-subtle)',
-            }}
-          >
-            Scores:{' '}
-            {combined.map((p, idx) => (
-              <span key={p.id} style={{ marginRight: 8 }}>
-                <span style={{ fontWeight: 600 }}>{p.name}</span>:{' '}
-                {scores[idx]}
-              </span>
-            ))}
-          </div>
 
           <StickyNextBar
             visible={selected !== null && !finished}
             label={isLast ? 'Finish game' : 'Next question'}
             onClick={handleNext}
           />
-        </>
+        </div>
       )}
 
       {finished && (
-        <div
-          style={{
-            marginTop: 12,
-            padding: 16,
-            borderRadius: 16,
-            backgroundColor: '#f9fafb',
-            border: '1px solid #e5e7eb',
-          }}
-        >
-          <h3
-            style={{
-              fontSize: 18,
-              fontWeight: 700,
-              marginBottom: 8,
-            }}
-          >
-            Final scores
-          </h3>
-          <ul
-            style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              fontSize: 14,
-            }}
-          >
-            {sorted.map((p) => (
-              <li
-                key={p.id}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '6px 0',
-                }}
+        <div className="btc-game">
+          <Starfield />
+          <div className="btc-winner">
+            <span className="btc-winner-avatar">
+              {isTie ? '🤝' : avatarFor(winners[0].name)}
+            </span>
+            <h3
+              className="btc-perfect-heading"
+              style={{
+                fontSize: 24,
+                fontWeight: 900,
+                margin: '0 0 6px',
+                color: 'var(--game-ink)',
+              }}
+            >
+              {isTie
+                ? `🎉 It's a tie — everyone wins!`
+                : `🎉 ${winners[0].name} wins Family Night!`}
+            </h3>
+            <p style={{ color: 'var(--game-muted)', margin: '0 0 16px', fontSize: 14 }}>
+              {isTie
+                ? `${winners.map((w) => w.name).join(' & ')} tied with ${topScore} pts`
+                : `${topScore} correct ${topScore === 1 ? 'answer' : 'answers'} · ${totalQuestions} questions played together`}
+            </p>
+            <MiniLeaderboard entries={combined} />
+            <p
+              style={{
+                marginTop: 12,
+                fontSize: 13,
+                color: 'var(--game-muted)',
+              }}
+            >
+              Great game! Everyone planted more of God&apos;s Word tonight.
+              Scores stay on this device — nothing is stored online.
+            </p>
+            <div
+              className="pro-locked"
+              style={{
+                marginTop: 12,
+                padding: '10px 12px',
+                borderRadius: 12,
+                border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(255,255,255,0.06)',
+                fontSize: 13,
+                color: 'var(--game-muted)',
+                textAlign: 'left',
+              }}
+            >
+              📊 <strong style={{ color: 'var(--game-ink)' }}>Family game history</strong>
+              <br />
+              See how your family improves over 30 games — part of Bible Coach
+              Pro. Coming soon!
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                gap: 10,
+                justifyContent: 'center',
+                marginTop: 16,
+                flexWrap: 'wrap',
+              }}
+            >
+              <button
+                type="button"
+                className="btc-btn btc-btn-success"
+                onClick={playAgain}
               >
-                <span
-                  style={{
-                    fontWeight: p.score === topScore ? 700 : 500,
-                    color: p.score === topScore ? '#166534' : 'var(--btc-ink)',
-                  }}
-                >
-                  {p.name}
-                  {p.score === topScore ? ' (winner)' : ''}
-                </span>
-                <span>{p.score}</span>
-              </li>
-            ))}
-          </ul>
-          <p
-            style={{
-              marginTop: 8,
-              fontSize: 13,
-              color: 'var(--btc-text-subtle)',
-            }}
-          >
-            Great game! Everyone planted more of God&apos;s Word tonight.
-          </p>
-
-          <button
-            type="button"
-            onClick={props.onBackHome}
-            style={{
-              marginTop: 12,
-              padding: '10px 16px',
-              borderRadius: 999,
-              border: 'none',
-              backgroundColor: 'var(--btc-ink)',
-              color: 'white',
-              cursor: 'pointer',
-              fontSize: 14,
-            }}
-          >
-            Back to Home
-          </button>
+                Play Again
+              </button>
+              <button
+                type="button"
+                className="btc-btn btc-btn-secondary"
+                onClick={props.onBackHome}
+              >
+                Back to Home
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

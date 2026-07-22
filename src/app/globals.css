@@ -310,3 +310,342 @@ html[data-btc-reduce-motion="1"] * {
   color: #7BE87A;
   font-weight: 600;
 }
+
+/* ══════════════════════════════════════════════════════════
+   v1.2.0 — Game feel (quiz surfaces only, scoped to .btc-game)
+   ══════════════════════════════════════════════════════════ */
+
+.btc-game {
+  --game-ink: #f3f0ff;
+  --game-muted: rgba(243, 240, 255, 0.72);
+  color: var(--game-ink);
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(74, 20, 140, 0.6), transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(20, 40, 140, 0.4), transparent 60%),
+    linear-gradient(180deg, #0a0020, #000a1a);
+  border-radius: 20px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.btc-game h2, .btc-card .btc-game h2,
+.btc-game h3, .btc-card .btc-game h3 { color: var(--game-ink) !important; }
+.btc-game .btc-text-muted, .btc-card .btc-game .btc-text-muted { color: var(--game-muted) !important; }
+
+/* Starfield — 50 stars are spawned as spans by JS */
+.btc-starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.btc-game > *:not(.btc-starfield) { position: relative; z-index: 1; }
+.btc-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  animation: btc-twinkle var(--twinkle-dur, 3s) ease-in-out infinite alternate,
+    btc-drift var(--drift-dur, 40s) linear infinite alternate;
+}
+.btc-star.gold { background: #ffd700; }
+@keyframes btc-twinkle {
+  from { opacity: 0.15; }
+  to { opacity: 0.9; }
+}
+@keyframes btc-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(14px); }
+}
+
+/* Coach card — 3D feel (light-content safe: transform + shadow + gold ring) */
+.coach-card {
+  border-radius: 24px;
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.25),
+    0 0 0 1px rgba(255, 215, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: perspective(1000px) rotateX(2deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.coach-card:hover {
+  transform: perspective(1000px) rotateX(0deg) scale(1.02);
+  box-shadow:
+    0 24px 48px rgba(15, 23, 42, 0.3),
+    0 0 0 1px rgba(255, 215, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Answer buttons — 3D pressable game-show buzzers */
+.answer-btn {
+  background: linear-gradient(180deg, #4a2080 0%, #2d1060 100%);
+  box-shadow:
+    0 6px 0 #1a0840,
+    0 8px 20px rgba(74, 32, 128, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  border: none;
+  padding: 16px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.1s;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.answer-btn:active {
+  transform: translateY(5px);
+  box-shadow:
+    0 1px 0 #1a0840,
+    0 2px 8px rgba(74, 32, 128, 0.3);
+}
+.answer-btn:disabled { cursor: default; }
+.answer-btn .answer-letter {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffd700;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.answer-btn.correct {
+  background: linear-gradient(180deg, #7be87a 0%, #4caf50 100%);
+  box-shadow: 0 6px 0 #2e7d32, 0 0 30px rgba(123, 232, 122, 0.6);
+  animation: correct-pulse 0.5s ease;
+  color: #052e0a;
+}
+.answer-btn.correct .answer-letter { color: #052e0a; border-color: rgba(0,0,0,0.25); }
+.answer-btn.wrong {
+  background: linear-gradient(180deg, #ff6b6b 0%, #c62828 100%);
+  box-shadow: 0 6px 0 #7b1a1a;
+  animation: wrong-shake 0.4s ease;
+}
+.answer-btn.dimmed { opacity: 0.55; }
+@keyframes correct-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05) translateY(-2px); }
+  100% { transform: scale(1); }
+}
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* Arcade score */
+.score-display {
+  font-size: 34px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.5);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  line-height: 1;
+}
+.btc-points-fly {
+  position: absolute;
+  font-weight: 900;
+  font-size: 20px;
+  color: #ffd700;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  animation: btc-fly-up 0.9s ease-out forwards;
+  z-index: 5;
+}
+@keyframes btc-fly-up {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  15% { opacity: 1; transform: translateY(-8px) scale(1.15); }
+  100% { opacity: 0; transform: translateY(-56px) scale(1); }
+}
+
+/* Question card entrance */
+.question-card {
+  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: question-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes question-enter {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Timer bar */
+.timer-track {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  margin: 10px 0 14px;
+}
+.timer-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: #7be87a;
+  transition: width 1s linear, background-color 0.5s;
+}
+.timer-bar.warn { background: #ffd54f; }
+.timer-bar.danger { background: #ff6b6b; animation: btc-timer-pulse 0.6s ease-in-out infinite; }
+@keyframes btc-timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* Streak flame */
+.btc-streak-flame {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 140, 0, 0.18);
+  border: 1px solid rgba(255, 160, 40, 0.5);
+  color: #ffc266;
+  font-weight: 800;
+  font-size: 13px;
+  animation: btc-flame-pop 0.45s ease;
+}
+@keyframes btc-flame-pop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Verse reveal — golden glow */
+.verse-reveal {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 215, 0, 0.55);
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffe9a8;
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.25);
+  font-size: 14px;
+  animation: btc-verse-in 0.6s ease;
+}
+@keyframes btc-verse-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Winner celebration */
+.btc-winner {
+  text-align: center;
+  padding: 24px 12px;
+  animation: question-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btc-winner .btc-winner-avatar {
+  font-size: 64px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+  animation: btc-perfect-bounce 900ms ease-out;
+}
+.btc-podium-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+.btc-podium-row.leader {
+  background: rgba(255, 215, 0, 0.14);
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+/* Pro locked placeholders */
+.pro-locked {
+  opacity: 0.6;
+  position: relative;
+}
+.pro-locked::after {
+  content: '🔒 Pro';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #b8860b;
+}
+.btc-game .pro-locked::after { color: #ffd700; }
+
+/* Modal overlay (safety notice + What's New) */
+.btc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(2, 6, 23, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: btc-verse-in 0.25s ease;
+}
+.btc-modal {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
+  animation: question-enter 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.btc-modal h3 { margin-top: 0; }
+.btc-modal-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.btc-modal-row .icon { flex-shrink: 0; font-size: 16px; }
+
+/* Nickname picker chips */
+.btc-name-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+.btc-name-chip {
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  padding: 6px 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--btc-ink);
+  transition: background-color 120ms ease, transform 80ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btc-name-chip:active { transform: scale(0.95); }
+.btc-name-chip.picked {
+  background: #eef2ff;
+  border-color: var(--btc-accent);
+  color: var(--btc-accent-deep);
+}

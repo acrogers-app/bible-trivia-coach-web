@@ -13,5 +13,13 @@ export default function FamilyModeChrome() {
   const familyMode = useSyncExternalStore(onFamilyModeChanged, isFamilyMode, () => false);
 
   if (!familyMode) return <Analytics />;
-  return <div className="family-mode-banner">👨‍👩‍👧 Family Mode — Child Safe ✓</div>;
+  return (
+    <div className="family-mode-banner">
+      👨‍👩‍👧 Family Mode — Child Safe ✓
+      <div style={{ fontSize: 11, fontWeight: 500, opacity: 0.9 }}>
+        📖 Family Safe Content ✓ — all content is scripture-based · analytics
+        and AI features are off in Family Mode
+      </div>
+    </div>
+  );
 }

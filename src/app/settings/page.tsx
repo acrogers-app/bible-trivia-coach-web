@@ -325,6 +325,9 @@ export default function SettingsPage() {
             so everyone can see it&apos;s active. A parent PIN is required to turn it
             back off. Applies immediately — no Save needed.
           </p>
+          <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 6, marginBottom: 0 }}>
+            💡 Set a PIN so kids can&apos;t change settings without permission.
+          </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <input
               type="password"
