@@ -122,3 +122,25 @@ Vercel deployments are capped at 100/24 hours. During overnight or heavy session
 - Never rotate Stripe keys without explicit written permission.
 - Never add domains without checking if they are registered first.
 - Always verify domains exist before referencing them in code.
+
+## 🔐 Secrets Policy — NON-NEGOTIABLE
+NEVER put any secret, key, token, or password in any file.
+NEVER commit .env files.
+NEVER commit Config.plist (or any plist) with secrets.
+NEVER commit any file with "key=value" where value looks like an API key.
+
+If a task requires an API key:
+1. Check Vercel env vars first
+2. If missing, ask Allen to add it
+3. Never create a placeholder with a real key format
+4. Never hardcode fallbacks
+
+Secrets live in:
+- Vercel Environment Variables (server)
+- iOS Keychain (device)
+- macOS Keychain (local dev only)
+NOWHERE ELSE.
+
+A pre-commit hook in this repo blocks likely secrets (reinstall after fresh
+clones: `cp /Volumes/Nvme4TB/docs/pre-commit-hook.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`).
+See: /Volumes/Nvme4TB/docs/SECRETS_POLICY.md and /Volumes/Nvme4TB/docs/ENV_VARS.md
