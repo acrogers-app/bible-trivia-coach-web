@@ -568,9 +568,9 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
         <div
           style={{
             borderRadius: 16,
-            border: '1px solid #e5e7eb',
+            border: '1px solid var(--btc-border)',
             padding: 12,
-            backgroundColor: '#f9fafb',
+            backgroundColor: 'var(--btc-panel-bg)',
           }}
         >
           <div
@@ -585,7 +585,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
           </div>
           {bookSummary.keyThemes && bookSummary.keyThemes.length > 0 && (
             <div
-              style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
+              style={{ fontSize: 12, color: 'var(--btc-text-mid)', marginTop: 4 }}
             >
               <div style={{ fontWeight: 600, marginBottom: 2 }}>
                 Key themes:
@@ -599,7 +599,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
           )}
           {bookSummary.keyVerses && bookSummary.keyVerses.length > 0 && (
             <div
-              style={{ fontSize: 12, color: '#374151', marginTop: 4 }}
+              style={{ fontSize: 12, color: 'var(--btc-text-mid)', marginTop: 4 }}
             >
               <span style={{ fontWeight: 600 }}>Key verses:</span>{' '}
               {bookSummary.keyVerses.join(', ')}
@@ -612,7 +612,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
         <div
           style={{
             borderRadius: 16,
-            border: '1px solid #e5e7eb',
+            border: '1px solid var(--btc-border)',
             padding: 12,
             backgroundColor: '#fefce8',
           }}
@@ -645,7 +645,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
           )}
           {reflection.prayerSuggestion && (
             <div
-              style={{ fontSize: 12, color: '#374151', marginTop: 6 }}
+              style={{ fontSize: 12, color: 'var(--btc-text-mid)', marginTop: 6 }}
             >
               Suggested prayer: {reflection.prayerSuggestion}
             </div>
@@ -853,7 +853,7 @@ function FixedSummaryScreen(props: {
         padding: 16,
         borderRadius: 16,
         backgroundColor: '#f3f4f6',
-        border: '1px solid #e5e7eb',
+        border: '1px solid var(--btc-border)',
         color: 'var(--btc-ink)',
       };
 
@@ -923,7 +923,7 @@ function FixedSummaryScreen(props: {
                 background: `conic-gradient(${
                   isPerfect ? '#fefce8' : percent >= 60 ? 'var(--btc-success)' : '#f59e0b'
                 } ${percent * 3.6}deg, ${
-                  isPerfect ? 'rgba(255,255,255,0.25)' : '#e5e7eb'
+                  isPerfect ? 'rgba(255,255,255,0.25)' : 'var(--btc-border)'
                 } 0deg)`,
                 display: 'flex',
                 alignItems: 'center',
@@ -935,7 +935,7 @@ function FixedSummaryScreen(props: {
                   width: 72,
                   height: 72,
                   borderRadius: '50%',
-                  backgroundColor: isPerfect ? 'rgba(22,163,74,0.95)' : '#ffffff',
+                  backgroundColor: isPerfect ? 'rgba(22,163,74,0.95)' : 'var(--btc-surface)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -982,7 +982,7 @@ function FixedSummaryScreen(props: {
                   : '#e0f2fe'
                 : isPerfect
                 ? 'rgba(15,118,110,0.4)'
-                : '#e5e7eb';
+                : 'var(--btc-border)';
               const border = unlocked
                 ? 'none'
                 : isPerfect
@@ -993,7 +993,7 @@ function FixedSummaryScreen(props: {
                   ? '#fefce8'
                   : '#0f172a'
                 : isPerfect
-                ? '#e5e7eb'
+                ? 'var(--btc-border)'
                 : 'var(--btc-text-muted)';
 
               return (
@@ -1061,7 +1061,7 @@ function FixedSummaryScreen(props: {
             <div
               style={{
                 fontSize: 13,
-                color: isPerfect ? 'inherit' : '#374151',
+                color: isPerfect ? 'inherit' : 'var(--btc-text-mid)',
               }}
             >
               {playerName ? `Nice progress, ${playerName}! ` : ''}God rewards
@@ -1148,7 +1148,7 @@ function FixedSummaryScreen(props: {
                 marginTop: 4,
                 height: 10,
                 borderRadius: 999,
-                backgroundColor: '#e5e7eb',
+                backgroundColor: 'var(--btc-border)',
                 overflow: 'hidden',
               }}
             >
@@ -1199,9 +1199,9 @@ function FixedSummaryScreen(props: {
               key={question.id}
               style={{
                 borderRadius: 12,
-                border: '1px solid #e5e7eb',
+                border: '1px solid var(--btc-border)',
                 padding: 12,
-                backgroundColor: '#ffffff',
+                backgroundColor: 'var(--btc-surface)',
               }}
             >
               <div
@@ -1697,7 +1697,7 @@ export default function PlayPage() {
             </p>
             <p
               style={{
-                color: '#374151',
+                color: 'var(--btc-text-mid)',
                 fontSize: 14,
                 whiteSpace: 'pre-wrap',
               }}
@@ -1910,7 +1910,7 @@ function BookPickerScreen(props: {
   const selectStyle = {
     width: '100%',
     borderRadius: 12,
-    border: '1px solid rgba(0,0,0,0.15)',
+    border: '1px solid var(--btc-border)',
     padding: '12px',
     fontSize: 15,
     background: 'white',
@@ -2196,8 +2196,8 @@ function HomeScreen(props: {
                   style={{
                     marginTop: 2,
                     borderRadius: 999,
-                    border: '1px solid #d1d5db',
-                    background: '#ffffff',
+                    border: '1px solid var(--btc-border)',
+                    background: 'var(--btc-surface)',
                     color: 'var(--btc-ink)',
                     cursor: 'pointer',
                     fontSize: 13,
@@ -2264,7 +2264,7 @@ function HomeScreen(props: {
             padding: 16,
             borderRadius: 20,
             border: '1px solid #c7d2fe',
-            background: 'linear-gradient(135deg, #eef2ff, #e0f2fe)',
+            background: 'var(--btc-hero-grad)',
             display: 'flex',
             alignItems: 'center',
             gap: 14,
@@ -2416,7 +2416,7 @@ function HomeScreen(props: {
             style={{
               textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border: props.dailyChallengeCompleted
-                ? '1.5px solid #86efac' : '1px solid rgba(0,0,0,0.10)',
+                ? '1.5px solid #86efac' : '1px solid var(--btc-border)',
               background: props.dailyChallengeCompleted
                 ? 'rgba(34,197,94,0.06)' : 'white',
               minHeight: 90,
@@ -2438,7 +2438,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onStartQuickQuiz}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📖</div>
             <div style={{ fontWeight:800 }}>Quick Quiz</div>
@@ -2449,7 +2449,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onOpenFamilyNight}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>👨‍👩‍👧</div>
             <div style={{ fontWeight:800 }}>Family Night</div>
@@ -2460,7 +2460,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onOpenBookPicker}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90 }}
+              border:'1px solid var(--btc-border)', background:'white', minHeight:90 }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📚</div>
             <div style={{ fontWeight:800 }}>By Book</div>
@@ -2471,7 +2471,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onStartHistoryQuiz}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📜</div>
             <div style={{ fontWeight:800 }}>Bible History</div>
@@ -2482,7 +2482,7 @@ function HomeScreen(props: {
             type="button"
             onClick={() => { window.location.href = '/levels'; }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,0.10)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>🎯</div>
             <div style={{ fontWeight:800 }}>Levels</div>
@@ -2500,7 +2500,7 @@ function HomeScreen(props: {
             marginTop: 14,
             padding: 14,
             borderRadius: 16,
-            border: '1px solid rgba(0,0,0,0.10)',
+            border: '1px solid var(--btc-border)',
             background: 'linear-gradient(135deg, #fefce8, #fff7ed)',
           }}
         >
@@ -2580,7 +2580,7 @@ function PathSection(props: { onStartPathQuiz: (key: PathKey) => void }) {
                 cursor: unlocked ? 'pointer' : 'default',
                 border: entry?.completed
                   ? '1.5px solid #86efac'
-                  : '1px solid rgba(0,0,0,0.10)',
+                  : '1px solid var(--btc-border)',
                 background: entry?.completed
                   ? 'rgba(34,197,94,0.06)'
                   : 'white',
@@ -2646,13 +2646,13 @@ function DayPickerRow(props: {
             onChange={e => setQuery(e.target.value)}
             style={{
               width: '100%', padding: '10px 14px', borderRadius: 12,
-              border: '1px solid rgba(0,0,0,0.15)', marginBottom: 6,
+              border: '1px solid var(--btc-border)', marginBottom: 6,
               boxSizing: 'border-box', fontSize: 14,
             }}
           />
           <div style={{
             maxHeight: 220, overflowY: 'auto', borderRadius: 12,
-            border: '1px solid rgba(0,0,0,0.10)', background: 'white',
+            border: '1px solid var(--btc-border)', background: 'white',
           }}>
             {filtered.map((d) => (
               <button
@@ -2718,10 +2718,10 @@ function Row(props: {
       style={{
         width: '100%',
         textAlign: 'left',
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--btc-surface)',
         borderRadius: 999,
         padding: '11px 16px',
-        border: '1px solid #9ca3af',
+        border: '1px solid var(--btc-border-strong)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -2751,7 +2751,7 @@ function DisabledRow(props: { title: string }) {
         backgroundColor: '#f3f4f6',
         borderRadius: 999,
         padding: '10px 16px',
-        border: '1px dashed #9ca3af',
+        border: '1px dashed var(--btc-border-strong)',
         marginBottom: 10,
         color: 'var(--btc-text-muted)',
         fontSize: 14,
@@ -2944,7 +2944,7 @@ function DailyReadingScreen(props: {
             marginTop: 12,
             padding: 16,
             borderRadius: 16,
-            backgroundColor: '#eef2ff',
+            backgroundColor: 'var(--btc-selected-bg)',
             color: 'var(--btc-ink)',
           }}
         >
@@ -2972,10 +2972,10 @@ function DailyReadingScreen(props: {
             marginTop: 12,
             padding: 16,
             borderRadius: 16,
-            backgroundColor: '#f9fafb',
+            backgroundColor: 'var(--btc-panel-bg)',
             maxHeight: '60vh',
             overflowY: 'auto',
-            border: '1px solid #e5e7eb',
+            border: '1px solid var(--btc-border)',
           }}
         >
           {lines.map((v, idx) => {
@@ -3045,9 +3045,9 @@ function DailyReadingScreen(props: {
             style={{
               padding: '8px 14px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
+              border: '1px solid var(--btc-border)',
               backgroundColor:
-                isSpeaking && !isPaused ? '#e5e7eb' : '#f9fafb',
+                isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-panel-bg)',
               cursor: isSpeaking && !isPaused ? 'default' : 'pointer',
             }}
           >
@@ -3059,8 +3059,8 @@ function DailyReadingScreen(props: {
             style={{
               padding: '8px 14px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
-              backgroundColor: '#f9fafb',
+              border: '1px solid var(--btc-border)',
+              backgroundColor: 'var(--btc-panel-bg)',
               cursor: !isSpeaking ? 'default' : 'pointer',
             }}
           >
@@ -3071,8 +3071,8 @@ function DailyReadingScreen(props: {
             style={{
               padding: '8px 14px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
-              backgroundColor: '#f9fafb',
+              border: '1px solid var(--btc-border)',
+              backgroundColor: 'var(--btc-panel-bg)',
               cursor: 'pointer',
             }}
           >
@@ -3797,8 +3797,8 @@ function FamilySetupScreen(props: {
           marginBottom: 16,
           padding: 12,
           borderRadius: 12,
-          backgroundColor: '#f9fafb',
-          border: '1px solid #e5e7eb',
+          backgroundColor: 'var(--btc-panel-bg)',
+          border: '1px solid var(--btc-border)',
         }}
       >
         <div
@@ -3829,7 +3829,7 @@ function FamilySetupScreen(props: {
                 style={{
                   flex: 1,
                   borderRadius: 999,
-                  border: '1px solid #e5e7eb',
+                  border: '1px solid var(--btc-border)',
                   padding: '6px 10px',
                   fontSize: 14,
                 }}
@@ -3860,8 +3860,8 @@ function FamilySetupScreen(props: {
               style={{
                 marginTop: 4,
                 borderRadius: 999,
-                border: '1px dashed #9ca3af',
-                backgroundColor: '#ffffff',
+                border: '1px dashed var(--btc-border-strong)',
+                backgroundColor: 'var(--btc-surface)',
                 color: 'var(--btc-ink)',
                 padding: '6px 10px',
                 fontSize: 13,
@@ -3915,8 +3915,8 @@ function FamilySetupScreen(props: {
           marginBottom: 16,
           padding: 12,
           borderRadius: 12,
-          backgroundColor: '#f9fafb',
-          border: '1px solid #e5e7eb',
+          backgroundColor: 'var(--btc-panel-bg)',
+          border: '1px solid var(--btc-border)',
         }}
       >
         <div
@@ -3938,7 +3938,7 @@ function FamilySetupScreen(props: {
           style={{
             width: 120,
             borderRadius: 999,
-            border: '1px solid #e5e7eb',
+            border: '1px solid var(--btc-border)',
             padding: '6px 10px',
             fontSize: 14,
           }}
@@ -4417,8 +4417,8 @@ function PassageInline(props: {
         marginTop: 16,
         padding: 12,
         borderRadius: 12,
-        border: '1px solid #e5e7eb',
-        backgroundColor: '#f9fafb',
+        border: '1px solid var(--btc-border)',
+        backgroundColor: 'var(--btc-panel-bg)',
       }}
     >
       <div
@@ -4449,9 +4449,9 @@ function PassageInline(props: {
             style={{
               padding: '4px 10px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
+              border: '1px solid var(--btc-border)',
               backgroundColor:
-                isSpeaking && !isPaused ? '#e5e7eb' : '#ffffff',
+                isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-surface)',
               cursor: isSpeaking && !isPaused ? 'default' : 'pointer',
               fontSize: 12,
             }}
@@ -4464,8 +4464,8 @@ function PassageInline(props: {
             style={{
               padding: '4px 10px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
-              backgroundColor: '#ffffff',
+              border: '1px solid var(--btc-border)',
+              backgroundColor: 'var(--btc-surface)',
               cursor: !isSpeaking ? 'default' : 'pointer',
               fontSize: 12,
             }}
@@ -4477,8 +4477,8 @@ function PassageInline(props: {
             style={{
               padding: '4px 10px',
               borderRadius: 999,
-              border: '1px solid #e5e7eb',
-              backgroundColor: '#ffffff',
+              border: '1px solid var(--btc-border)',
+              backgroundColor: 'var(--btc-surface)',
               cursor: 'pointer',
               fontSize: 12,
             }}

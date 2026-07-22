@@ -32,16 +32,19 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 1.5rem 0.75rem;
-  background-color: #020617; /* slate-950 */
+  background: var(--app-root-bg, #020617);
+  transition: background 0.3s ease;
 }
 
 .btc-card {
   width: 100%;
   max-width: 560px;
-  background-color: #ffffff;
+  background-color: var(--app-card-bg, #ffffff);
+  border: 1px solid var(--app-card-border, transparent);
   border-radius: 1.5rem;
   padding: 1.75rem 1.75rem 2.25rem;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.75);
+  box-shadow: var(--app-card-shadow, 0 24px 60px rgba(15, 23, 42, 0.75));
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Phone: full-screen card */
@@ -278,9 +281,9 @@ html[data-btc-reduce-motion="1"] * {
 .btc-btn-warm { background-color: #d97706; }
 .btc-btn-dark { background-color: var(--btc-ink); }
 .btc-btn-secondary {
-  background-color: #ffffff;
+  background-color: var(--btc-surface);
   color: var(--btc-ink);
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--btc-border);
 }
 
 /* Quiz micro-feedback */
@@ -319,7 +322,7 @@ html[data-btc-reduce-motion="1"] * {
    ══════════════════════════════════════════════════════════ */
 
 :root {
-  /* dark = default */
+  /* dark = default (night sky) */
   --game-ink: #f3f0ff;
   --game-muted: rgba(243, 240, 255, 0.72);
   --game-bg:
@@ -328,6 +331,7 @@ html[data-btc-reduce-motion="1"] * {
     linear-gradient(180deg, #0a0020, #000a1a);
   --game-card-bg: rgba(255, 255, 255, 0.08);
   --game-card-border: rgba(255, 255, 255, 0.18);
+  --game-card-shadow: none;
   --game-star: #ffffff;
   --game-star-gold: #ffd700;
   --game-score: #ffd700;
@@ -345,65 +349,163 @@ html[data-btc-reduce-motion="1"] * {
   --game-chip-bg: rgba(255, 255, 255, 0.1);
   --game-chip-border: rgba(255, 255, 255, 0.35);
   --game-chip-ink: #dbe4ff;
+  --game-btn-grad: linear-gradient(180deg, #4a2080 0%, #2d1060 100%);
+  --game-btn-shadow: #1a0840;
+  --game-btn-glow: rgba(74, 32, 128, 0.4);
+  --game-letter-bg: rgba(255, 255, 255, 0.12);
+  --game-letter-border: rgba(255, 255, 255, 0.35);
+  --game-letter-ink: #ffd700;
+  --game-timer-track: rgba(255, 255, 255, 0.15);
+  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* App shell (non-game screens) — dark defaults match the pre-v1.2.2 look:
+     navy surround, white card, Tailwind-gray text/borders. */
+  --app-root-bg: #020617;
+  --app-card-bg: #ffffff;
+  --app-card-border: transparent;
+  --app-card-shadow: 0 24px 60px rgba(15, 23, 42, 0.75);
+  --btc-surface: #ffffff;
+  --btc-panel-bg: #f9fafb;
+  --btc-selected-bg: #eef2ff;
+  --btc-border: #e5e7eb;
+  --btc-border-strong: #9ca3af;
+  --btc-text-strong: #1e293b;
+  --btc-text-mid: #374151;
+  --btc-nav-bg: #ffffff;
+  --btc-nav-border: rgba(0, 0, 0, 0.09);
+  --btc-hero-grad: linear-gradient(135deg, #eef2ff, #e0f2fe);
+  --btc-deco-grad: radial-gradient(circle at top left, #bfdbfe, #f9fafb 60%, #bbf7d0);
 }
 
-/* Light = bright scrolls / parchment. Two routes in: explicit data-theme,
-   or system preference when the user hasn't chosen manually. */
+/* Light = illuminated manuscript: warm parchment, rich gold, deep readable
+   ink, royal-purple buzzers. Two routes in: explicit data-theme, or system
+   preference when the user hasn't chosen manually. Keep BOTH blocks below
+   identical — they are the same palette reached two ways. */
 :root[data-theme='light'] {
-  --game-ink: #241245;
-  --game-muted: rgba(36, 18, 69, 0.62);
+  --game-ink: #1a1040;
+  --game-muted: rgba(26, 16, 64, 0.55);
   --game-bg:
-    radial-gradient(ellipse at 30% 20%, rgba(184, 134, 11, 0.14), transparent 60%),
-    radial-gradient(ellipse at 70% 80%, rgba(106, 27, 154, 0.1), transparent 60%),
-    linear-gradient(180deg, #fdf8ec, #f3ead6);
-  --game-card-bg: rgba(255, 255, 255, 0.78);
-  --game-card-border: rgba(106, 27, 154, 0.22);
-  --game-star: rgba(90, 50, 180, 0.35);
-  --game-star-gold: rgba(184, 134, 11, 0.5);
-  --game-score: #b8860b;
-  --game-score-glow: rgba(184, 134, 11, 0.45);
+    repeating-linear-gradient(0deg, transparent, transparent 40px,
+      rgba(139, 90, 43, 0.03) 40px, rgba(139, 90, 43, 0.03) 41px),
+    radial-gradient(ellipse at 25% 15%, rgba(255, 215, 0, 0.12), transparent 55%),
+    linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 100%);
+  --game-card-bg: #ffffff;
+  --game-card-border: rgba(139, 90, 43, 0.25);
+  --game-card-shadow: 0 4px 20px rgba(139, 90, 43, 0.15);
+  --game-star: rgba(139, 90, 43, 0.3);
+  --game-star-gold: rgba(139, 105, 20, 0.45);
+  --game-score: #8b6914;
+  --game-score-glow: rgba(139, 90, 43, 0.25);
   --game-good: #2e7d32;
   --game-bad: #b91c1c;
-  --game-verse-ink: #7a5800;
-  --game-verse-bg: rgba(255, 215, 0, 0.16);
-  --game-verse-border: rgba(184, 134, 11, 0.55);
-  --game-flame-ink: #b45309;
-  --game-flame-bg: rgba(255, 140, 0, 0.14);
-  --game-flame-border: rgba(180, 83, 9, 0.4);
-  --game-row-bg: rgba(36, 18, 69, 0.06);
-  --game-row-border: rgba(36, 18, 69, 0.12);
-  --game-chip-bg: rgba(74, 32, 128, 0.08);
-  --game-chip-border: rgba(74, 32, 128, 0.35);
-  --game-chip-ink: #4a2080;
+  --game-verse-ink: #5a3a10;
+  --game-verse-bg: rgba(139, 90, 43, 0.08);
+  --game-verse-border: rgba(139, 90, 43, 0.3);
+  --game-flame-ink: #8a4b08;
+  --game-flame-bg: rgba(139, 90, 43, 0.12);
+  --game-flame-border: rgba(139, 90, 43, 0.35);
+  --game-row-bg: rgba(139, 90, 43, 0.07);
+  --game-row-border: rgba(139, 90, 43, 0.18);
+  --game-chip-bg: rgba(139, 90, 43, 0.08);
+  --game-chip-border: rgba(139, 90, 43, 0.35);
+  --game-chip-ink: #5a3a10;
+  --game-btn-grad: linear-gradient(180deg, #5b2bd0 0%, #3d1a9e 100%);
+  --game-btn-shadow: #2a1060;
+  --game-btn-glow: rgba(91, 43, 208, 0.35);
+  --game-letter-bg: rgba(255, 215, 0, 0.2);
+  --game-letter-border: rgba(255, 215, 0, 0.5);
+  --game-letter-ink: #ffd700;
+  --game-timer-track: rgba(139, 90, 43, 0.15);
+  --toggle-bg: rgba(139, 90, 43, 0.12);
+  --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* App shell — warm parchment: cream card on a deeper vellum surround,
+     brown ink, gold accents. Deliberately saturated, never washed-out white. */
+  --app-root-bg:
+    radial-gradient(ellipse at 30% 10%, rgba(212, 160, 23, 0.22), transparent 55%),
+    linear-gradient(160deg, #e9dcc0, #d8c49e);
+  --app-card-bg: #faf3e2;
+  --app-card-border: rgba(139, 90, 43, 0.3);
+  --app-card-shadow: 0 24px 60px rgba(101, 67, 33, 0.28);
+  --btc-surface: #fffaf0;
+  --btc-panel-bg: #f3ead4;
+  --btc-selected-bg: rgba(184, 134, 11, 0.16);
+  --btc-border: rgba(139, 90, 43, 0.25);
+  --btc-border-strong: rgba(139, 90, 43, 0.5);
+  --btc-text-strong: #3a2c15;
+  --btc-text-mid: #55432a;
+  --btc-nav-bg: #f6eed9;
+  --btc-nav-border: rgba(139, 90, 43, 0.3);
+  --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
+  --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
+  --btc-ink: #2e2110;
+  --btc-text-main: #2e2110;
+  --btc-text-subtle: #63512f;
+  --btc-text-muted: #7c683f;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
-    --game-ink: #241245;
-    --game-muted: rgba(36, 18, 69, 0.62);
+    --game-ink: #1a1040;
+    --game-muted: rgba(26, 16, 64, 0.55);
     --game-bg:
-      radial-gradient(ellipse at 30% 20%, rgba(184, 134, 11, 0.14), transparent 60%),
-      radial-gradient(ellipse at 70% 80%, rgba(106, 27, 154, 0.1), transparent 60%),
-      linear-gradient(180deg, #fdf8ec, #f3ead6);
-    --game-card-bg: rgba(255, 255, 255, 0.78);
-    --game-card-border: rgba(106, 27, 154, 0.22);
-    --game-star: rgba(90, 50, 180, 0.35);
-    --game-star-gold: rgba(184, 134, 11, 0.5);
-    --game-score: #b8860b;
-    --game-score-glow: rgba(184, 134, 11, 0.45);
+      repeating-linear-gradient(0deg, transparent, transparent 40px,
+        rgba(139, 90, 43, 0.03) 40px, rgba(139, 90, 43, 0.03) 41px),
+      radial-gradient(ellipse at 25% 15%, rgba(255, 215, 0, 0.12), transparent 55%),
+      linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 100%);
+    --game-card-bg: #ffffff;
+    --game-card-border: rgba(139, 90, 43, 0.25);
+    --game-card-shadow: 0 4px 20px rgba(139, 90, 43, 0.15);
+    --game-star: rgba(139, 90, 43, 0.3);
+    --game-star-gold: rgba(139, 105, 20, 0.45);
+    --game-score: #8b6914;
+    --game-score-glow: rgba(139, 90, 43, 0.25);
     --game-good: #2e7d32;
     --game-bad: #b91c1c;
-    --game-verse-ink: #7a5800;
-    --game-verse-bg: rgba(255, 215, 0, 0.16);
-    --game-verse-border: rgba(184, 134, 11, 0.55);
-    --game-flame-ink: #b45309;
-    --game-flame-bg: rgba(255, 140, 0, 0.14);
-    --game-flame-border: rgba(180, 83, 9, 0.4);
-    --game-row-bg: rgba(36, 18, 69, 0.06);
-    --game-row-border: rgba(36, 18, 69, 0.12);
-    --game-chip-bg: rgba(74, 32, 128, 0.08);
-    --game-chip-border: rgba(74, 32, 128, 0.35);
-    --game-chip-ink: #4a2080;
+    --game-verse-ink: #5a3a10;
+    --game-verse-bg: rgba(139, 90, 43, 0.08);
+    --game-verse-border: rgba(139, 90, 43, 0.3);
+    --game-flame-ink: #8a4b08;
+    --game-flame-bg: rgba(139, 90, 43, 0.12);
+    --game-flame-border: rgba(139, 90, 43, 0.35);
+    --game-row-bg: rgba(139, 90, 43, 0.07);
+    --game-row-border: rgba(139, 90, 43, 0.18);
+    --game-chip-bg: rgba(139, 90, 43, 0.08);
+    --game-chip-border: rgba(139, 90, 43, 0.35);
+    --game-chip-ink: #5a3a10;
+    --game-btn-grad: linear-gradient(180deg, #5b2bd0 0%, #3d1a9e 100%);
+    --game-btn-shadow: #2a1060;
+    --game-btn-glow: rgba(91, 43, 208, 0.35);
+    --game-letter-bg: rgba(255, 215, 0, 0.2);
+    --game-letter-border: rgba(255, 215, 0, 0.5);
+    --game-letter-ink: #ffd700;
+    --game-timer-track: rgba(139, 90, 43, 0.15);
+    --toggle-bg: rgba(139, 90, 43, 0.12);
+    --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    /* App shell — warm parchment (identical to the block above) */
+    --app-root-bg:
+      radial-gradient(ellipse at 30% 10%, rgba(212, 160, 23, 0.22), transparent 55%),
+      linear-gradient(160deg, #e9dcc0, #d8c49e);
+    --app-card-bg: #faf3e2;
+    --app-card-border: rgba(139, 90, 43, 0.3);
+    --app-card-shadow: 0 24px 60px rgba(101, 67, 33, 0.28);
+    --btc-surface: #fffaf0;
+    --btc-panel-bg: #f3ead4;
+    --btc-selected-bg: rgba(184, 134, 11, 0.16);
+    --btc-border: rgba(139, 90, 43, 0.25);
+    --btc-border-strong: rgba(139, 90, 43, 0.5);
+    --btc-text-strong: #3a2c15;
+    --btc-text-mid: #55432a;
+    --btc-nav-bg: #f6eed9;
+    --btc-nav-border: rgba(139, 90, 43, 0.3);
+    --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
+    --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
+    --btc-ink: #2e2110;
+    --btc-text-main: #2e2110;
+    --btc-text-subtle: #63512f;
+    --btc-text-muted: #7c683f;
   }
 }
 
@@ -414,6 +516,7 @@ html[data-btc-reduce-motion="1"] * {
   padding: 16px;
   position: relative;
   overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 .btc-game h2, .btc-card .btc-game h2,
 .btc-game h3, .btc-card .btc-game h3 { color: var(--game-ink) !important; }
@@ -464,12 +567,13 @@ html[data-btc-reduce-motion="1"] * {
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
-/* Answer buttons — 3D pressable game-show buzzers */
+/* Answer buttons — 3D pressable game-show buzzers (royal purple in BOTH
+   themes; only depth/glow colors shift) */
 .answer-btn {
-  background: linear-gradient(180deg, #4a2080 0%, #2d1060 100%);
+  background: var(--game-btn-grad);
   box-shadow:
-    0 6px 0 #1a0840,
-    0 8px 20px rgba(74, 32, 128, 0.4),
+    0 6px 0 var(--game-btn-shadow),
+    0 8px 20px var(--game-btn-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   border: none;
@@ -488,8 +592,8 @@ html[data-btc-reduce-motion="1"] * {
 .answer-btn:active {
   transform: translateY(5px);
   box-shadow:
-    0 1px 0 #1a0840,
-    0 2px 8px rgba(74, 32, 128, 0.3);
+    0 1px 0 var(--game-btn-shadow),
+    0 2px 8px var(--game-btn-glow);
 }
 .answer-btn:disabled { cursor: default; }
 .answer-btn .answer-letter {
@@ -497,9 +601,9 @@ html[data-btc-reduce-motion="1"] * {
   width: 26px;
   height: 26px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffd700;
+  border: 1px solid var(--game-letter-border);
+  background: var(--game-letter-bg);
+  color: var(--game-letter-ink);
   font-size: 12px;
   font-weight: 800;
   display: inline-flex;
@@ -563,6 +667,7 @@ html[data-btc-reduce-motion="1"] * {
   border-radius: 16px;
   background: var(--game-card-bg);
   border: 1px solid var(--game-card-border);
+  box-shadow: var(--game-card-shadow);
   animation: question-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .question-card .q-text {
@@ -579,7 +684,7 @@ html[data-btc-reduce-motion="1"] * {
 .timer-track {
   height: 6px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--game-timer-track);
   overflow: hidden;
   margin: 10px 0 14px;
 }
@@ -735,7 +840,7 @@ html[data-btc-reduce-motion="1"] * {
   max-width: 420px;
   max-height: 85vh;
   overflow-y: auto;
-  background: #ffffff;
+  background: var(--app-card-bg, #ffffff);
   border-radius: 20px;
   padding: 22px;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
@@ -760,8 +865,8 @@ html[data-btc-reduce-motion="1"] * {
 }
 .btc-name-chip {
   border-radius: 999px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
+  border: 1px solid var(--btc-border);
+  background: var(--btc-surface);
   padding: 6px 8px;
   font-size: 12.5px;
   font-weight: 600;
@@ -774,7 +879,33 @@ html[data-btc-reduce-motion="1"] * {
 }
 .btc-name-chip:active { transform: scale(0.95); }
 .btc-name-chip.picked {
-  background: #eef2ff;
+  background: var(--btc-selected-bg);
   border-color: var(--btc-accent);
   color: var(--btc-accent-deep);
 }
+
+/* Floating ☀️/🌙 theme toggle (v1.2.2) — fixed top-right on every screen.
+   Shows the mode you'll switch TO; Settings keeps the 3-way System picker. */
+.theme-toggle {
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top));
+  right: 12px;
+  z-index: 1500; /* above content, below modals (2000) */
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--btc-border-strong);
+  background: var(--btc-surface);
+  box-shadow: var(--toggle-shadow);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 80ms ease, background 0.3s ease;
+}
+.theme-toggle:active { transform: scale(0.92); }
+/* Clear the fixed Family Mode banner when it's showing */
+.theme-toggle.below-family-banner { top: calc(64px + env(safe-area-inset-top)); }

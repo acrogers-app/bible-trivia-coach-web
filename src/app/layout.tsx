@@ -5,6 +5,7 @@ import FamilyModeChrome from "../components/FamilyModeChrome";
 import RegisterServiceWorker from "../components/RegisterServiceWorker";
 import CapacitorBridge from "../components/CapacitorBridge";
 import OfflineBanner from "../components/OfflineBanner";
+import ThemeToggle from "../components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -113,7 +114,10 @@ const structuredData = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1d4ed8",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e9dcc0" },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+  ],
   viewportFit: "cover",
 };
 
@@ -143,6 +147,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         {children}
+        <ThemeToggle />
         <FamilyModeChrome />
         <OfflineBanner />
         <RegisterServiceWorker />

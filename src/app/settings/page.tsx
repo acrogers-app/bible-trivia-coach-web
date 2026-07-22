@@ -393,7 +393,7 @@ export default function SettingsPage() {
               )}
             </select>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'white', border: '1px solid rgba(0,0,0,0.10)' }}>
+            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'white', border: '1px solid var(--btc-border)' }}>
               <div style={{ fontWeight: 900, marginBottom: 6 }}>Voice quality</div>
               <div className="btc-text-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
                 Voice quality depends on your browser/device.<br />
@@ -470,8 +470,9 @@ function ThemeCard() {
     <div style={card}>
       <h2 style={h2}>🎨 Appearance</h2>
       <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
-        Quiz screens follow your device&apos;s Light/Dark setting, or pick one
-        here. Applies immediately — no Save needed.
+        The whole app follows your device&apos;s Light/Dark setting, or pick
+        one here (light is a warm parchment look). The ☀️/🌙 button in the
+        corner switches instantly too. Applies immediately — no Save needed.
       </p>
       <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
         {options.map((o) => (
@@ -489,8 +490,8 @@ function ThemeCard() {
               border:
                 pref === o.key
                   ? '1.5px solid var(--btc-accent)'
-                  : '1px solid rgba(0,0,0,0.15)',
-              background: pref === o.key ? 'rgba(37,99,235,0.10)' : '#ffffff',
+                  : '1px solid var(--btc-border)',
+              background: pref === o.key ? 'rgba(37,99,235,0.10)' : 'var(--btc-surface)',
               color: pref === o.key ? 'var(--btc-accent-deep)' : 'var(--btc-ink)',
             }}
           >
@@ -519,6 +520,6 @@ const preview: React.CSSProperties = {
   marginTop: 12,
   padding: 12,
   borderRadius: 14,
-  border: '1px solid rgba(0,0,0,0.10)',
+  border: '1px solid var(--btc-border)',
   background: 'white',
 };

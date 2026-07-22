@@ -10,7 +10,7 @@ export default function Loading() {
           textAlign: 'center',
         }}
       >
-        <p style={{ fontSize: 15, fontWeight: 600, color: '#374151' }}>
+        <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--btc-text-mid)' }}>
           Loading your Scripture journey...
         </p>
       </div>

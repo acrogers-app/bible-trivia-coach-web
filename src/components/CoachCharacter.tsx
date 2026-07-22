@@ -291,7 +291,7 @@ const CoachCharacter: FC<CoachCharacterProps> = ({ className }) => {
                 style={{
                   width: 18,
                   height: 12,
-                  background: '#ffffff',
+                  background: 'var(--btc-surface)',
                 }}
               />
               <div

@@ -6,6 +6,24 @@ fixes, 2.0.0 = major redesign). Update this file with every change and commit
 it with every release. The in-app "What's New" modal is keyed to the version
 in `src/lib/gameFx.ts` (`APP_VERSION`) — bump both together.
 
+## [1.2.2] — 2026-07-22
+### Added
+- Floating ☀️/🌙 theme toggle, fixed top-right on every screen. Tapping pins
+  Light/Dark instantly; the Settings Appearance card still offers System.
+- Light mode now themes the WHOLE app, not just quiz screens: warm parchment
+  redesign — cream card on a vellum-gold surround, brown ink, gold accents
+  (never plain white). Dark mode is visually unchanged.
+- Browser/status-bar theme color now matches the theme (parchment in light,
+  night navy in dark) instead of the old blue.
+
+### Changed
+- App-shell colors moved from ~40 hardcoded hex values to CSS variables
+  (`--app-*` / `--btc-*` tokens in globals.css) with dark defaults identical
+  to v1.2.1; quiz-game light palette refined (illuminated-manuscript
+  parchment, ruled-line texture, white question cards with warm shadows,
+  royal-purple buzzers in both themes).
+- Service worker cache bumped to `btc-v5`.
+
 ## [1.2.1] — 2026-07-21
 ### Fixed
 - TTS speech now stops immediately when Next is tapped, when navigating away,

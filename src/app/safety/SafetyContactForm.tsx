@@ -7,13 +7,13 @@ const ENDPOINT = 'https://dashboard.webeuseful.com/api/safety-contact';
 const fieldStyle = {
   width: '100%',
   boxSizing: 'border-box',
-  border: '1px solid #d1d5db',
+  border: '1px solid var(--btc-border)',
   borderRadius: 8,
   padding: '10px 12px',
   fontSize: 'var(--btc-body-size)',
   fontFamily: 'inherit',
   color: 'var(--btc-text-main)',
-  background: '#fff',
+  background: 'var(--btc-surface)',
   marginBottom: 10,
 } as const;
 

@@ -17,12 +17,12 @@ export default function NotFound() {
             fontSize: 24,
             fontWeight: 800,
             marginBottom: 8,
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           Hmm, this page seems to have wandered off
         </h1>
-        <p style={{ fontSize: 14, color: '#4b5563', marginBottom: 20 }}>
+        <p style={{ fontSize: 14, color: 'var(--btc-text-subtle)', marginBottom: 20 }}>
           No worries — even the best of us take a wrong turn now and then.
           Let&apos;s head back to your journey.
         </p>

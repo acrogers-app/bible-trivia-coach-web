@@ -22,12 +22,12 @@ export default function Error({
             fontSize: 24,
             fontWeight: 800,
             marginBottom: 8,
-            color: '#111827',
+            color: 'var(--btc-ink)',
           }}
         >
           Well, that didn&apos;t go as planned
         </h1>
-        <p style={{ fontSize: 14, color: '#4b5563', marginBottom: 20 }}>
+        <p style={{ fontSize: 14, color: 'var(--btc-text-subtle)', marginBottom: 20 }}>
           Something hiccuped on our end — it&apos;s not you. Take a breath, and
           let&apos;s pick up right where you left off.
         </p>

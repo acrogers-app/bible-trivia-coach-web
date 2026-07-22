@@ -44,7 +44,7 @@ export default function HomePage() {
                 lineHeight: 1.2,
                 fontWeight: 800,
                 marginBottom: 8,
-                color: '#111827',
+                color: 'var(--btc-ink)',
               }}
             >
               Make Scripture stick with gentle daily quizzes
@@ -52,7 +52,7 @@ export default function HomePage() {
             <p
               style={{
                 fontSize: 14,
-                color: '#4b5563',
+                color: 'var(--btc-text-subtle)',
                 marginBottom: 16,
               }}
             >
@@ -66,7 +66,7 @@ export default function HomePage() {
                 padding: 0,
                 margin: '0 0 18px',
                 fontSize: 13,
-                color: '#374151',
+                color: 'var(--btc-text-mid)',
               }}
             >
               <li>• 30‑day Gospel reading plan with auto‑generated quizzes</li>
@@ -89,7 +89,7 @@ export default function HomePage() {
               <span
                 style={{
                   fontSize: 12,
-                  color: '#6b7280',
+                  color: 'var(--btc-text-muted)',
                 }}
               >
                 Takes about 5–10 minutes. No account needed.
@@ -108,7 +108,7 @@ export default function HomePage() {
                 borderRadius: 24,
                 padding: 16,
                 background:
-                  'radial-gradient(circle at top left, #bfdbfe, #f9fafb 60%, #bbf7d0)',
+                  'var(--btc-deco-grad)',
                 boxShadow:
                   '0 20px 25px -5px rgba(15,23,42,0.15), 0 10px 10px -5px rgba(15,23,42,0.1)',
               }}
@@ -125,7 +125,7 @@ export default function HomePage() {
             <p
               style={{
                 fontSize: 12,
-                color: '#6b7280',
+                color: 'var(--btc-text-muted)',
                 marginTop: 8,
                 textAlign: 'center',
               }}
@@ -140,14 +140,14 @@ export default function HomePage() {
           style={{
             marginTop: 32,
             paddingTop: 18,
-            borderTop: '1px solid #e5e7eb',
+            borderTop: '1px solid var(--btc-border)',
           }}
         >
           <h2
             style={{
               fontSize: 16,
               fontWeight: 700,
-              color: '#111827',
+              color: 'var(--btc-ink)',
               marginBottom: 10,
               textAlign: 'center',
             }}
@@ -178,7 +178,7 @@ export default function HomePage() {
               >
                 1. Read a short passage
               </div>
-              <p style={{ fontSize: 13, color: '#374151', margin: 0 }}>
+              <p style={{ fontSize: 13, color: 'var(--btc-text-mid)', margin: 0 }}>
                 Follow a 30‑day Gospel plan or pick any book and chapter. Most
                 readings take 3–5 minutes.
               </p>
@@ -200,7 +200,7 @@ export default function HomePage() {
               >
                 2. Take a gentle quiz
               </div>
-              <p style={{ fontSize: 13, color: '#374151', margin: 0 }}>
+              <p style={{ fontSize: 13, color: 'var(--btc-text-mid)', margin: 0 }}>
                 Answer 5–10 questions drawn directly from the passage to make
                 key details and themes stick.
               </p>
@@ -222,7 +222,7 @@ export default function HomePage() {
               >
                 3. Reflect &amp; revisit
               </div>
-              <p style={{ fontSize: 13, color: '#374151', margin: 0 }}>
+              <p style={{ fontSize: 13, color: 'var(--btc-text-mid)', margin: 0 }}>
                 See summaries, reflections, and history nuggets that connect
                 what you read to everyday life.
               </p>
@@ -235,7 +235,7 @@ export default function HomePage() {
           style={{
             marginTop: 26,
             paddingTop: 18,
-            borderTop: '1px solid #e5e7eb',
+            borderTop: '1px solid var(--btc-border)',
             textAlign: 'center',
           }}
         >
@@ -243,7 +243,7 @@ export default function HomePage() {
             style={{
               fontSize: 15,
               fontWeight: 700,
-              color: '#111827',
+              color: 'var(--btc-ink)',
               marginBottom: 6,
             }}
           >
@@ -252,7 +252,7 @@ export default function HomePage() {
           <p
             style={{
               fontSize: 13,
-              color: '#4b5563',
+              color: 'var(--btc-text-subtle)',
               marginBottom: 10,
             }}
           >
@@ -264,7 +264,7 @@ export default function HomePage() {
               padding: 0,
               margin: 0,
               fontSize: 13,
-              color: '#374151',
+              color: 'var(--btc-text-mid)',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
               gap: 6,
@@ -279,14 +279,14 @@ export default function HomePage() {
         <p
           style={{
             fontSize: 13,
-            color: '#6b7280',
+            color: 'var(--btc-text-muted)',
             textAlign: 'center',
             margin: '18px 0 4px',
           }}
         >
-          <a href="/safety" style={{ color: '#374151' }}>🔒 Child Safety</a>
+          <a href="/safety" style={{ color: 'var(--btc-text-mid)' }}>🔒 Child Safety</a>
           {' · '}
-          <a href="/privacy" style={{ color: '#374151' }}>Privacy Policy</a>
+          <a href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</a>
         </p>
       </div>
     </div>
