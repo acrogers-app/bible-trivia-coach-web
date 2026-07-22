@@ -8,6 +8,7 @@
  * app start and on the window "online" event by OfflineBanner).
  */
 import { loadSettings } from './appSettings';
+import { isFamilyMode } from './familyMode';
 import { apiUrl } from './apiBase';
 
 export type QuizAnswerEvent = {
@@ -138,6 +139,7 @@ export function flushAnalyticsOutbox(): void {
     if (typeof window === 'undefined') return;
     if (flushing) return;
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+    if (isFamilyMode()) return;
     const settings = loadSettings();
     if (settings.analyticsEnabled === false) return;
 
@@ -175,6 +177,7 @@ export function flushAnalyticsOutbox(): void {
 export function sendQuizAnalytics(payload: QuizAnalyticsPayload): void {
   try {
     if (typeof window === 'undefined') return;
+    if (isFamilyMode()) return;
     const settings = loadSettings();
     if (settings.analyticsEnabled === false) return;
 

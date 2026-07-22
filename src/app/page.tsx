@@ -275,6 +275,19 @@ export default function HomePage() {
             <li>• Wanting Scripture to stick, not just be skimmed</li>
           </ul>
         </section>
+
+        <p
+          style={{
+            fontSize: 13,
+            color: '#6b7280',
+            textAlign: 'center',
+            margin: '18px 0 4px',
+          }}
+        >
+          <a href="/safety" style={{ color: '#374151' }}>🔒 Child Safety</a>
+          {' · '}
+          <a href="/privacy" style={{ color: '#374151' }}>Privacy Policy</a>
+        </p>
       </div>
     </div>
   );

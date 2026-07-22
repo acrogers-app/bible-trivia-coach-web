@@ -294,3 +294,19 @@ html[data-btc-reduce-motion="1"] * {
 /* Results screen */
 @keyframes btcFillGrow { from { width: 0%; } }
 .btc-xp-fill { animation: btcFillGrow 900ms ease-out; }
+
+/* Family Mode banner (see src/lib/familyMode.ts) */
+.family-mode-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #1a4a1a, #0d2b0d);
+  border-bottom: 2px solid #4CAF50;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #7BE87A;
+  font-weight: 600;
+}

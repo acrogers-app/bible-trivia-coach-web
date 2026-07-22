@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import BottomNav from '../../components/BottomNav';
 import {
   type AppSettings,
@@ -14,6 +14,13 @@ import {
   enableDailyNudge,
   isNativeApp,
 } from '../../lib/dailyNudge';
+import {
+  disableFamilyMode,
+  enableFamilyMode,
+  isFamilyMode,
+  isValidPin,
+  onFamilyModeChanged,
+} from '../../lib/familyMode';
 
 type VoiceOpt = SpeechSynthesisVoice;
 
@@ -87,6 +94,29 @@ export default function SettingsPage() {
   const [voices, setVoices] = useState<VoiceOpt[]>([]);
   const [status, setStatus] = useState<string>('');
   const [isNative] = useState<boolean>(() => isNativeApp());
+  const familyOn = useSyncExternalStore(onFamilyModeChanged, isFamilyMode, () => false);
+  const [familyPin, setFamilyPin] = useState<string>('');
+  const [familyStatus, setFamilyStatus] = useState<string>('');
+
+  // Applies immediately (not part of the preview-then-Save draft) so a parent
+  // can hand the device back knowing the switch is already in effect.
+  function toggleFamilyMode() {
+    if (!familyOn) {
+      if (!isValidPin(familyPin)) {
+        setFamilyStatus('Choose a 4-digit PIN first — you’ll need it to turn Family Mode off.');
+        return;
+      }
+      enableFamilyMode(familyPin);
+      setFamilyPin('');
+      setFamilyStatus('Family Mode is ON. All analytics are off. Keep the PIN somewhere safe.');
+    } else if (disableFamilyMode(familyPin)) {
+      setFamilyPin('');
+      setFamilyStatus('Family Mode is off.');
+    } else {
+      setFamilyPin('');
+      setFamilyStatus('Wrong PIN. Ask a parent to turn Family Mode off.');
+    }
+  }
 
   useEffect(() => {
     applySettingsToDocument(saved);
@@ -284,6 +314,35 @@ export default function SettingsPage() {
             <div className="btc-text-muted">
               Bible Study Coach helps you read, listen, and learn with gentle daily challenges.
             </div>
+          </div>
+        </div>
+
+        <div style={card}>
+          <h2 style={h2}>👨‍👩‍👧 Family Mode</h2>
+          <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
+            For families and classrooms. When on, <strong>all</strong> analytics are
+            turned off (overriding the toggle above) and a Family Mode banner shows
+            so everyone can see it&apos;s active. A parent PIN is required to turn it
+            back off. Applies immediately — no Save needed.
+          </p>
+          <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+            <input
+              type="password"
+              inputMode="numeric"
+              maxLength={4}
+              placeholder={familyOn ? 'Parent PIN to turn off' : 'Set a 4-digit parent PIN'}
+              value={familyPin}
+              onChange={(e) => setFamilyPin(e.target.value.replace(/\D/g, ''))}
+              style={{ ...select, width: 200 }}
+              aria-label={familyOn ? 'Parent PIN to turn Family Mode off' : 'Choose a 4-digit parent PIN'}
+            />
+            <button type="button" onClick={toggleFamilyMode} style={btnPrimary}>
+              {familyOn ? 'Turn Family Mode off' : 'Turn Family Mode on'}
+            </button>
+          </div>
+          <div className="btc-text-muted" style={{ fontSize: 12, marginTop: 8 }}>
+            {familyStatus || (familyOn ? 'Family Mode is ON.' : 'Family Mode is off.')}{' '}
+            <a href="/safety">Read our child safety promise →</a>
           </div>
         </div>
 

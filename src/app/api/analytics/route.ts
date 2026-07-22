@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { corsHeaders, corsPreflightResponse } from '../../../lib/cors';
+import { allowRequest } from '../../../lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -176,7 +177,9 @@ async function handlePost(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const res = await handlePost(req);
+  const res = allowRequest(req, 30)
+    ? await handlePost(req)
+    : NextResponse.json({ ok: false, error: 'rate limited' }, { status: 429 });
   for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
     res.headers.set(k, v);
   }

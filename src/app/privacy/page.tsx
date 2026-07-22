@@ -125,7 +125,9 @@ export default function PrivacyPage() {
           <p style={textStyle}>
             Bible Study Coach is made for all ages, including families
             playing together. Because we collect no personal information from
-            anyone, we collect none from children either.
+            anyone, we collect none from children either. See our{' '}
+            <a href="/safety">Child Safety page</a> for a plain-language guide
+            for parents and teachers.
           </p>
         </section>
 

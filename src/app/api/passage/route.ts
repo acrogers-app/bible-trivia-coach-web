@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { corsHeaders, corsPreflightResponse } from '../../../lib/cors';
+import { allowRequest } from '../../../lib/rateLimit';
 import path from 'path';
 import Database from 'better-sqlite3';
 
@@ -242,7 +243,9 @@ async function handleGet(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const res = await handleGet(req);
+  const res = allowRequest(req, 120)
+    ? await handleGet(req)
+    : NextResponse.json({ error: 'rate limited' }, { status: 429 });
   for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
     res.headers.set(k, v);
   }
