@@ -2528,17 +2528,18 @@ function HomeScreen(props: {
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
-          border:'1px solid rgba(251,191,36,0.4)', background:'var(--btc-warn-soft)',
-          color:'var(--btc-ink)' }}
+          border:'1.5px solid var(--btc-tip-border)', background:'var(--btc-tip-bg)',
+          color:'var(--btc-tip-ink)' }}
         >
           <summary style={{ cursor:'pointer', padding:'10px 14px',
-            fontWeight:700, listStyle:'none', display:'flex',
+            fontWeight:800, listStyle:'none', display:'flex',
             alignItems:'center', gap:8 }}
           >
             <span>💡</span>
             <span>Coach&apos;s tip</span>
           </summary>
-          <div style={{ padding:'8px 14px 12px', fontSize:13, color:'var(--btc-text-subtle)' }}>
+          <div style={{ padding:'8px 14px 12px', fontSize:13, lineHeight:1.55,
+            fontWeight:500, color:'var(--btc-tip-text)' }}>
             {coachTip}
           </div>
         </details>

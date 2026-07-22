@@ -95,7 +95,7 @@ export function applySettingsToDocument(s: AppSettings) {
   root.setAttribute('data-btc-reader-theme', s.readerTheme);
 }
 
-function fontFamilyFor(f: AppFont): string {
+export function fontFamilyFor(f: AppFont): string {
   if (f === 'rounded') {
     return `ui-rounded, "SF Pro Rounded", "Avenir Next", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif`;
   }

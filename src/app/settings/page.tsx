@@ -6,6 +6,7 @@ import {
   type AppSettings,
   applySettingsToDocument,
   defaultSettings,
+  fontFamilyFor,
   loadSettings,
   saveSettings,
 } from '../../lib/appSettings';
@@ -313,7 +314,14 @@ export default function SettingsPage() {
 
           <div style={preview}>
             <div style={{ fontWeight: 900, marginBottom: 6 }}>Preview</div>
-            <div className="btc-text-muted">
+            <div
+              style={{
+                color: 'var(--btc-text-mid)',
+                fontFamily: fontFamilyFor(draft.appFont),
+                fontSize: Math.round(15 * draft.appTextScale),
+                lineHeight: 1.5,
+              }}
+            >
               Bible Study Coach helps you read, listen, and learn with gentle daily challenges.
             </div>
           </div>
@@ -393,9 +401,9 @@ export default function SettingsPage() {
               )}
             </select>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'var(--btc-surface)', border: '1px solid var(--btc-border)' }}>
+            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'var(--btc-elevated)', border: '1px solid var(--btc-border)' }}>
               <div style={{ fontWeight: 900, marginBottom: 6 }}>Voice quality</div>
-              <div className="btc-text-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
+              <div style={{ fontSize: 12, lineHeight: 1.6, color: 'var(--btc-text-mid)' }}>
                 Voice quality depends on your browser/device.<br />
                 For the most natural voice on Apple devices, <strong>Safari</strong> is recommended.<br />
                 For Google-quality voices on many devices, <strong>Chrome/Edge/Opera</strong> are recommended.<br /><br />
@@ -504,10 +512,21 @@ function ThemeCard() {
   );
 }
 
-const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16, background: 'var(--btc-panel-bg)' };
+const card: React.CSSProperties = {
+  marginTop: 12,
+  padding: 14,
+  borderRadius: 16,
+  background: 'var(--btc-panel-bg)',
+  border: '1px solid var(--btc-border)',
+};
 const h2: React.CSSProperties = { margin: 0, fontSize: 16 };
 const row: React.CSSProperties = { display: 'flex', gap: 10, alignItems: 'center', marginTop: 10 };
-const labelSmall: React.CSSProperties = { fontSize: 12, opacity: 0.75, marginBottom: 6 };
+const labelSmall: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 700,
+  color: 'var(--btc-text-subtle)',
+  marginBottom: 6,
+};
 const select: React.CSSProperties = {
   width: '100%',
   padding: 10,
@@ -535,6 +554,6 @@ const preview: React.CSSProperties = {
   marginTop: 12,
   padding: 12,
   borderRadius: 14,
-  border: '1px solid var(--btc-border)',
-  background: 'var(--btc-surface)',
+  border: '1px solid var(--btc-border-strong)',
+  background: 'var(--btc-elevated)',
 };

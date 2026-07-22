@@ -7,7 +7,7 @@
  *  - page navigations      → network-first, falling back to the cached shell
  */
 
-const CACHE_NAME = 'btc-v7';
+const CACHE_NAME = 'btc-v8';
 const PRECACHE_URLS = [
   '/',
   '/play',
