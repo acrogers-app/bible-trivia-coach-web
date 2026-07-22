@@ -6,6 +6,25 @@ fixes, 2.0.0 = major redesign). Update this file with every change and commit
 it with every release. The in-app "What's New" modal is keyed to the version
 in `src/lib/gameFx.ts` (`APP_VERSION`) — bump both together.
 
+## [1.2.4] — 2026-07-22
+### Fixed
+- Day picker list readable in dark mode (dark surface, light text, themed
+  search input) — was a white box with invisible text.
+- Settings preview box, voice-quality box, selects, buttons, checkboxes,
+  and slider all dark-styled (accent-color on form controls).
+- Coach tip card is now a golden hint box in dark (gold border on dark),
+  not dull tan.
+- Quiz mode tile cards (Daily Challenge, Quick Quiz, Family Night, By Book,
+  Bible History, Levels) dark elevated instead of white — they also never
+  set a text color, so they'd have shown black-on-dark once fixed.
+- Locked path cards more visible in dark (opacity 0.55 → 0.7, themed surface).
+- Quiz by Book selects dark styled; global rule themes select option lists.
+- Bible Coach Pro banner now indigo-tinted and visible in dark.
+- /read referenced four CSS tokens that were never defined
+  (--btc-input-bg/--btc-input-border/--btc-text/--btc-btn-bg) — now aliased
+  to the themed tokens.
+- Service worker cache bumped to `btc-v7`.
+
 ## [1.2.3] — 2026-07-22
 ### Changed
 - Light mode: bright white with indigo accents (not parchment).

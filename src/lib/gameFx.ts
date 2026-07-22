@@ -2,7 +2,7 @@
 // version-gated "What's New", and the (very) subtle timer tick.
 // Everything here is device-local: no player data ever leaves the device.
 
-export const APP_VERSION = '1.2.3';
+export const APP_VERSION = '1.2.4';
 
 // localStorage as an external store (for useSyncExternalStore — the repo's
 // lint forbids reading localStorage into state inside effects).

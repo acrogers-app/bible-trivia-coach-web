@@ -292,7 +292,7 @@ export default function ReadPage() {
               padding: '6px 14px',
               borderRadius: 999,
               border: '1px solid var(--btc-border)',
-              background: 'white',
+              background: 'var(--btc-surface)',
               color: 'var(--btc-text-mid)',
               textDecoration: 'none',
               fontSize: 13,

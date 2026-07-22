@@ -389,6 +389,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-accent: #818cf8;
   --btc-accent-deep: #a5b4fc;
   --btc-accent-soft: rgba(129, 140, 248, 0.15);
+  --btc-accent-border: rgba(129, 140, 248, 0.3);
   --btc-gold: #fbbf24;
   --btc-green: #4ade80;
   --btc-red: #f87171;
@@ -473,6 +474,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-accent: #4f46e5;
   --btc-accent-deep: #4338ca;
   --btc-accent-soft: rgba(79, 70, 229, 0.1);
+  --btc-accent-border: rgba(79, 70, 229, 0.3);
   --btc-gold: #b45309;
   --btc-green: #15803d;
   --btc-red: #dc2626;
@@ -552,6 +554,7 @@ html[data-btc-reduce-motion="1"] * {
     --btc-accent: #4f46e5;
     --btc-accent-deep: #4338ca;
     --btc-accent-soft: rgba(79, 70, 229, 0.1);
+    --btc-accent-border: rgba(79, 70, 229, 0.3);
     --btc-gold: #b45309;
     --btc-green: #15803d;
     --btc-red: #dc2626;
@@ -970,3 +973,38 @@ html[data-btc-reduce-motion="1"] * {
 .theme-toggle:active { transform: scale(0.92); }
 /* Clear the fixed Family Mode banner when it's showing */
 .theme-toggle.below-family-banner { top: calc(64px + env(safe-area-inset-top)); }
+
+/* ── v1.2.4 dark-contrast fixes ──────────────────────────────
+   Aliases for tokens referenced by /read but never defined; they chain to
+   the themed tokens so they resolve correctly in BOTH light and dark. */
+:root {
+  --btc-input-bg: var(--btc-elevated);
+  --btc-input-border: var(--btc-border-strong);
+  --btc-text: var(--btc-ink);
+  --btc-btn-bg: var(--btc-surface);
+}
+
+/* Form controls follow the theme (covers inputs/selects without inline
+   backgrounds; inline-styled ones now use the same tokens directly). */
+.btc-card input[type='text'],
+.btc-card input[type='search'],
+.btc-card input[type='number'],
+.btc-card input[type='password'],
+.btc-card select {
+  background: var(--btc-elevated);
+  color: var(--btc-ink);
+  border: 1px solid var(--btc-border-strong);
+  border-radius: 12px;
+}
+.btc-card input::placeholder {
+  color: var(--btc-text-muted);
+  opacity: 1;
+}
+select option {
+  background: var(--btc-surface);
+  color: var(--btc-ink);
+}
+input[type='range'],
+input[type='checkbox'] {
+  accent-color: var(--btc-accent);
+}

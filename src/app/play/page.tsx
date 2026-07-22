@@ -1910,10 +1910,10 @@ function BookPickerScreen(props: {
   const selectStyle = {
     width: '100%',
     borderRadius: 12,
-    border: '1px solid var(--btc-border)',
+    border: '1px solid var(--btc-border-strong)',
     padding: '12px',
     fontSize: 15,
-    background: 'white',
+    background: 'var(--btc-elevated)',
     color: 'var(--btc-ink)',
   } as const;
 
@@ -2426,10 +2426,11 @@ function HomeScreen(props: {
             onClick={props.onStartDailyQuiz}
             style={{
               textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
+              color:'var(--btc-ink)',
               border: props.dailyChallengeCompleted
                 ? '1.5px solid #86efac' : '1px solid var(--btc-border)',
               background: props.dailyChallengeCompleted
-                ? 'rgba(34,197,94,0.06)' : 'white',
+                ? 'rgba(34,197,94,0.06)' : 'var(--btc-surface)',
               minHeight: 90,
             }}
           >
@@ -2449,7 +2450,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onStartQuickQuiz}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📖</div>
             <div style={{ fontWeight:800 }}>Quick Quiz</div>
@@ -2460,7 +2461,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onOpenFamilyNight}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>👨‍👩‍👧</div>
             <div style={{ fontWeight:800 }}>Family Night</div>
@@ -2471,7 +2472,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onOpenBookPicker}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid var(--btc-border)', background:'white', minHeight:90 }}
+              border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90 }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📚</div>
             <div style={{ fontWeight:800 }}>By Book</div>
@@ -2482,7 +2483,7 @@ function HomeScreen(props: {
             type="button"
             onClick={props.onStartHistoryQuiz}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>📜</div>
             <div style={{ fontWeight:800 }}>Bible History</div>
@@ -2493,7 +2494,7 @@ function HomeScreen(props: {
             type="button"
             onClick={() => { window.location.href = '/levels'; }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
-              border:'1px solid var(--btc-border)', background:'white', minHeight:90,  }}
+              border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
             <div style={{ fontSize:24, marginBottom:4 }}>🎯</div>
             <div style={{ fontWeight:800 }}>Levels</div>
@@ -2511,11 +2512,11 @@ function HomeScreen(props: {
             marginTop: 14,
             padding: 14,
             borderRadius: 16,
-            border: '1px solid var(--btc-border)',
-            background: 'linear-gradient(135deg, #fefce8, #fff7ed)',
+            border: '1px solid var(--btc-accent-border)',
+            background: 'var(--btc-accent-soft)',
           }}
         >
-          <div style={{ fontWeight: 800 }}>🔒 Bible Coach Pro</div>
+          <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Coach Pro</div>
           <div
             className="btc-text-muted"
             style={{ marginTop: 4, fontSize: 12 }}
@@ -2527,7 +2528,8 @@ function HomeScreen(props: {
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
-          border:'1px solid rgba(0,0,0,0.07)', background:'rgba(254,249,195,0.6)' }}
+          border:'1px solid rgba(251,191,36,0.4)', background:'var(--btc-warn-soft)',
+          color:'var(--btc-ink)' }}
         >
           <summary style={{ cursor:'pointer', padding:'10px 14px',
             fontWeight:700, listStyle:'none', display:'flex',
@@ -2589,14 +2591,15 @@ function PathSection(props: { onStartPathQuiz: (key: PathKey) => void }) {
                 padding: 14,
                 borderRadius: 16,
                 cursor: unlocked ? 'pointer' : 'default',
+                color: 'var(--btc-ink)',
                 border: entry?.completed
                   ? '1.5px solid #86efac'
                   : '1px solid var(--btc-border)',
                 background: entry?.completed
                   ? 'rgba(34,197,94,0.06)'
-                  : 'white',
+                  : 'var(--btc-surface)',
                 minHeight: 96,
-                opacity: unlocked ? 1 : 0.55,
+                opacity: unlocked ? 1 : 0.7,
               }}
             >
               <div style={{ fontSize: 24, marginBottom: 4 }}>
@@ -2657,13 +2660,14 @@ function DayPickerRow(props: {
             onChange={e => setQuery(e.target.value)}
             style={{
               width: '100%', padding: '10px 14px', borderRadius: 12,
-              border: '1px solid var(--btc-border)', marginBottom: 6,
+              border: '1px solid var(--btc-border-strong)', marginBottom: 6,
+              background: 'var(--btc-elevated)', color: 'var(--btc-ink)',
               boxSizing: 'border-box', fontSize: 14,
             }}
           />
           <div style={{
             maxHeight: 220, overflowY: 'auto', borderRadius: 12,
-            border: '1px solid var(--btc-border)', background: 'white',
+            border: '1px solid var(--btc-border)', background: 'var(--btc-surface)',
           }}>
             {filtered.map((d) => (
               <button
@@ -2673,12 +2677,12 @@ function DayPickerRow(props: {
                 style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   width: '100%', textAlign: 'left', padding: '10px 14px',
-                  background: 'transparent', border: 'none',
-                  borderBottom: '1px solid rgba(0,0,0,0.06)', cursor: 'pointer', fontSize: 14,
+                  background: 'transparent', border: 'none', color: 'var(--btc-ink)',
+                  borderBottom: '1px solid var(--btc-border)', cursor: 'pointer', fontSize: 14,
                 }}
               >
                 <span style={{ fontWeight: 600 }}>Day {d.day}</span>
-                <span style={{ opacity: 0.6, fontSize: 13 }}>{d.title}</span>
+                <span style={{ color: 'var(--btc-text-subtle)', fontSize: 13 }}>{d.title}</span>
               </button>
             ))}
           </div>

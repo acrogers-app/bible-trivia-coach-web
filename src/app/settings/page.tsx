@@ -393,7 +393,7 @@ export default function SettingsPage() {
               )}
             </select>
 
-            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'white', border: '1px solid var(--btc-border)' }}>
+            <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'var(--btc-surface)', border: '1px solid var(--btc-border)' }}>
               <div style={{ fontWeight: 900, marginBottom: 6 }}>Voice quality</div>
               <div className="btc-text-muted" style={{ fontSize: 12, lineHeight: 1.5 }}>
                 Voice quality depends on your browser/device.<br />
@@ -508,19 +508,33 @@ const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16
 const h2: React.CSSProperties = { margin: 0, fontSize: 16 };
 const row: React.CSSProperties = { display: 'flex', gap: 10, alignItems: 'center', marginTop: 10 };
 const labelSmall: React.CSSProperties = { fontSize: 12, opacity: 0.75, marginBottom: 6 };
-const select: React.CSSProperties = { width: '100%', padding: 10, borderRadius: 12 };
-const btn: React.CSSProperties = { padding: '10px 14px', borderRadius: 12 };
+const select: React.CSSProperties = {
+  width: '100%',
+  padding: 10,
+  borderRadius: 12,
+  background: 'var(--btc-elevated)',
+  color: 'var(--btc-ink)',
+  border: '1px solid var(--btc-border-strong)',
+};
+const btn: React.CSSProperties = {
+  padding: '10px 14px',
+  borderRadius: 12,
+  background: 'var(--btc-surface)',
+  color: 'var(--btc-ink)',
+  border: '1px solid var(--btc-border)',
+};
 const btnPrimary: React.CSSProperties = {
   padding: '10px 14px',
   borderRadius: 12,
   fontWeight: 800,
-  border: '1px solid rgba(0,0,0,0.12)',
-  background: 'rgba(37,99,235,0.10)',
+  color: 'var(--btc-accent-deep)',
+  border: '1px solid var(--btc-accent-border)',
+  background: 'var(--btc-accent-soft)',
 };
 const preview: React.CSSProperties = {
   marginTop: 12,
   padding: 12,
   borderRadius: 14,
   border: '1px solid var(--btc-border)',
-  background: 'white',
+  background: 'var(--btc-surface)',
 };
