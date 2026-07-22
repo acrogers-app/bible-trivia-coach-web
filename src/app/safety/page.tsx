@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import SafetyContactForm from './SafetyContactForm';
 
 export const metadata: Metadata = {
   title: 'Child Safety — Bible Study Coach',
@@ -120,10 +121,10 @@ export default function SafetyPage() {
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Questions?</h2>
           <p style={textStyle}>
-            Email us at{' '}
-            <a href="mailto:safety@webeuseful.com">safety@webeuseful.com</a> —
-            we read every message.
+            Send us your question or concern — our safety team reads every
+            message and reviews it within 48 hours.
           </p>
+          <SafetyContactForm />
         </section>
       </main>
     </div>
