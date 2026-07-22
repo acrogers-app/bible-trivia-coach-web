@@ -35,6 +35,16 @@ Next.js 16 (App Router, Turbopack), TypeScript, Capacitor iOS wrapper, static tr
 ## Deploy Workflow
 Auto-deploy is active (GitHub → Vercel): push to `main` deploys biblestudy.webeuseful.com. Commit author allen.webeuseful@gmail.com. Test locally first (`npm run check`); bump package.json version for significant releases. NOTE: repo policy (below) forbids pushes/deploys by default — Allen overrode this on 2026-07-21 for safety work only; **future sessions should still ask before pushing unless he directs otherwise.**
 
+## After Every Deploy — REQUIRED
+Always do these steps after deploying, without being asked:
+1. `open https://biblestudy.webeuseful.com/play` and `open https://biblestudy.webeuseful.com/settings` — opens in browser
+2. Take puppeteer screenshots of key screens (play top+bottom incl. Coach's tip, settings, day picker, By Book) in BOTH dark and light mode, at 390px and 768px, full-page. Save to `/tmp/bible-trivia-screenshots/`
+3. `open /tmp/bible-trivia-screenshots/` — opens the folder in Finder
+4. For iOS changes: `npx cap open ios`
+5. Show the screenshots in the report
+
+Never skip this. Allen needs to see what shipped before approving the next task.
+
 ## Environment Variables (names only)
 None required for core function (trivia is static). Vercel Analytics is built in.
 
