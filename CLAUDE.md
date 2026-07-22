@@ -9,8 +9,23 @@
 - **Ask before running commands.** Get explicit approval before executing any shell command.
 - **No destructive commands.** Never run commands that delete, overwrite, or irreversibly change data or history (e.g. `rm -rf`, `git reset --hard`, `git push --force`).
 - **No new dependencies without approval.** Do not add packages or run installs for new dependencies unless explicitly approved.
-- **No deploys or production changes.** Never deploy, trigger production builds, change production configuration, or push to `main`.
 - **Run lint/tests after changes and report results.** After code changes, run `npm run check` (or the relevant subset) and report the actual results, including failures.
+
+## Deploy workflow
+
+Auto-deploy is active (GitHub → Vercel, wired 2026-07-21): pushing to `main` deploys automatically.
+
+- `git push origin main` → auto-deploys to biblestudy.webeuseful.com
+- Commits must use the team email or Vercel silently blocks the deploy:
+  `git config user.email "allen.webeuseful@gmail.com"` (already set globally)
+- Test locally before pushing (`npm run check`)
+- Bump the version in package.json for significant releases
+
+NEVER do:
+
+- Push broken code to `main`
+- Push API keys or secrets
+- Merge without testing locally first
 - **Prefer minimal, reversible changes.** Make the smallest change that solves the problem and avoid edits that are hard to undo.
 
 
