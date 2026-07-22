@@ -21,6 +21,8 @@ import {
   isValidPin,
   onFamilyModeChanged,
 } from '../../lib/familyMode';
+import { subscribeLS } from '../../lib/gameFx';
+import { getThemePref, setThemePref, type ThemePref } from '../../lib/theme';
 
 type VoiceOpt = SpeechSynthesisVoice;
 
@@ -317,6 +319,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        <ThemeCard />
+
         <div style={card}>
           <h2 style={h2}>👨‍👩‍👧 Family Mode</h2>
           <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
@@ -443,6 +447,56 @@ export default function SettingsPage() {
         <div className="btc-text-muted" style={{ marginTop: 12 }}>
           Note: word highlighting depends on browser/voice support.
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Appearance: System / Light / Dark (v1.2.1) ──
+// Saved in localStorage 'bible-theme'; "System" removes the key so the CSS
+// prefers-color-scheme rules follow iOS/macOS appearance live.
+function ThemeCard() {
+  const pref = useSyncExternalStore(
+    subscribeLS,
+    getThemePref,
+    () => 'system' as ThemePref,
+  );
+  const options: { key: ThemePref; label: string }[] = [
+    { key: 'system', label: '⚙️ System' },
+    { key: 'light', label: '☀️ Light' },
+    { key: 'dark', label: '🌙 Dark' },
+  ];
+  return (
+    <div style={card}>
+      <h2 style={h2}>🎨 Appearance</h2>
+      <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
+        Quiz screens follow your device&apos;s Light/Dark setting, or pick one
+        here. Applies immediately — no Save needed.
+      </p>
+      <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+        {options.map((o) => (
+          <button
+            key={o.key}
+            type="button"
+            onClick={() => setThemePref(o.key)}
+            aria-pressed={pref === o.key}
+            style={{
+              padding: '10px 16px',
+              borderRadius: 999,
+              fontWeight: 700,
+              fontSize: 13,
+              cursor: 'pointer',
+              border:
+                pref === o.key
+                  ? '1.5px solid var(--btc-accent)'
+                  : '1px solid rgba(0,0,0,0.15)',
+              background: pref === o.key ? 'rgba(37,99,235,0.10)' : '#ffffff',
+              color: pref === o.key ? 'var(--btc-accent-deep)' : 'var(--btc-ink)',
+            }}
+          >
+            {o.label}
+          </button>
+        ))}
       </div>
     </div>
   );

@@ -6,6 +6,27 @@ fixes, 2.0.0 = major redesign). Update this file with every change and commit
 it with every release. The in-app "What's New" modal is keyed to the version
 in `src/lib/gameFx.ts` (`APP_VERSION`) — bump both together.
 
+## [1.2.1] — 2026-07-21
+### Fixed
+- TTS speech now stops immediately when Next is tapped, when navigating away,
+  or when a quiz/reading screen unmounts (was continuing over the next
+  question). New shared `src/lib/speech.ts` (`stopSpeech`/`speakText`) —
+  every future advance path must call `stopSpeech()`.
+- Light mode now properly themes the quiz game screens (was staying dark
+  purple). Dark = night sky (unchanged); light = parchment/manuscript.
+  Follows the iOS/system setting live, plus a manual System/Light/Dark
+  picker in Settings (localStorage `bible-theme`, applied pre-paint).
+- iPad layout (≥768px): answers in a 2×2 game-show grid, larger question
+  text/buttons/score, roomier game padding.
+
+### Added
+- Pulsing 🔊 "Reading aloud…" indicator while a passage is being read;
+  disappears on stop, Next, or natural end.
+- What's New modal now only re-shows on minor/major releases, not patches.
+
+### Changed
+- Service worker cache bumped to `btc-v4`.
+
 ## [1.2.0] — 2026-07-21
 ### Added
 - **Family Night — Sprout-level safety**: Bible character nickname picker

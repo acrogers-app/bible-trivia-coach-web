@@ -19,6 +19,7 @@ import { apiUrl } from '../../lib/apiBase';
 import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
+import { stopSpeech } from '../../lib/speech';
 import {
   APP_VERSION,
   VERSION_SEEN_KEY,
@@ -2786,6 +2787,12 @@ function DailyReadingScreen(props: {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
+    // Unmount must silence any in-flight reading — otherwise tapping Next
+    // (which unmounts this component) leaves speech playing over the next
+    // question
+    return () => {
+      stopSpeech();
+    };
   }, []);
 
   useEffect(() => {
@@ -3107,7 +3114,10 @@ function WhatsNewModal() {
     writeLS(VERSION_SEEN_KEY, APP_VERSION);
   }
 
-  if (seen === APP_VERSION) return null;
+  // Only re-show for a new major.minor — patch releases (1.2.0 → 1.2.1)
+  // shouldn't nag users with the same feature list again
+  const minorOf = (v: string | null) => (v ?? '').split('.').slice(0, 2).join('.');
+  if (minorOf(seen) === minorOf(APP_VERSION)) return null;
   return (
     <div className="btc-modal-overlay" role="dialog" aria-modal="true">
       <div className="btc-modal">
@@ -3493,6 +3503,9 @@ function QuizScreen(props: {
   }
 
   function handleNext() {
+    // Any passage still being read aloud must not bleed into the next
+    // question (or the summary screen)
+    stopSpeech();
     if (isLast) {
       props.onFinished(correctCount, questions.length, answers);
     } else {
@@ -3505,6 +3518,13 @@ function QuizScreen(props: {
     }
   }
 
+  // Leaving the quiz any other way (back, screen swap) also silences TTS
+  useEffect(() => {
+    return () => {
+      stopSpeech();
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -3513,7 +3533,12 @@ function QuizScreen(props: {
         paddingBottom: selected !== null ? 150 : 0,
       }}
     >
-      <BackButton onClick={props.onBack} />
+      <BackButton
+        onClick={() => {
+          stopSpeech();
+          props.onBack();
+        }}
+      />
       <h2>{title}</h2>
 
       {verseRefStr && (
@@ -3579,7 +3604,7 @@ function QuizScreen(props: {
           <div
             style={{
               fontSize: 13,
-              color: '#ffc266',
+              color: 'var(--game-flame-ink)',
               fontWeight: 600,
               marginBottom: 10,
             }}
@@ -3589,14 +3614,10 @@ function QuizScreen(props: {
         )}
 
         <div className="question-card" key={index}>
-          <div
-            style={{ fontSize: 16, fontWeight: 600, color: 'var(--game-ink)' }}
-          >
-            {q.text}
-          </div>
+          <div className="q-text">{q.text}</div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="answer-grid">
           {q.options.map((opt, i) => (
             <GameAnswerButton
               key={i}
@@ -3615,7 +3636,10 @@ function QuizScreen(props: {
               style={{
                 fontWeight: 700,
                 marginBottom: 4,
-                color: selected === q.correctIndex ? '#7be87a' : '#ff9d9d',
+                color:
+                  selected === q.correctIndex
+                    ? 'var(--game-good)'
+                    : 'var(--game-bad)',
               }}
             >
               {coachReaction(selected === q.correctIndex, index)}
@@ -3641,9 +3665,9 @@ function QuizScreen(props: {
                   marginTop: 10,
                   padding: '8px 14px',
                   borderRadius: 999,
-                  border: '1px solid rgba(255,255,255,0.35)',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  color: '#dbe4ff',
+                  border: '1px solid var(--game-chip-border)',
+                  backgroundColor: 'var(--game-chip-bg)',
+                  color: 'var(--game-chip-ink)',
                   fontSize: 13,
                   cursor: 'pointer',
                 }}
@@ -3991,6 +4015,7 @@ function FamilyGameScreen(props: {
 
   function handleNext() {
     if (finished) return;
+    stopSpeech();
     if (isLast) {
       setFinished(true);
       return;
@@ -4001,8 +4026,16 @@ function FamilyGameScreen(props: {
     setCurrentPlayerIndex((i) => (i + 1) % props.players.length);
   }
 
+  // Silence any TTS when the family game unmounts (back to home, etc.)
+  useEffect(() => {
+    return () => {
+      stopSpeech();
+    };
+  }, []);
+
   // "Play Again" — same questions, fresh scores. Nothing is stored anywhere.
   function playAgain() {
+    stopSpeech();
     setScores(props.players.map(() => 0));
     setCurrentIndex(0);
     setCurrentPlayerIndex(0);
@@ -4080,18 +4113,10 @@ function FamilyGameScreen(props: {
           </p>
 
           <div className="question-card" key={currentIndex}>
-            <div
-              style={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: 'var(--game-ink)',
-              }}
-            >
-              {q.text}
-            </div>
+            <div className="q-text">{q.text}</div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="answer-grid">
             {q.options.map((opt, i) => (
               <GameAnswerButton
                 key={i}
@@ -4112,7 +4137,9 @@ function FamilyGameScreen(props: {
                   fontWeight: 700,
                   marginBottom: 4,
                   color:
-                    selected === q.correctIndex ? '#7be87a' : '#ff9d9d',
+                    selected === q.correctIndex
+                      ? 'var(--game-good)'
+                      : 'var(--game-bad)',
                 }}
               >
                 {coachReaction(selected === q.correctIndex, currentIndex)}
@@ -4174,8 +4201,8 @@ function FamilyGameScreen(props: {
                 marginTop: 12,
                 padding: '10px 12px',
                 borderRadius: 12,
-                border: '1px solid rgba(255,255,255,0.2)',
-                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid var(--game-row-border)',
+                background: 'var(--game-row-bg)',
                 fontSize: 13,
                 color: 'var(--game-muted)',
                 textAlign: 'left',
@@ -4242,6 +4269,12 @@ function PassageInline(props: {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
+    // Unmount must silence any in-flight reading — otherwise tapping Next
+    // (which unmounts this component) leaves speech playing over the next
+    // question
+    return () => {
+      stopSpeech();
+    };
   }, []);
 
   useEffect(() => {
@@ -4405,6 +4438,9 @@ function PassageInline(props: {
           <div style={{ fontSize: 12, color: 'var(--btc-text-subtle)' }}>
             {refStart} – {refEnd}
           </div>
+          {isSpeaking && !isPaused && (
+            <span className="tts-playing-indicator">🔊 Reading aloud…</span>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           <button

@@ -2,7 +2,7 @@
 // version-gated "What's New", and the (very) subtle timer tick.
 // Everything here is device-local: no player data ever leaves the device.
 
-export const APP_VERSION = '1.2.0';
+export const APP_VERSION = '1.2.1';
 
 // localStorage as an external store (for useSyncExternalStore — the repo's
 // lint forbids reading localStorage into state inside effects).
@@ -20,6 +20,15 @@ export function readLS(key: string): string | null {
 export function writeLS(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
+  } catch {}
+  try {
+    window.dispatchEvent(new CustomEvent(LS_EVENT));
+  } catch {}
+}
+
+export function removeLS(key: string) {
+  try {
+    localStorage.removeItem(key);
   } catch {}
   try {
     window.dispatchEvent(new CustomEvent(LS_EVENT));
