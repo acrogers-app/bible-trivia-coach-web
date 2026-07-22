@@ -376,6 +376,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-nav-border: rgba(0, 0, 0, 0.09);
   --btc-hero-grad: linear-gradient(135deg, #eef2ff, #e0f2fe);
   --btc-deco-grad: radial-gradient(circle at top left, #bfdbfe, #f9fafb 60%, #bbf7d0);
+  --btc-section-tint: #dbeafe;
 }
 
 /* Light = illuminated manuscript: warm parchment, rich gold, deep readable
@@ -439,6 +440,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-nav-border: rgba(139, 90, 43, 0.3);
   --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
   --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
+  --btc-section-tint: #ecdfb9;
   --btc-ink: #2e2110;
   --btc-text-main: #2e2110;
   --btc-text-subtle: #63512f;
@@ -502,6 +504,7 @@ html[data-btc-reduce-motion="1"] * {
     --btc-nav-border: rgba(139, 90, 43, 0.3);
     --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
     --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
+    --btc-section-tint: #ecdfb9;
     --btc-ink: #2e2110;
     --btc-text-main: #2e2110;
     --btc-text-subtle: #63512f;

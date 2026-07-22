@@ -993,7 +993,7 @@ function FixedSummaryScreen(props: {
                   ? '#fefce8'
                   : '#0f172a'
                 : isPerfect
-                ? 'var(--btc-border)'
+                ? '#e5e7eb' /* fixed: sits on the perfect-green bg in both themes */
                 : 'var(--btc-text-muted)';
 
               return (
@@ -2355,7 +2355,7 @@ function HomeScreen(props: {
         )}
       </section>
 
-      <Section title="Today" tint="#dbeafe">
+      <Section title="Today" tint="var(--btc-section-tint)">
         {today && (
           <Row
             title={`${readingDoneToday ? '✓ ' : ''}Daily Reading: ${today.title}`}
