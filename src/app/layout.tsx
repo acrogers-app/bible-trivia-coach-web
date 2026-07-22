@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_URL = "https://biblestudy.webeuseful.com";
-const SITE_TITLE = "Bible Study Coach — Bible Trivia, Quizzes & Daily Verse";
+const SITE_TITLE = "Bible Study Coach — Daily Scripture, Gentle Quizzes & Verse of the Day";
 const SITE_DESCRIPTION =
-  "Play Bible trivia with hundreds of questions, learn Scripture references as you go, and get a daily Verse of the Day on web, iPhone, and Apple Watch.";
+  "Make Scripture stick with short daily readings, gentle Bible quizzes, and a daily Verse of the Day on web, iPhone, and Apple Watch.";
 const APP_STORE_ID = "6788610253";
 
 export const metadata: Metadata = {
