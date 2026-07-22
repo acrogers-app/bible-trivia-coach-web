@@ -6,6 +6,21 @@ fixes, 2.0.0 = major redesign). Update this file with every change and commit
 it with every release. The in-app "What's New" modal is keyed to the version
 in `src/lib/gameFx.ts` (`APP_VERSION`) — bump both together.
 
+## [1.2.3] — 2026-07-22
+### Changed
+- Light mode: bright white with indigo accents (not parchment).
+- Dark mode: true deep navy (#080818) with elevated dark-purple cards,
+  light glowing text, and gold accents — not a beige/white card.
+- Light and dark are now dramatically different at a glance.
+- Toggle button larger and more visible (44px rounded square; indigo in
+  light, frosted in dark).
+- Cleaner card hierarchy: consistent 16px radii, shared shadow tokens,
+  indigo-accented Daily Challenge card and list chevrons.
+- Better CTA button prominence (full-width, 17px/700, taller).
+- Name input looks like a real input (bordered, elevated background).
+- Phone layout: 390px centered column on a visible themed backdrop.
+- Service worker cache bumped to `btc-v6`.
+
 ## [1.2.2] — 2026-07-22
 ### Added
 - Floating ☀️/🌙 theme toggle, fixed top-right on every screen. Tapping pins

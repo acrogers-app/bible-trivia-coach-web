@@ -471,8 +471,9 @@ function ThemeCard() {
       <h2 style={h2}>🎨 Appearance</h2>
       <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
         The whole app follows your device&apos;s Light/Dark setting, or pick
-        one here (light is a warm parchment look). The ☀️/🌙 button in the
-        corner switches instantly too. Applies immediately — no Save needed.
+        one here — bright &amp; clean in Light, deep night navy in Dark. The
+        ☀️/🌙 button in the corner switches instantly too. Applies
+        immediately — no Save needed.
       </p>
       <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
         {options.map((o) => (
@@ -491,7 +492,7 @@ function ThemeCard() {
                 pref === o.key
                   ? '1.5px solid var(--btc-accent)'
                   : '1px solid var(--btc-border)',
-              background: pref === o.key ? 'rgba(37,99,235,0.10)' : 'var(--btc-surface)',
+              background: pref === o.key ? 'var(--btc-accent-soft)' : 'var(--btc-surface)',
               color: pref === o.key ? 'var(--btc-accent-deep)' : 'var(--btc-ink)',
             }}
           >
@@ -503,7 +504,7 @@ function ThemeCard() {
   );
 }
 
-const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16, background: 'rgba(0,0,0,0.03)' };
+const card: React.CSSProperties = { marginTop: 12, padding: 14, borderRadius: 16, background: 'var(--btc-panel-bg)' };
 const h2: React.CSSProperties = { margin: 0, fontSize: 16 };
 const row: React.CSSProperties = { display: 'flex', gap: 10, alignItems: 'center', marginTop: 10 };
 const labelSmall: React.CSSProperties = { fontSize: 12, opacity: 0.75, marginBottom: 6 };

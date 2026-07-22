@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="btc-root" style={{ backgroundColor: '#f3f4f6' }}>
+    <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <div
         className="btc-card"
         style={{

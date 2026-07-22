@@ -614,7 +614,7 @@ function SummaryExtras({ quizTitle }: { quizTitle: string }) {
             borderRadius: 16,
             border: '1px solid var(--btc-border)',
             padding: 12,
-            backgroundColor: '#fefce8',
+            backgroundColor: 'var(--btc-warn-soft)',
           }}
         >
           <div
@@ -852,7 +852,7 @@ function FixedSummaryScreen(props: {
     : {
         padding: 16,
         borderRadius: 16,
-        backgroundColor: '#f3f4f6',
+        backgroundColor: 'var(--btc-elevated)',
         border: '1px solid var(--btc-border)',
         color: 'var(--btc-ink)',
       };
@@ -1088,7 +1088,7 @@ function FixedSummaryScreen(props: {
                 backgroundColor: isPerfect
                   ? 'rgba(255,255,255,0.15)'
                   : '#fef3c7',
-                border: isPerfect ? 'none' : '1px solid #fde68a',
+                border: isPerfect ? 'none' : '1px solid rgba(251,191,36,0.5)',
                 fontSize: 13,
                 color: isPerfect ? '#fefce8' : '#92400e',
               }}
@@ -1219,13 +1219,13 @@ function FixedSummaryScreen(props: {
               </div>
               <div style={{ fontSize: 13, marginBottom: 2 }}>
                 Your answer:{' '}
-                <span style={{ color: '#b91c1c', fontWeight: 500 }}>
+                <span style={{ color: 'var(--btc-red)', fontWeight: 500 }}>
                   {question.options[answer.chosenIndex] ?? '—'}
                 </span>
               </div>
               <div style={{ fontSize: 13, marginBottom: 4 }}>
                 Correct answer:{' '}
-                <span style={{ color: '#166534', fontWeight: 500 }}>
+                <span style={{ color: 'var(--btc-green)', fontWeight: 500 }}>
                   {question.options[answer.correctIndex]}
                 </span>
               </div>
@@ -1688,7 +1688,7 @@ export default function PlayPage() {
             <h1>Bible Study Coach</h1>
             <p
               style={{
-                color: '#b91c1c',
+                color: 'var(--btc-red)',
                 marginBottom: 8,
                 fontWeight: 600,
               }}
@@ -2146,11 +2146,11 @@ function HomeScreen(props: {
                   gap: 6,
                   padding: '6px 12px',
                   borderRadius: 999,
-                  backgroundColor: '#fef3c7',
-                  border: '1px solid #fde68a',
+                  backgroundColor: 'var(--btc-warn-soft)',
+                  border: '1px solid rgba(251,191,36,0.5)',
                   fontSize: 14,
                   fontWeight: 600,
-                  color: '#92400e',
+                  color: 'var(--btc-gold)',
                 }}
               >
                 🕯️ Day {streak}
@@ -2195,14 +2195,17 @@ function HomeScreen(props: {
                   onClick={handleEditName}
                   style={{
                     marginTop: 2,
-                    borderRadius: 999,
-                    border: '1px solid var(--btc-border)',
-                    background: 'var(--btc-surface)',
-                    color: 'var(--btc-ink)',
+                    borderRadius: 12,
+                    border: '1px solid var(--btc-border-strong)',
+                    background: 'var(--btc-elevated)',
+                    color: 'var(--btc-text-subtle)',
                     cursor: 'pointer',
-                    fontSize: 13,
+                    fontSize: 14,
                     padding: '12px 16px',
                     minHeight: 44,
+                    width: '100%',
+                    maxWidth: 320,
+                    textAlign: 'left',
                   }}
                 >
                   Tap here to add your name
@@ -2217,10 +2220,10 @@ function HomeScreen(props: {
                   alignItems: 'center',
                   padding: '4px 10px',
                   borderRadius: 999,
-                  backgroundColor: '#ecfdf5',
-                  border: '1px solid #bbf7d0',
+                  backgroundColor: 'var(--btc-success-soft)',
+                  border: '1px solid rgba(74,222,128,0.45)',
                   fontSize: 12,
-                  color: '#166534',
+                  color: 'var(--btc-green)',
                   gap: 6,
                   flexWrap: 'wrap',
                 }}
@@ -2244,10 +2247,10 @@ function HomeScreen(props: {
                 marginTop: 10,
                 padding: '8px 12px',
                 borderRadius: 12,
-                backgroundColor: '#fff7ed',
-                border: '1px solid #fdba74',
+                backgroundColor: 'var(--btc-warn-soft)',
+                border: '1px solid rgba(251,146,60,0.5)',
                 fontSize: 13,
-                color: '#9a3412',
+                color: 'var(--btc-gold)',
                 fontWeight: 600,
               }}
             >
@@ -2262,8 +2265,10 @@ function HomeScreen(props: {
           style={{
             marginTop: 14,
             padding: 16,
-            borderRadius: 20,
-            border: '1px solid #c7d2fe',
+            borderRadius: 16,
+            border: '1px solid var(--btc-border)',
+            borderLeft: '4px solid var(--btc-accent)',
+            boxShadow: 'var(--btc-shadow)',
             background: 'var(--btc-hero-grad)',
             display: 'flex',
             alignItems: 'center',
@@ -2303,7 +2308,13 @@ function HomeScreen(props: {
                 type="button"
                 className="btc-btn"
                 onClick={props.onStartDailyQuiz}
-                style={{ width: '100%', minHeight: 52, fontSize: 16 }}
+                style={{
+                  width: '100%',
+                  minHeight: 52,
+                  fontSize: 17,
+                  fontWeight: 700,
+                  padding: '16px 24px',
+                }}
               >
                 Start today&apos;s challenge
               </button>
@@ -2327,13 +2338,13 @@ function HomeScreen(props: {
               marginTop: 12,
               padding: '6px 10px',
               borderRadius: 999,
-              backgroundColor: '#fef9c3',
-              border: '1px solid #fde68a',
+              backgroundColor: 'var(--btc-warn-soft)',
+              border: '1px solid rgba(251,191,36,0.5)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: 12,
-              color: '#854d0e',
+              color: 'var(--btc-gold)',
               gap: 8,
               flexWrap: 'wrap',
             }}
@@ -2685,19 +2696,19 @@ function Section(props: {
   return (
     <section
       style={{
-        marginTop: 18,
+        marginTop: 24,
         marginBottom: 6,
-        padding: 14,
-        borderRadius: 18,
+        padding: 16,
+        borderRadius: 16,
         backgroundColor: props.tint,
       }}
     >
       <h2
         style={{
           fontSize: 'var(--btc-heading-md)',
-          fontWeight: 700,
+          fontWeight: 800,
           letterSpacing: 0.08,
-          marginBottom: 10,
+          marginBottom: 12,
         }}
       >
         {props.title}
@@ -2719,9 +2730,11 @@ function Row(props: {
         width: '100%',
         textAlign: 'left',
         backgroundColor: 'var(--btc-surface)',
-        borderRadius: 999,
-        padding: '11px 16px',
-        border: '1px solid var(--btc-border-strong)',
+        borderRadius: 16,
+        padding: '12px 16px',
+        minHeight: 44,
+        border: '1px solid var(--btc-border)',
+        boxShadow: 'var(--btc-shadow)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -2738,7 +2751,7 @@ function Row(props: {
           </div>
         )}
       </div>
-      <span style={{ color: 'var(--btc-text-subtle)', fontSize: 18 }}>›</span>
+      <span style={{ color: 'var(--btc-accent)', fontSize: 18, fontWeight: 700 }}>›</span>
     </button>
   );
 }
@@ -2748,7 +2761,7 @@ function DisabledRow(props: { title: string }) {
     <div
       style={{
         width: '100%',
-        backgroundColor: '#f3f4f6',
+        backgroundColor: 'var(--btc-elevated)',
         borderRadius: 999,
         padding: '10px 16px',
         border: '1px dashed var(--btc-border-strong)',
@@ -2958,8 +2971,8 @@ function DailyReadingScreen(props: {
             marginTop: 12,
             padding: 16,
             borderRadius: 16,
-            backgroundColor: '#fee2e2',
-            color: '#991b1b',
+            backgroundColor: 'var(--btc-red-soft)',
+            color: 'var(--btc-red)',
           }}
         >
           Couldn&apos;t load passage: {error}
@@ -3841,8 +3854,8 @@ function FamilySetupScreen(props: {
                   style={{
                     borderRadius: 999,
                     border: 'none',
-                    backgroundColor: '#fee2e2',
-                    color: '#b91c1c',
+                    backgroundColor: 'var(--btc-red-soft)',
+                    color: 'var(--btc-red)',
                     padding: '4px 8px',
                     cursor: 'pointer',
                     fontSize: 12,
@@ -4513,7 +4526,7 @@ function PassageInline(props: {
           </div>
         )}
         {error && !loading && (
-          <div style={{ fontSize: 13, color: '#b91c1c' }}>
+          <div style={{ fontSize: 13, color: 'var(--btc-red)' }}>
             Couldn&apos;t load passage: {error}
           </div>
         )}

@@ -28,7 +28,7 @@ const listStyle = {
 
 export default function PrivacyPage() {
   return (
-    <div className="btc-root" style={{ backgroundColor: '#f3f4f6' }}>
+    <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <main className="btc-card">
         <h1 style={{ fontSize: 'var(--btc-heading-xl)', marginBottom: 4 }}>
           Privacy Policy

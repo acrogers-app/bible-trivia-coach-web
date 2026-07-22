@@ -115,8 +115,8 @@ const structuredData = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e9dcc0" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f7ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#080818" },
   ],
   viewportFit: "cover",
 };

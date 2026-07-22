@@ -7,7 +7,7 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <div className="btc-root" style={{ backgroundColor: '#f3f4f6' }}>
+    <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <div
         className="btc-card"
         style={{

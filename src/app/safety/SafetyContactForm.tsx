@@ -50,7 +50,7 @@ export default function SafetyContactForm() {
           color: 'var(--btc-text-main)',
           fontSize: 'var(--btc-body-size)',
           lineHeight: 1.6,
-          background: '#ecfdf5',
+          background: 'var(--btc-success-soft)',
           border: '1px solid #a7f3d0',
           borderRadius: 8,
           padding: '12px 14px',

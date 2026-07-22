@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function HomePage() {
   return (
-    <div className="btc-root" style={{ backgroundColor: '#f3f4f6' }}>
+    <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <div
         className="btc-card"
         style={{
@@ -29,8 +29,8 @@ export default function HomePage() {
                 alignItems: 'center',
                 padding: '4px 10px',
                 borderRadius: 999,
-                backgroundColor: '#dcfce7',
-                color: '#166534',
+                backgroundColor: 'var(--btc-success-soft)',
+                color: 'var(--btc-green)',
                 fontSize: 12,
                 fontWeight: 600,
                 marginBottom: 12,
@@ -165,14 +165,14 @@ export default function HomePage() {
               style={{
                 padding: 14,
                 borderRadius: 16,
-                backgroundColor: '#eff6ff',
+                backgroundColor: 'var(--btc-accent-soft)',
               }}
             >
               <div
                 style={{
                   fontSize: 12,
                   fontWeight: 600,
-                  color: '#1d4ed8',
+                  color: 'var(--btc-accent)',
                   marginBottom: 4,
                 }}
               >
@@ -187,14 +187,14 @@ export default function HomePage() {
               style={{
                 padding: 14,
                 borderRadius: 16,
-                backgroundColor: '#ecfdf5',
+                backgroundColor: 'var(--btc-success-soft)',
               }}
             >
               <div
                 style={{
                   fontSize: 12,
                   fontWeight: 600,
-                  color: '#15803d',
+                  color: 'var(--btc-green)',
                   marginBottom: 4,
                 }}
               >
@@ -209,14 +209,14 @@ export default function HomePage() {
               style={{
                 padding: 14,
                 borderRadius: 16,
-                backgroundColor: '#fef3c7',
+                backgroundColor: 'var(--btc-warn-soft)',
               }}
             >
               <div
                 style={{
                   fontSize: 12,
                   fontWeight: 600,
-                  color: '#b45309',
+                  color: 'var(--btc-gold)',
                   marginBottom: 4,
                 }}
               >

@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #080818;
+    --foreground: #f0f0ff;
   }
 }
 
@@ -47,19 +47,20 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Phone: full-screen card */
+/* Phone: 390px centered column on a visible themed backdrop (v1.2.3) */
 @media (max-width: 480px) {
   .btc-root {
-    padding: 0;
+    padding: 8px;
   }
 
   .btc-card {
-    max-width: 100%;
-    min-height: 100vh;
-    border-radius: 0;
+    max-width: 390px;
+    margin: 0 auto;
+    min-height: calc(100vh - 16px);
+    border-radius: 20px;
     /* extra top padding clears the iOS status bar (env() is 0 on web/Android) */
     padding: calc(1.25rem + env(safe-area-inset-top)) 1rem 1.75rem;
-    box-shadow: none;
+    box-shadow: var(--app-card-shadow);
   }
 }
 
@@ -96,7 +97,7 @@ body {
   --btc-text-main: #0f172a;   /* very dark text */
   --btc-text-muted: #6b7280;  /* secondary text */
 
-  --btc-heading-xl: 1.75rem;  /* main app title */
+  --btc-heading-xl: 2rem;     /* main app title */
   --btc-heading-lg: 1.4rem;   /* section / page titles */
   --btc-heading-md: 1.1rem;   /* question text / subheadings */
 
@@ -269,17 +270,18 @@ html[data-btc-reduce-motion="1"] * {
   padding: 10px 20px;
   border-radius: 999px;
   border: none;
-  background-color: var(--btc-accent);
-  color: #ffffff;
+  background-color: var(--btc-btn-primary, var(--btc-accent));
+  color: var(--btc-btn-text, #ffffff);
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   transition: background-color 150ms ease, transform 80ms ease;
 }
+.btc-btn:hover { background-color: var(--btc-btn-primary-hover, var(--btc-accent-deep)); }
 .btc-btn:active { transform: scale(0.97); }
 .btc-btn-success { background-color: var(--btc-success); }
 .btc-btn-warm { background-color: #d97706; }
-.btc-btn-dark { background-color: var(--btc-ink); }
+.btc-btn-dark { background-color: var(--btc-btn-dark-bg, var(--btc-ink)); }
 .btc-btn-secondary {
   background-color: var(--btc-surface);
   color: var(--btc-ink);
@@ -356,27 +358,52 @@ html[data-btc-reduce-motion="1"] * {
   --game-letter-border: rgba(255, 255, 255, 0.35);
   --game-letter-ink: #ffd700;
   --game-timer-track: rgba(255, 255, 255, 0.15);
-  --toggle-bg: rgba(255, 255, 255, 0.1);
-  --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
-  /* App shell (non-game screens) — dark defaults match the pre-v1.2.2 look:
-     navy surround, white card, Tailwind-gray text/borders. */
-  --app-root-bg: #020617;
-  --app-card-bg: #ffffff;
-  --app-card-border: transparent;
-  --app-card-shadow: 0 24px 60px rgba(15, 23, 42, 0.75);
-  --btc-surface: #ffffff;
-  --btc-panel-bg: #f9fafb;
-  --btc-selected-bg: #eef2ff;
-  --btc-border: #e5e7eb;
-  --btc-border-strong: #9ca3af;
-  --btc-text-strong: #1e293b;
-  --btc-text-mid: #374151;
-  --btc-nav-bg: #ffffff;
-  --btc-nav-border: rgba(0, 0, 0, 0.09);
-  --btc-hero-grad: linear-gradient(135deg, #eef2ff, #e0f2fe);
-  --btc-deco-grad: radial-gradient(circle at top left, #bfdbfe, #f9fafb 60%, #bbf7d0);
-  --btc-section-tint: #dbeafe;
+  /* App shell (non-game screens) — v1.2.3 TRUE DARK: near-black navy bg,
+     elevated dark-purple cards, glowing light text, gold/indigo accents.
+     These later definitions deliberately override the legacy token blocks
+     earlier in this file (same specificity, later wins). */
+  --app-root-bg: linear-gradient(180deg, #080818 0%, #0d0d2b 100%);
+  --app-card-bg: #0d0d2b;
+  --app-card-border: rgba(255, 255, 255, 0.08);
+  --app-card-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --btc-surface: #12123a;
+  --btc-panel-bg: #0f0f30;
+  --btc-elevated: #1a1a4a;
+  --btc-selected-bg: rgba(129, 140, 248, 0.15);
+  --btc-border: rgba(255, 255, 255, 0.08);
+  --btc-border-strong: rgba(255, 255, 255, 0.15);
+  --btc-text-strong: #f0f0ff;
+  --btc-text-mid: rgba(240, 240, 255, 0.78);
+  --btc-nav-bg: rgba(8, 8, 24, 0.97);
+  --btc-nav-border: rgba(255, 255, 255, 0.08);
+  --btc-nav-active: #818cf8;
+  --btc-nav-inactive: rgba(240, 240, 255, 0.6);
+  --btc-hero-grad: linear-gradient(135deg, #0d0d2b 0%, #1a1040 100%);
+  --btc-deco-grad: radial-gradient(circle at top left, #1a1a4a, #0d0d2b 60%, #12123a);
+  --btc-section-tint: #0f0f30;
+  --btc-ink: #ffffff;
+  --btc-text-main: #f0f0ff;
+  --btc-text-subtle: rgba(240, 240, 255, 0.65);
+  --btc-text-muted: rgba(240, 240, 255, 0.45);
+  --btc-accent: #818cf8;
+  --btc-accent-deep: #a5b4fc;
+  --btc-accent-soft: rgba(129, 140, 248, 0.15);
+  --btc-gold: #fbbf24;
+  --btc-green: #4ade80;
+  --btc-red: #f87171;
+  --btc-success-soft: rgba(74, 222, 128, 0.15);
+  --btc-warn-soft: rgba(251, 191, 36, 0.12);
+  --btc-red-soft: rgba(248, 113, 113, 0.15);
+  --btc-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --btc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --btc-btn-primary: #6366f1;
+  --btc-btn-primary-hover: #818cf8;
+  --btc-btn-text: #ffffff;
+  --btc-btn-dark-bg: #1a1a4a;
+  --toggle-bg: rgba(255, 255, 255, 0.12);
+  --toggle-border: rgba(255, 255, 255, 0.2);
+  --toggle-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Light = illuminated manuscript: warm parchment, rich gold, deep readable
@@ -385,130 +412,161 @@ html[data-btc-reduce-motion="1"] * {
    identical — they are the same palette reached two ways. */
 :root[data-theme='light'] {
   --game-ink: #1a1040;
-  --game-muted: rgba(26, 16, 64, 0.55);
+  --game-muted: rgba(26, 16, 64, 0.6);
   --game-bg:
-    repeating-linear-gradient(0deg, transparent, transparent 40px,
-      rgba(139, 90, 43, 0.03) 40px, rgba(139, 90, 43, 0.03) 41px),
-    radial-gradient(ellipse at 25% 15%, rgba(255, 215, 0, 0.12), transparent 55%),
-    linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 100%);
+    radial-gradient(ellipse at 25% 15%, rgba(79, 70, 229, 0.1), transparent 55%),
+    linear-gradient(135deg, #f0f2ff 0%, #fafbff 100%);
   --game-card-bg: #ffffff;
-  --game-card-border: rgba(139, 90, 43, 0.25);
-  --game-card-shadow: 0 4px 20px rgba(139, 90, 43, 0.15);
-  --game-star: rgba(139, 90, 43, 0.3);
-  --game-star-gold: rgba(139, 105, 20, 0.45);
-  --game-score: #8b6914;
-  --game-score-glow: rgba(139, 90, 43, 0.25);
-  --game-good: #2e7d32;
-  --game-bad: #b91c1c;
-  --game-verse-ink: #5a3a10;
-  --game-verse-bg: rgba(139, 90, 43, 0.08);
-  --game-verse-border: rgba(139, 90, 43, 0.3);
-  --game-flame-ink: #8a4b08;
-  --game-flame-bg: rgba(139, 90, 43, 0.12);
-  --game-flame-border: rgba(139, 90, 43, 0.35);
-  --game-row-bg: rgba(139, 90, 43, 0.07);
-  --game-row-border: rgba(139, 90, 43, 0.18);
-  --game-chip-bg: rgba(139, 90, 43, 0.08);
-  --game-chip-border: rgba(139, 90, 43, 0.35);
-  --game-chip-ink: #5a3a10;
+  --game-card-border: rgba(0, 0, 0, 0.08);
+  --game-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --game-star: rgba(79, 70, 229, 0.25);
+  --game-star-gold: rgba(180, 83, 9, 0.4);
+  --game-score: #b45309;
+  --game-score-glow: rgba(180, 83, 9, 0.25);
+  --game-good: #15803d;
+  --game-bad: #dc2626;
+  --game-verse-ink: #92400e;
+  --game-verse-bg: rgba(180, 83, 9, 0.08);
+  --game-verse-border: rgba(180, 83, 9, 0.35);
+  --game-flame-ink: #b45309;
+  --game-flame-bg: rgba(180, 83, 9, 0.1);
+  --game-flame-border: rgba(180, 83, 9, 0.3);
+  --game-row-bg: rgba(15, 10, 46, 0.05);
+  --game-row-border: rgba(15, 10, 46, 0.12);
+  --game-chip-bg: rgba(79, 70, 229, 0.08);
+  --game-chip-border: rgba(79, 70, 229, 0.35);
+  --game-chip-ink: #4338ca;
   --game-btn-grad: linear-gradient(180deg, #5b2bd0 0%, #3d1a9e 100%);
   --game-btn-shadow: #2a1060;
   --game-btn-glow: rgba(91, 43, 208, 0.35);
   --game-letter-bg: rgba(255, 215, 0, 0.2);
   --game-letter-border: rgba(255, 215, 0, 0.5);
   --game-letter-ink: #ffd700;
-  --game-timer-track: rgba(139, 90, 43, 0.15);
-  --toggle-bg: rgba(139, 90, 43, 0.12);
-  --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --game-timer-track: rgba(15, 10, 46, 0.12);
 
-  /* App shell — warm parchment: cream card on a deeper vellum surround,
-     brown ink, gold accents. Deliberately saturated, never washed-out white. */
-  --app-root-bg:
-    radial-gradient(ellipse at 30% 10%, rgba(212, 160, 23, 0.22), transparent 55%),
-    linear-gradient(160deg, #e9dcc0, #d8c49e);
-  --app-card-bg: #faf3e2;
-  --app-card-border: rgba(139, 90, 43, 0.3);
-  --app-card-shadow: 0 24px 60px rgba(101, 67, 33, 0.28);
-  --btc-surface: #fffaf0;
-  --btc-panel-bg: #f3ead4;
-  --btc-selected-bg: rgba(184, 134, 11, 0.16);
-  --btc-border: rgba(139, 90, 43, 0.25);
-  --btc-border-strong: rgba(139, 90, 43, 0.5);
-  --btc-text-strong: #3a2c15;
-  --btc-text-mid: #55432a;
-  --btc-nav-bg: #f6eed9;
-  --btc-nav-border: rgba(139, 90, 43, 0.3);
-  --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
-  --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
-  --btc-section-tint: #ecdfb9;
-  --btc-ink: #2e2110;
-  --btc-text-main: #2e2110;
-  --btc-text-subtle: #63512f;
-  --btc-text-muted: #7c683f;
+  /* App shell — v1.2.3 CLEAN BRIGHT LIGHT: white cards on a faint indigo
+     wash, deep-purple ink, indigo accents. Crisp modern-iOS feel — the
+     dramatic opposite of true-dark mode. */
+  --app-root-bg: #f5f7ff;
+  --app-card-bg: #ffffff;
+  --app-card-border: rgba(0, 0, 0, 0.06);
+  --app-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --btc-surface: #ffffff;
+  --btc-panel-bg: #f5f7ff;
+  --btc-elevated: #f0f2ff;
+  --btc-selected-bg: rgba(79, 70, 229, 0.1);
+  --btc-border: rgba(0, 0, 0, 0.08);
+  --btc-border-strong: rgba(0, 0, 0, 0.15);
+  --btc-text-strong: #1a1040;
+  --btc-text-mid: #3f3a5e;
+  --btc-nav-bg: rgba(255, 255, 255, 0.97);
+  --btc-nav-border: rgba(0, 0, 0, 0.08);
+  --btc-nav-active: #4f46e5;
+  --btc-nav-inactive: #6b7280;
+  --btc-hero-grad: linear-gradient(135deg, #f0f2ff 0%, #fafbff 100%);
+  --btc-deco-grad: radial-gradient(circle at top left, #e0e7ff, #fafbff 60%, #f0f2ff);
+  --btc-section-tint: #f5f7ff;
+  --btc-ink: #0f0a2e;
+  --btc-text-main: #1a1040;
+  --btc-text-subtle: #6b7280;
+  --btc-text-muted: #9ca3af;
+  --btc-accent: #4f46e5;
+  --btc-accent-deep: #4338ca;
+  --btc-accent-soft: rgba(79, 70, 229, 0.1);
+  --btc-gold: #b45309;
+  --btc-green: #15803d;
+  --btc-red: #dc2626;
+  --btc-success-soft: #dcfce7;
+  --btc-warn-soft: #fff7ed;
+  --btc-red-soft: #fee2e2;
+  --btc-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --btc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --btc-btn-primary: #4f46e5;
+  --btc-btn-primary-hover: #4338ca;
+  --btc-btn-text: #ffffff;
+  --btc-btn-dark-bg: #0f0a2e;
+  --toggle-bg: #4f46e5;
+  --toggle-border: transparent;
+  --toggle-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
     --game-ink: #1a1040;
-    --game-muted: rgba(26, 16, 64, 0.55);
+    --game-muted: rgba(26, 16, 64, 0.6);
     --game-bg:
-      repeating-linear-gradient(0deg, transparent, transparent 40px,
-        rgba(139, 90, 43, 0.03) 40px, rgba(139, 90, 43, 0.03) 41px),
-      radial-gradient(ellipse at 25% 15%, rgba(255, 215, 0, 0.12), transparent 55%),
-      linear-gradient(135deg, #f0e8d8 0%, #e8dcc8 100%);
+      radial-gradient(ellipse at 25% 15%, rgba(79, 70, 229, 0.1), transparent 55%),
+      linear-gradient(135deg, #f0f2ff 0%, #fafbff 100%);
     --game-card-bg: #ffffff;
-    --game-card-border: rgba(139, 90, 43, 0.25);
-    --game-card-shadow: 0 4px 20px rgba(139, 90, 43, 0.15);
-    --game-star: rgba(139, 90, 43, 0.3);
-    --game-star-gold: rgba(139, 105, 20, 0.45);
-    --game-score: #8b6914;
-    --game-score-glow: rgba(139, 90, 43, 0.25);
-    --game-good: #2e7d32;
-    --game-bad: #b91c1c;
-    --game-verse-ink: #5a3a10;
-    --game-verse-bg: rgba(139, 90, 43, 0.08);
-    --game-verse-border: rgba(139, 90, 43, 0.3);
-    --game-flame-ink: #8a4b08;
-    --game-flame-bg: rgba(139, 90, 43, 0.12);
-    --game-flame-border: rgba(139, 90, 43, 0.35);
-    --game-row-bg: rgba(139, 90, 43, 0.07);
-    --game-row-border: rgba(139, 90, 43, 0.18);
-    --game-chip-bg: rgba(139, 90, 43, 0.08);
-    --game-chip-border: rgba(139, 90, 43, 0.35);
-    --game-chip-ink: #5a3a10;
+    --game-card-border: rgba(0, 0, 0, 0.08);
+    --game-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --game-star: rgba(79, 70, 229, 0.25);
+    --game-star-gold: rgba(180, 83, 9, 0.4);
+    --game-score: #b45309;
+    --game-score-glow: rgba(180, 83, 9, 0.25);
+    --game-good: #15803d;
+    --game-bad: #dc2626;
+    --game-verse-ink: #92400e;
+    --game-verse-bg: rgba(180, 83, 9, 0.08);
+    --game-verse-border: rgba(180, 83, 9, 0.35);
+    --game-flame-ink: #b45309;
+    --game-flame-bg: rgba(180, 83, 9, 0.1);
+    --game-flame-border: rgba(180, 83, 9, 0.3);
+    --game-row-bg: rgba(15, 10, 46, 0.05);
+    --game-row-border: rgba(15, 10, 46, 0.12);
+    --game-chip-bg: rgba(79, 70, 229, 0.08);
+    --game-chip-border: rgba(79, 70, 229, 0.35);
+    --game-chip-ink: #4338ca;
     --game-btn-grad: linear-gradient(180deg, #5b2bd0 0%, #3d1a9e 100%);
     --game-btn-shadow: #2a1060;
     --game-btn-glow: rgba(91, 43, 208, 0.35);
     --game-letter-bg: rgba(255, 215, 0, 0.2);
     --game-letter-border: rgba(255, 215, 0, 0.5);
     --game-letter-ink: #ffd700;
-    --game-timer-track: rgba(139, 90, 43, 0.15);
-    --toggle-bg: rgba(139, 90, 43, 0.12);
-    --toggle-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --game-timer-track: rgba(15, 10, 46, 0.12);
 
-    /* App shell — warm parchment (identical to the block above) */
-    --app-root-bg:
-      radial-gradient(ellipse at 30% 10%, rgba(212, 160, 23, 0.22), transparent 55%),
-      linear-gradient(160deg, #e9dcc0, #d8c49e);
-    --app-card-bg: #faf3e2;
-    --app-card-border: rgba(139, 90, 43, 0.3);
-    --app-card-shadow: 0 24px 60px rgba(101, 67, 33, 0.28);
-    --btc-surface: #fffaf0;
-    --btc-panel-bg: #f3ead4;
-    --btc-selected-bg: rgba(184, 134, 11, 0.16);
-    --btc-border: rgba(139, 90, 43, 0.25);
-    --btc-border-strong: rgba(139, 90, 43, 0.5);
-    --btc-text-strong: #3a2c15;
-    --btc-text-mid: #55432a;
-    --btc-nav-bg: #f6eed9;
-    --btc-nav-border: rgba(139, 90, 43, 0.3);
-    --btc-hero-grad: linear-gradient(135deg, #f7ecd2, #f0e2c0);
-    --btc-deco-grad: radial-gradient(circle at top left, #f3dfae, #f3ead4 60%, #e6d3a8);
-    --btc-section-tint: #ecdfb9;
-    --btc-ink: #2e2110;
-    --btc-text-main: #2e2110;
-    --btc-text-subtle: #63512f;
-    --btc-text-muted: #7c683f;
+    /* App shell — clean bright light (identical to the block above) */
+    --app-root-bg: #f5f7ff;
+    --app-card-bg: #ffffff;
+    --app-card-border: rgba(0, 0, 0, 0.06);
+    --app-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --btc-surface: #ffffff;
+    --btc-panel-bg: #f5f7ff;
+    --btc-elevated: #f0f2ff;
+    --btc-selected-bg: rgba(79, 70, 229, 0.1);
+    --btc-border: rgba(0, 0, 0, 0.08);
+    --btc-border-strong: rgba(0, 0, 0, 0.15);
+    --btc-text-strong: #1a1040;
+    --btc-text-mid: #3f3a5e;
+    --btc-nav-bg: rgba(255, 255, 255, 0.97);
+    --btc-nav-border: rgba(0, 0, 0, 0.08);
+    --btc-nav-active: #4f46e5;
+    --btc-nav-inactive: #6b7280;
+    --btc-hero-grad: linear-gradient(135deg, #f0f2ff 0%, #fafbff 100%);
+    --btc-deco-grad: radial-gradient(circle at top left, #e0e7ff, #fafbff 60%, #f0f2ff);
+    --btc-section-tint: #f5f7ff;
+    --btc-ink: #0f0a2e;
+    --btc-text-main: #1a1040;
+    --btc-text-subtle: #6b7280;
+    --btc-text-muted: #9ca3af;
+    --btc-accent: #4f46e5;
+    --btc-accent-deep: #4338ca;
+    --btc-accent-soft: rgba(79, 70, 229, 0.1);
+    --btc-gold: #b45309;
+    --btc-green: #15803d;
+    --btc-red: #dc2626;
+    --btc-success-soft: #dcfce7;
+    --btc-warn-soft: #fff7ed;
+    --btc-red-soft: #fee2e2;
+    --btc-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --btc-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --btc-btn-primary: #4f46e5;
+    --btc-btn-primary-hover: #4338ca;
+    --btc-btn-text: #ffffff;
+    --btc-btn-dark-bg: #0f0a2e;
+    --toggle-bg: #4f46e5;
+    --toggle-border: transparent;
+    --toggle-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
   }
 }
 
@@ -776,7 +834,7 @@ html[data-btc-reduce-motion="1"] * {
   align-items: center;
   gap: 6px;
   margin-top: 4px;
-  color: #b8860b;
+  color: var(--btc-gold, #b8860b);
   font-size: 12px;
   font-weight: 600;
   animation: tts-pulse 1s infinite;
@@ -822,7 +880,7 @@ html[data-btc-reduce-motion="1"] * {
   border-radius: 8px;
   padding: 2px 8px;
   font-size: 11px;
-  color: #b8860b;
+  color: var(--btc-gold, #b8860b);
 }
 .btc-game .pro-locked::after { color: var(--game-score); }
 
@@ -891,23 +949,23 @@ html[data-btc-reduce-motion="1"] * {
    Shows the mode you'll switch TO; Settings keeps the 3-way System picker. */
 .theme-toggle {
   position: fixed;
-  top: calc(10px + env(safe-area-inset-top));
-  right: 12px;
+  top: calc(12px + env(safe-area-inset-top));
+  right: 16px;
   z-index: 1500; /* above content, below modals (2000) */
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  border: 1px solid var(--btc-border-strong);
-  background: var(--btc-surface);
+  width: 44px;
+  height: 44px;
+  border-radius: 14px; /* rounded square, like an iOS app icon */
+  border: 1px solid var(--toggle-border);
+  background: var(--toggle-bg);
   box-shadow: var(--toggle-shadow);
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: transform 80ms ease, background 0.3s ease;
+  transition: transform 80ms ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .theme-toggle:active { transform: scale(0.92); }
 /* Clear the fixed Family Mode banner when it's showing */
