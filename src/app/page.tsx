@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import HomePricing from './HomePricing';
 
 export default function HomePage() {
   return (
@@ -275,6 +276,8 @@ export default function HomePage() {
             <li>• Wanting Scripture to stick, not just be skimmed</li>
           </ul>
         </section>
+
+        <HomePricing />
 
         <p
           style={{
