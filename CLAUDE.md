@@ -48,6 +48,11 @@ Never skip this. Allen needs to see what shipped before approving the next task.
 ## Environment Variables (names only)
 None required for core function (trivia is static). Vercel Analytics is built in.
 
+Web Pro unlock (Stripe, one-time $2.99) — set in Vercel to activate; dormant until then:
+- `STRIPE_SECRET_KEY` (test: `sk_test_…`)
+- `STRIPE_PRICE_BIBLE_COACH` (test price id from `stripe-setup.mjs`)
+- `NEXT_PUBLIC_SITE_URL` (defaults to https://biblestudy.webeuseful.com)
+
 ## Current Version
 Web: continuous (main). iOS: 1.1.0(2) approved lineage.
 
@@ -95,7 +100,8 @@ Web: continuous (main). iOS: 1.1.0(2) approved lineage.
 3. Consider surfacing Family Mode in onboarding
 
 ## Revenue Model
-Free (no IAPs yet).
+- **Web:** Bible Coach Pro — **$2.99 one-time** unlock via Stripe (account-less license; `/pricing`, `/api/checkout`, `/unlock/success`, `src/lib/pro.ts`). Built 2026-07-27; live but **dormant until the Stripe env vars are set** (checkout returns 503 → UI shows "coming soon"). Flip to live keys when ready.
+- **iOS:** non-consumable IAP `com.webeuseful.BibleTriviaCoach.pro` $2.99 (code written; see outer CLAUDE.md).
 
 ## Model Guide
 Sonnet for content, UI, and pack work. Fable 5/Opus for safety/Family Mode logic, rate limiting/CSP changes, or Capacitor/watch build issues.
