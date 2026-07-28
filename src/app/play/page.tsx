@@ -2507,7 +2507,6 @@ function HomeScreen(props: {
 
         {/* ── Bible Coach Pro teaser (no gating — placeholder only) ─ */}
         <div
-          className="pro-locked"
           style={{
             marginTop: 14,
             padding: 14,
@@ -2522,8 +2521,24 @@ function HomeScreen(props: {
             style={{ marginTop: 4, fontSize: 12 }}
           >
             Unlock unlimited challenges, all difficulty levels, family game
-            history, and more. Coming soon!
+            history, and more.
           </div>
+          <a
+            href="/pricing"
+            style={{
+              display: 'inline-block',
+              marginTop: 10,
+              padding: '8px 14px',
+              borderRadius: 10,
+              background: 'var(--btc-accent-deep)',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: 12,
+              textDecoration: 'none',
+            }}
+          >
+            Unlock Pro — $2.99 →
+          </a>
         </div>
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
@@ -4214,7 +4229,6 @@ function FamilyGameScreen(props: {
               Scores stay on this device — nothing is stored online.
             </p>
             <div
-              className="pro-locked"
               style={{
                 marginTop: 12,
                 padding: '10px 12px',
@@ -4229,7 +4243,10 @@ function FamilyGameScreen(props: {
               📊 <strong style={{ color: 'var(--game-ink)' }}>Family game history</strong>
               <br />
               See how your family improves over 30 games — part of Bible Coach
-              Pro. Coming soon!
+              Pro.{' '}
+              <a href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
+                Unlock — $2.99 →
+              </a>
             </div>
             <div
               style={{
