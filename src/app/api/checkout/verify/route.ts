@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { sendWelcomeEmail } from "@/lib/welcomeEmail";
 
 export const runtime = "nodejs";
 
@@ -19,6 +20,13 @@ export async function GET(req: Request) {
     const stripe = new Stripe(secret);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     const paid = session.payment_status === "paid";
+    if (paid) {
+      // Welcome email (gated + idempotent per session; never blocks the unlock).
+      await sendWelcomeEmail({
+        to: session.customer_details?.email,
+        sessionId,
+      }).catch(() => {});
+    }
     return Response.json({ paid });
   } catch (err) {
     const message = err instanceof Error ? err.message : "verify_failed";
