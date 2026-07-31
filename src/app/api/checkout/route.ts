@@ -13,6 +13,11 @@ export async function POST(req: Request) {
   if (!secret || !price) {
     return Response.json({ error: "not_configured" }, { status: 503 });
   }
+  if (process.env.VERCEL_ENV === "production" && secret.startsWith("sk_test_")) {
+    console.warn(
+      "[stripe] WARNING: TEST secret key in production — checkouts open as Sandbox and charge no real money."
+    );
+  }
 
   const origin =
     process.env.NEXT_PUBLIC_SITE_URL ||
