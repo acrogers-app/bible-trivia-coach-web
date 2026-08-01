@@ -7,14 +7,14 @@ import { setPro } from "@/lib/pro";
 
 function SuccessInner() {
   const params = useSearchParams();
-  const [state, setState] = useState<"verifying" | "ok" | "fail">("verifying");
+  const sessionId = params.get("session_id");
+  // No session_id → fail from the first render (no effect-time setState).
+  const [state, setState] = useState<"verifying" | "ok" | "fail">(
+    sessionId ? "verifying" : "fail"
+  );
 
   useEffect(() => {
-    const sessionId = params.get("session_id");
-    if (!sessionId) {
-      setState("fail");
-      return;
-    }
+    if (!sessionId) return;
     let active = true;
     fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
       .then((r) => r.json())
@@ -31,7 +31,7 @@ function SuccessInner() {
     return () => {
       active = false;
     };
-  }, [params]);
+  }, [sessionId]);
 
   return (
     <main style={{ maxWidth: 520, margin: "0 auto", padding: "56px 20px", textAlign: "center" }}>

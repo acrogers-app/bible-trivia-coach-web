@@ -20,6 +20,7 @@ import { hapticTap } from '../../lib/haptics';
 import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
 import { stopSpeech } from '../../lib/speech';
+import { useIsPro } from '../../lib/pro';
 import {
   APP_VERSION,
   VERSION_SEEN_KEY,
@@ -2031,6 +2032,7 @@ function HomeScreen(props: {
   const mixedCount = availableCount(pack, 'mixed', 'scripture');
   const coachTip = getTodayCoachTip();
   const dailyNudgeText = getDailyChallengeNudgeLine();
+  const pro = useIsPro();
 
   const [streakInfo] = useState(() => getStreakInfo());
   const streak = streakInfo.current > 0 ? streakInfo.current : null;
@@ -2505,7 +2507,9 @@ function HomeScreen(props: {
         {/* ── Your Path: difficulty progression (device-local) ───── */}
         <PathSection onStartPathQuiz={props.onStartPathQuiz} />
 
-        {/* ── Bible Coach Pro teaser (no gating — placeholder only) ─ */}
+        {/* ── Bible Coach Pro: upsell for free users, thank-you once
+            unlocked. Entitlement via useIsPro (localStorage + cookie,
+            set only after server-side Stripe verification). ─ */}
         <div
           style={{
             marginTop: 14,
@@ -2515,30 +2519,44 @@ function HomeScreen(props: {
             background: 'var(--btc-accent-soft)',
           }}
         >
-          <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Coach Pro</div>
-          <div
-            className="btc-text-muted"
-            style={{ marginTop: 4, fontSize: 12 }}
-          >
-            Unlock unlimited challenges, all difficulty levels, family game
-            history, and more.
-          </div>
-          <a
-            href="/pricing"
-            style={{
-              display: 'inline-block',
-              marginTop: 10,
-              padding: '8px 14px',
-              borderRadius: 10,
-              background: 'var(--btc-accent-deep)',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: 12,
-              textDecoration: 'none',
-            }}
-          >
-            Unlock Pro — $2.99 →
-          </a>
+          {pro ? (
+            <>
+              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>
+                ✨ Bible Coach Pro — unlocked
+              </div>
+              <div className="btc-text-muted" style={{ marginTop: 4, fontSize: 12 }}>
+                Unlimited challenges, every difficulty level, and family game
+                history are yours. Thank you for supporting Bible Coach!
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Coach Pro</div>
+              <div
+                className="btc-text-muted"
+                style={{ marginTop: 4, fontSize: 12 }}
+              >
+                Unlock unlimited challenges, all difficulty levels, family game
+                history, and more.
+              </div>
+              <a
+                href="/pricing"
+                style={{
+                  display: 'inline-block',
+                  marginTop: 10,
+                  padding: '8px 14px',
+                  borderRadius: 10,
+                  background: 'var(--btc-accent-deep)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  textDecoration: 'none',
+                }}
+              >
+                Unlock Pro — $2.99 →
+              </a>
+            </>
+          )}
         </div>
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
