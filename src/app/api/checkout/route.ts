@@ -28,6 +28,9 @@ export async function POST(req: Request) {
     const stripe = new Stripe(secret);
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      // Per-app bank-statement descriptor: shows "WEBEUSEFUL* BIBLECOACH".
+      // (Suffix kept ≤10 chars so account descriptor + suffix stays ≤22.)
+      payment_intent_data: { statement_descriptor_suffix: "BIBLECOACH" },
       line_items: [{ price, quantity: 1 }],
       allow_promotion_codes: true,
       success_url: `${origin}/unlock/success?session_id={CHECKOUT_SESSION_ID}`,
