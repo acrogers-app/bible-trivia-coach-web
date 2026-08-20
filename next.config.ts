@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
               "img-src 'self' data: blob:",
-              "connect-src 'self' https://api.langfuse.com https://cloud.langfuse.com",
+              "connect-src 'self' https://api.langfuse.com https://cloud.langfuse.com https://dashboard.webeuseful.com",
               "frame-ancestors 'none'",
             ].join("; "),
           },
