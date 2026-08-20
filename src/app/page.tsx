@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import HomePricing from './HomePricing';
+import { LiveTotalPromo } from '@/components/LiveTotalPromo';
 
 export default function HomePage() {
   return (
@@ -291,6 +292,8 @@ export default function HomePage() {
           {' · '}
           <a href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</a>
         </p>
+
+        <LiveTotalPromo />
       </div>
     </div>
   );
