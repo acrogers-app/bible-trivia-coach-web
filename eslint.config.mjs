@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // macOS AppleDouble sidecar files (._foo.ts) auto-created on external
+    // volumes after edits — never source, must not be parsed by eslint:
+    "**/._*",
     // Capacitor native projects (contain copied minified web assets):
     "ios/**",
     "android/**",

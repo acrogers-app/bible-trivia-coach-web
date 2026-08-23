@@ -1,6 +1,6 @@
 {
   "name": "bible-trivia-coach-web",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,6 +19,7 @@
     "@capacitor/ios": "^8.4.1",
     "@capacitor/local-notifications": "^8.2.0",
     "@capacitor/preferences": "^8.0.1",
+    "@capgo/native-purchases": "^8.6.6",
     "@vercel/analytics": "^2.0.1",
     "better-sqlite3": "^12.10.1",
     "canvas-confetti": "^1.9.4",

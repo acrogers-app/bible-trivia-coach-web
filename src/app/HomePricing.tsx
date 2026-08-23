@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useIsPro } from "@/lib/pro";
+import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
 
 /**
  * Landing-page pricing section. The Unlock button starts Stripe Checkout
@@ -10,11 +11,18 @@ import { useIsPro } from "@/lib/pro";
  */
 export default function HomePricing() {
   const pro = useIsPro();
-  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error">("idle");
+  const ios = useIsIosNative();
+  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error" | "restoring">("idle");
 
   async function unlock() {
     setStatus("loading");
     try {
+      // Inside the iOS app, Apple requires StoreKit — not Stripe.
+      if (ios) {
+        await purchasePro(); // sets Pro on success; user-cancel is a no-op
+        setStatus("idle");
+        return;
+      }
       const res = await fetch("/api/checkout", { method: "POST" });
       if (res.status === 503) {
         setStatus("soon");
@@ -26,6 +34,16 @@ export default function HomePricing() {
         return;
       }
       setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  async function restore() {
+    setStatus("restoring");
+    try {
+      await restorePro(); // sets Pro if a prior purchase is found
+      setStatus("idle");
     } catch {
       setStatus("error");
     }
@@ -147,7 +165,7 @@ export default function HomePricing() {
           ) : (
             <button
               onClick={unlock}
-              disabled={status === "loading"}
+              disabled={status === "loading" || status === "restoring"}
               style={{
                 marginTop: 14,
                 width: "100%",
@@ -165,6 +183,28 @@ export default function HomePricing() {
             </button>
           )}
 
+          {/* Apple requires a restore path for non-consumable purchases. */}
+          {ios && !pro && (
+            <button
+              onClick={restore}
+              disabled={status === "loading" || status === "restoring"}
+              style={{
+                marginTop: 8,
+                width: "100%",
+                padding: "8px 14px",
+                borderRadius: 10,
+                border: "none",
+                background: "transparent",
+                color: "var(--btc-accent-deep)",
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: "pointer",
+              }}
+            >
+              {status === "restoring" ? "Restoring…" : "Restore purchase"}
+            </button>
+          )}
+
           {status === "soon" && (
             <p className="btc-text-muted" style={{ marginTop: 8, fontSize: 12 }}>
               Pro checkout is launching shortly — check back soon.
@@ -179,16 +219,22 @@ export default function HomePricing() {
             className="btc-text-muted"
             style={{ marginTop: 8, fontSize: 11, textAlign: "center" }}
           >
-            Secure one-time checkout by Stripe. Also on the{" "}
-            <a
-              href="https://apps.apple.com/app/id6788610253"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--btc-accent-deep)" }}
-            >
-              iOS App Store
-            </a>
-            .
+            {ios ? (
+              "Secure one-time purchase through the App Store."
+            ) : (
+              <>
+                Secure one-time checkout by Stripe. Also on the{" "}
+                <a
+                  href="https://apps.apple.com/app/id6788610253"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--btc-accent-deep)" }}
+                >
+                  iOS App Store
+                </a>
+                .
+              </>
+            )}
           </p>
         </div>
       </div>
