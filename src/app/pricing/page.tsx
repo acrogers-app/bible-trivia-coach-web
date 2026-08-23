@@ -3,14 +3,22 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useIsPro } from "@/lib/pro";
+import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
 
 export default function PricingPage() {
   const pro = useIsPro();
-  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error">("idle");
+  const ios = useIsIosNative();
+  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error" | "restoring">("idle");
 
   async function unlock() {
     setStatus("loading");
     try {
+      // Inside the iOS app, Apple requires StoreKit — not Stripe.
+      if (ios) {
+        await purchasePro(); // sets Pro on success; user-cancel is a no-op
+        setStatus("idle");
+        return;
+      }
       const res = await fetch("/api/checkout", { method: "POST" });
       if (res.status === 503) {
         setStatus("soon");
@@ -22,6 +30,16 @@ export default function PricingPage() {
         return;
       }
       setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  async function restore() {
+    setStatus("restoring");
+    try {
+      await restorePro(); // sets Pro if a prior purchase is found
+      setStatus("idle");
     } catch {
       setStatus("error");
     }
@@ -125,7 +143,7 @@ export default function PricingPage() {
           ) : (
             <button
               onClick={unlock}
-              disabled={status === "loading"}
+              disabled={status === "loading" || status === "restoring"}
               style={{
                 marginTop: 16,
                 width: "100%",
@@ -143,6 +161,28 @@ export default function PricingPage() {
             </button>
           )}
 
+          {/* Apple requires a restore path for non-consumable purchases. */}
+          {ios && !pro && (
+            <button
+              onClick={restore}
+              disabled={status === "loading" || status === "restoring"}
+              style={{
+                marginTop: 10,
+                width: "100%",
+                padding: "10px 16px",
+                borderRadius: 10,
+                border: "none",
+                background: "transparent",
+                color: "var(--btc-accent-deep)",
+                fontWeight: 600,
+                fontSize: 14,
+                cursor: "pointer",
+              }}
+            >
+              {status === "restoring" ? "Restoring…" : "Restore purchase"}
+            </button>
+          )}
+
           {status === "soon" && (
             <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 13 }}>
               Pro checkout is launching shortly — check back soon.
@@ -154,16 +194,22 @@ export default function PricingPage() {
             </p>
           )}
           <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 12 }}>
-            No subscription. Also available on the{" "}
-            <a
-              href="https://apps.apple.com/app/id6788610253"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--btc-accent-deep)" }}
-            >
-              iOS App Store
-            </a>
-            .
+            {ios ? (
+              "No subscription — a one-time purchase through the App Store."
+            ) : (
+              <>
+                No subscription. Also available on the{" "}
+                <a
+                  href="https://apps.apple.com/app/id6788610253"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--btc-accent-deep)" }}
+                >
+                  iOS App Store
+                </a>
+                .
+              </>
+            )}
           </p>
         </section>
       </div>
