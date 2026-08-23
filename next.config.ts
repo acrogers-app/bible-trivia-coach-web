@@ -1,8 +1,25 @@
+import fs from "node:fs";
 import type { NextConfig } from "next";
 
 // BUILD_TARGET=capacitor produces a static export for the mobile shell
 // (no server; /api/* calls go to NEXT_PUBLIC_API_BASE instead).
 const isCapacitorBuild = process.env.BUILD_TARGET === "capacitor";
+
+// Guard: the capacitor static export is incompatible with dynamic route
+// handlers, so scripts/buildMobile.mjs renames src/app/api -> src/app/_api
+// for the duration of the build. If BUILD_TARGET=capacitor is set but that
+// rename never happened (i.e. someone ran the raw `BUILD_TARGET=capacitor
+// next build` instead of `npm run build:mobile`), the build would fail deep
+// in page-data collection with a cryptic "export const dynamic" error and,
+// worse, leave a stale out/ that cap sync would silently ship. Fail loudly
+// and early instead.
+if (isCapacitorBuild && fs.existsSync("src/app/api")) {
+  throw new Error(
+    "BUILD_TARGET=capacitor but src/app/api still exists — dynamic API routes " +
+      "cannot be part of a static export. Run `npm run build:mobile` (it renames " +
+      "src/app/api out of the way for the build), not `BUILD_TARGET=capacitor next build`.",
+  );
+}
 
 const nextConfig: NextConfig = {
   ...(isCapacitorBuild
