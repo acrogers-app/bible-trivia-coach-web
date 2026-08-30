@@ -8,7 +8,7 @@
 //
 // Every export is a hard no-op off iOS-native, so importing this module on the
 // web (or during SSR/static export) is safe.
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Capacitor } from "@capacitor/core";
 import { NativePurchases } from "@capgo/native-purchases";
 import { isPro, setPro } from "./pro";
@@ -36,6 +36,25 @@ export function useIsIosNative(): boolean {
     () => isIosNative(),
     () => false,
   );
+}
+
+/**
+ * React hook: the price to show on paywall UI. On iOS this resolves to the
+ * localized StoreKit price (so non-US storefronts never see a hardcoded "$2.99"
+ * — Guideline 2.3.1); on the web it stays the Stripe USD price.
+ */
+export function useProPriceString(fallback = "$2.99"): string {
+  const [price, setPrice] = useState(fallback);
+  useEffect(() => {
+    let alive = true;
+    getProPriceString().then((localized) => {
+      if (alive && localized) setPrice(localized);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return price;
 }
 
 /** Localized StoreKit price string (e.g. "$2.99"), or null off iOS / on error. */

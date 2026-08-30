@@ -3,11 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 export default function PricingPage() {
   const pro = useIsPro();
   const ios = useIsIosNative();
+  const price = useProPriceString();
   const [status, setStatus] = useState<
     "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
   >("idle");
@@ -118,7 +119,7 @@ export default function PricingPage() {
             Pro
           </div>
           <div style={{ fontSize: 30, fontWeight: 800, margin: "6px 0" }}>
-            $2.99 <span style={{ fontSize: 14, fontWeight: 600 }}>one-time</span>
+            {price} <span style={{ fontSize: 14, fontWeight: 600 }}>one-time</span>
           </div>
           <ul style={{ margin: "10px 0 0", paddingLeft: 18, lineHeight: 1.9, fontSize: 14 }}>
             <li>Everything in Free</li>
@@ -159,7 +160,7 @@ export default function PricingPage() {
                 cursor: status === "loading" ? "default" : "pointer",
               }}
             >
-              {status === "loading" ? "Starting checkout…" : "Unlock Pro — $2.99"}
+              {status === "loading" ? "Starting checkout…" : `Unlock Pro — ${price}`}
             </button>
           )}
 

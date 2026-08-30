@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 /**
  * Landing-page pricing section. The Unlock button starts Stripe Checkout
@@ -12,6 +12,7 @@ import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
 export default function HomePricing() {
   const pro = useIsPro();
   const ios = useIsIosNative();
+  const price = useProPriceString();
   const [status, setStatus] = useState<
     "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
   >("idle");
@@ -137,7 +138,7 @@ export default function HomePricing() {
             Bible Coach Pro
           </div>
           <div style={{ fontSize: 28, fontWeight: 800, margin: "4px 0" }}>
-            $2.99 <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>
+            {price} <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>
           </div>
           <p style={{ fontSize: 12, color: "var(--btc-text-muted)", margin: 0 }}>
             Pay once. Own it forever.
@@ -181,7 +182,7 @@ export default function HomePricing() {
                 cursor: status === "loading" ? "default" : "pointer",
               }}
             >
-              {status === "loading" ? "Starting checkout…" : "Unlock Pro — $2.99"}
+              {status === "loading" ? "Starting checkout…" : `Unlock Pro — ${price}`}
             </button>
           )}
 

@@ -2553,7 +2553,7 @@ function HomeScreen(props: {
                   textDecoration: 'none',
                 }}
               >
-                Unlock Pro — $2.99 →
+                Unlock Pro →
               </a>
             </>
           )}
@@ -4263,7 +4263,7 @@ function FamilyGameScreen(props: {
               See how your family improves over 30 games — part of Bible Coach
               Pro.{' '}
               <a href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
-                Unlock — $2.99 →
+                Unlock →
               </a>
             </div>
             <div
