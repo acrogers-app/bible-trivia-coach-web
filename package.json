@@ -10,7 +10,8 @@
     "validate:questions": "node scripts/validateQuestions.mjs",
     "check": "npm run lint && npm run build && npm run validate:questions",
     "build:mobile": "node scripts/buildMobile.mjs",
-    "cap:sync": "npm run build:mobile && npx cap sync"
+    "cap:sync": "npm run build:mobile && npx cap sync",
+    "postinstall": "node scripts/patchNativePurchases.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",
