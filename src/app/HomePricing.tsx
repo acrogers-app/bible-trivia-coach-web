@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 /**
  * Landing-page pricing section. The Unlock button starts Stripe Checkout
@@ -12,7 +12,10 @@ import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
 export default function HomePricing() {
   const pro = useIsPro();
   const ios = useIsIosNative();
-  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error" | "restoring">("idle");
+  const price = useProPriceString();
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
+  >("idle");
 
   async function unlock() {
     setStatus("loading");
@@ -42,10 +45,10 @@ export default function HomePricing() {
   async function restore() {
     setStatus("restoring");
     try {
-      await restorePro(); // sets Pro if a prior purchase is found
-      setStatus("idle");
+      const result = await restorePro(); // sets Pro if a prior purchase is found
+      setStatus(result === "restored" ? "restored" : result === "none" ? "restore-none" : "restore-error");
     } catch {
-      setStatus("error");
+      setStatus("restore-error");
     }
   }
 
@@ -135,7 +138,7 @@ export default function HomePricing() {
             Bible Coach Pro
           </div>
           <div style={{ fontSize: 28, fontWeight: 800, margin: "4px 0" }}>
-            $2.99 <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>
+            {price} <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>
           </div>
           <p style={{ fontSize: 12, color: "var(--btc-text-muted)", margin: 0 }}>
             Pay once. Own it forever.
@@ -179,7 +182,7 @@ export default function HomePricing() {
                 cursor: status === "loading" ? "default" : "pointer",
               }}
             >
-              {status === "loading" ? "Starting checkout…" : "Unlock Pro — $2.99"}
+              {status === "loading" ? "Starting checkout…" : `Unlock Pro — ${price}`}
             </button>
           )}
 
@@ -213,6 +216,21 @@ export default function HomePricing() {
           {status === "error" && (
             <p style={{ marginTop: 8, fontSize: 12, color: "#b91c1c" }}>
               Something went wrong. Please try again.
+            </p>
+          )}
+          {status === "restored" && (
+            <p style={{ marginTop: 8, fontSize: 12, color: "var(--btc-accent-deep)", fontWeight: 600 }}>
+              ✓ Purchases restored.
+            </p>
+          )}
+          {status === "restore-none" && (
+            <p className="btc-text-muted" style={{ marginTop: 8, fontSize: 12 }}>
+              No previous purchase was found for this Apple&nbsp;ID.
+            </p>
+          )}
+          {status === "restore-error" && (
+            <p style={{ marginTop: 8, fontSize: 12, color: "#b91c1c" }}>
+              Restore didn&apos;t complete. Check your App Store sign-in and try again.
             </p>
           )}
           <p

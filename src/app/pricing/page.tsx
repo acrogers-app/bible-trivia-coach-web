@@ -3,12 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 export default function PricingPage() {
   const pro = useIsPro();
   const ios = useIsIosNative();
-  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error" | "restoring">("idle");
+  const price = useProPriceString();
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
+  >("idle");
 
   async function unlock() {
     setStatus("loading");
@@ -38,10 +41,10 @@ export default function PricingPage() {
   async function restore() {
     setStatus("restoring");
     try {
-      await restorePro(); // sets Pro if a prior purchase is found
-      setStatus("idle");
+      const result = await restorePro(); // sets Pro if a prior purchase is found
+      setStatus(result === "restored" ? "restored" : result === "none" ? "restore-none" : "restore-error");
     } catch {
-      setStatus("error");
+      setStatus("restore-error");
     }
   }
 
@@ -116,7 +119,7 @@ export default function PricingPage() {
             Pro
           </div>
           <div style={{ fontSize: 30, fontWeight: 800, margin: "6px 0" }}>
-            $2.99 <span style={{ fontSize: 14, fontWeight: 600 }}>one-time</span>
+            {price} <span style={{ fontSize: 14, fontWeight: 600 }}>one-time</span>
           </div>
           <ul style={{ margin: "10px 0 0", paddingLeft: 18, lineHeight: 1.9, fontSize: 14 }}>
             <li>Everything in Free</li>
@@ -157,7 +160,7 @@ export default function PricingPage() {
                 cursor: status === "loading" ? "default" : "pointer",
               }}
             >
-              {status === "loading" ? "Starting checkout…" : "Unlock Pro — $2.99"}
+              {status === "loading" ? "Starting checkout…" : `Unlock Pro — ${price}`}
             </button>
           )}
 
@@ -191,6 +194,21 @@ export default function PricingPage() {
           {status === "error" && (
             <p style={{ marginTop: 10, fontSize: 13, color: "#b91c1c" }}>
               Something went wrong. Please try again.
+            </p>
+          )}
+          {status === "restored" && (
+            <p style={{ marginTop: 10, fontSize: 13, color: "var(--btc-accent-deep)", fontWeight: 600 }}>
+              ✓ Purchases restored.
+            </p>
+          )}
+          {status === "restore-none" && (
+            <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 13 }}>
+              No previous purchase was found for this Apple&nbsp;ID.
+            </p>
+          )}
+          {status === "restore-error" && (
+            <p style={{ marginTop: 10, fontSize: 13, color: "#b91c1c" }}>
+              Restore didn&apos;t complete. Check your App Store sign-in and try again.
             </p>
           )}
           <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 12 }}>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useIsIosNative } from "@/lib/iap";
 
 /**
  * Portfolio cross-promo: live combined downloads+visits total across the whole
@@ -31,6 +32,9 @@ function readFreshCache(): number | null {
 
 export function LiveTotalPromo() {
   const [total, setTotal] = useState<number | null>(null);
+  // Inside the iOS app this is an outbound marketing link to other platforms —
+  // an App Review 3.1.1/2.3.10 flag. Web-only.
+  const ios = useIsIosNative();
 
   useEffect(() => {
     let cancelled = false;
@@ -68,7 +72,7 @@ export function LiveTotalPromo() {
     };
   }, []);
 
-  if (total === null || total <= 0) return null;
+  if (ios || total === null || total <= 0) return null;
 
   const floored = Math.floor(total / 10) * 10;
   return (

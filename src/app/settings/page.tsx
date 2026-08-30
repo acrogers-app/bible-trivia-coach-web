@@ -24,6 +24,8 @@ import {
 } from '../../lib/familyMode';
 import { subscribeLS } from '../../lib/gameFx';
 import { getThemePref, setThemePref, type ThemePref } from '../../lib/theme';
+import { useIsPro } from '../../lib/pro';
+import { restorePro, type RestoreResult } from '../../lib/iap';
 
 type VoiceOpt = SpeechSynthesisVoice;
 
@@ -443,6 +445,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {isNative && <PurchasesCard />}
+
         <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" onClick={save} disabled={!dirty} style={btnPrimary}>Save</button>
           <button type="button" onClick={cancel} disabled={!dirty} style={btn}>Cancel</button>
@@ -507,6 +511,53 @@ function ThemeCard() {
             {o.label}
           </button>
         ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Purchases (iOS only): explicit user-initiated Restore Purchases with
+// visible success/failure feedback — required by App Review Guideline 3.1.1.
+function PurchasesCard() {
+  const pro = useIsPro();
+  const [state, setState] = useState<'idle' | 'working' | RestoreResult>('idle');
+
+  async function onRestore() {
+    setState('working');
+    try {
+      setState(await restorePro());
+    } catch {
+      setState('error');
+    }
+  }
+
+  return (
+    <div style={card}>
+      <h2 style={h2}>Purchases</h2>
+      <div className="btc-text-muted" style={{ marginTop: 6, fontSize: 13 }}>
+        {pro
+          ? 'Bible Coach Pro is unlocked on this device. Thank you!'
+          : 'Already bought Bible Coach Pro? Restore it here on any device signed in to the same Apple ID.'}
+      </div>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
+        <button type="button" onClick={onRestore} disabled={state === 'working'} style={btn}>
+          {state === 'working' ? 'Restoring…' : 'Restore Purchases'}
+        </button>
+        {state === 'restored' && (
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--btc-accent-deep)' }}>
+            ✓ Purchases restored.
+          </span>
+        )}
+        {state === 'none' && (
+          <span className="btc-text-muted" style={{ fontSize: 13 }}>
+            No previous purchase was found for this Apple ID.
+          </span>
+        )}
+        {state === 'error' && (
+          <span style={{ fontSize: 13, color: '#b91c1c' }}>
+            Restore didn&apos;t complete. Check your App Store sign-in and try again.
+          </span>
+        )}
       </div>
     </div>
   );

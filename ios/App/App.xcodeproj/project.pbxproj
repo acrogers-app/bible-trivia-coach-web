@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		195AFAE368E83C3052A3A422 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B7544FA1D40E60E088E2D9 /* Foundation.framework */; };
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		49B740F8CF92F4B914A7797B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B7544FA1D40E60E088E2D9 /* Foundation.framework */; };
 		4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE82AF431CB00220026 /* CapApp-SPM */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
@@ -15,6 +17,8 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		53C501F17C0EF02450AAA813 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 60050FBC773EBB04481B8A6E /* Configuration.storekit */; };
+		7A20260829B1B1E501AC0001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A20260829B1B1E501AC0002 /* PrivacyInfo.xcprivacy */; };
 		B5C000000000000000000011 /* BibleStudyCoachWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000003 /* BibleStudyCoachWatchApp.swift */; };
 		B5C000000000000000000012 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000004 /* ContentView.swift */; };
 		B5C000000000000000000013 /* VerseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000005 /* VerseProvider.swift */; };
@@ -25,6 +29,8 @@
 		B5C000000000000000000018 /* BibleStudyCoach Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000001 /* BibleStudyCoach Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5C000000000000000000019 /* BibleStudyCoach Complication.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000002 /* BibleStudyCoach Complication.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5C000000000000000000061 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5C000000000000000000060 /* Assets.xcassets */; };
+		D48AA3547CDB11A46B599192 /* IapHostedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7304B9364E16919C0FB6AAD /* IapHostedTests.swift */; };
+		E195C18F28759459485B9F0C /* AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A191855F0B0989258E095BB9 /* AppUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +47,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = B5C000000000000000000031;
 			remoteInfo = "BibleStudyCoach Watch App";
+		};
+		B7BECC26C59AA5970829F648 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 504EC3031FED79650016851F;
+			remoteInfo = App;
+		};
+		FA426C2C193673761CF7A837 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 504EC3031FED79650016851F;
+			remoteInfo = App;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -79,7 +99,11 @@
 		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		60050FBC773EBB04481B8A6E /* Configuration.storekit */ = {isa = PBXFileReference; includeInIndex = 1; name = Configuration.storekit; path = App/Configuration.storekit; sourceTree = "<group>"; };
+		7A20260829B1B1E501AC0002 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = App/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		64B7544FA1D40E60E088E2D9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		A191855F0B0989258E095BB9 /* AppUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppUITests.swift; sourceTree = "<group>"; };
 		B5C000000000000000000001 /* BibleStudyCoach Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BibleStudyCoach Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C000000000000000000002 /* BibleStudyCoach Complication.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BibleStudyCoach Complication.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C000000000000000000003 /* BibleStudyCoachWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleStudyCoachWatchApp.swift; sourceTree = "<group>"; };
@@ -89,6 +113,9 @@
 		B5C000000000000000000007 /* ComplicationBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationBundle.swift; sourceTree = "<group>"; };
 		B5C000000000000000000008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5C000000000000000000060 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CF3ED7B45AFC9D735FE31A3D /* AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E17E30193A87530FCF5C2462 /* AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7304B9364E16919C0FB6AAD /* IapHostedTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IapHostedTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +124,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8298967D53A31E42C12EE057 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				195AFAE368E83C3052A3A422 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +149,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C6DDF242267296AFC926FAC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49B740F8CF92F4B914A7797B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -126,6 +169,11 @@
 				B5C000000000000000000022 /* BibleStudyCoachComplication */,
 				B5C000000000000000000023 /* WatchShared */,
 				504EC3051FED79650016851F /* Products */,
+				BBE5F462351597CED770B66F /* Frameworks */,
+				61C478062785444DAE1288AA /* AppUITests */,
+				8ABA3B7F6B5266CB42E48FB7 /* AppTests */,
+				60050FBC773EBB04481B8A6E /* Configuration.storekit */,
+				7A20260829B1B1E501AC0002 /* PrivacyInfo.xcprivacy */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,6 +183,8 @@
 				504EC3041FED79650016851F /* App.app */,
 				B5C000000000000000000001 /* BibleStudyCoach Watch App.app */,
 				B5C000000000000000000002 /* BibleStudyCoach Complication.appex */,
+				CF3ED7B45AFC9D735FE31A3D /* AppUITests.xctest */,
+				E17E30193A87530FCF5C2462 /* AppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,6 +202,24 @@
 				50B271D01FEDC1A000F3C39B /* public */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		61C478062785444DAE1288AA /* AppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A191855F0B0989258E095BB9 /* AppUITests.swift */,
+			);
+			name = AppUITests;
+			path = AppUITests;
+			sourceTree = "<group>";
+		};
+		8ABA3B7F6B5266CB42E48FB7 /* AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				E7304B9364E16919C0FB6AAD /* IapHostedTests.swift */,
+			);
+			name = AppTests;
+			path = AppTests;
 			sourceTree = "<group>";
 		};
 		B5C000000000000000000021 /* BibleStudyCoachWatch */ = {
@@ -182,6 +250,22 @@
 			path = WatchShared;
 			sourceTree = "<group>";
 		};
+		BBE5F462351597CED770B66F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D80C213E5AFEF89CBAB9A332 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D80C213E5AFEF89CBAB9A332 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				64B7544FA1D40E60E088E2D9 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -206,6 +290,24 @@
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		668B99308F4A350AC7F3426F /* AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17BFC2E20B0F7B41ED4B21FE /* Build configuration list for PBXNativeTarget "AppTests" */;
+			buildPhases = (
+				E4CA976A66388560D29F499E /* Sources */,
+				C6DDF242267296AFC926FAC8 /* Frameworks */,
+				0F088EBB26F49087A6EA9703 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B860A10DB53949F089250A9C /* PBXTargetDependency */,
+			);
+			name = AppTests;
+			productName = AppTests;
+			productReference = E17E30193A87530FCF5C2462 /* AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		B5C000000000000000000031 /* BibleStudyCoach Watch App */ = {
 			isa = PBXNativeTarget;
@@ -242,6 +344,24 @@
 			productName = "BibleStudyCoach Complication";
 			productReference = B5C000000000000000000002 /* BibleStudyCoach Complication.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		FD5C30F358D9CEEDABCD39F3 /* AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5F6343FCEC48ACFD26656F4E /* Build configuration list for PBXNativeTarget "AppUITests" */;
+			buildPhases = (
+				1F240D5E0F5472F8B4AF30C6 /* Sources */,
+				8298967D53A31E42C12EE057 /* Frameworks */,
+				4723B1EBC804DF33644F50BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95E36848915F57BCFF473A7F /* PBXTargetDependency */,
+			);
+			name = AppUITests;
+			productName = AppUITests;
+			productReference = CF3ED7B45AFC9D735FE31A3D /* AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -286,11 +406,28 @@
 				504EC3031FED79650016851F /* App */,
 				B5C000000000000000000031 /* BibleStudyCoach Watch App */,
 				B5C000000000000000000036 /* BibleStudyCoach Complication */,
+				FD5C30F358D9CEEDABCD39F3 /* AppUITests */,
+				668B99308F4A350AC7F3426F /* AppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0F088EBB26F49087A6EA9703 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53C501F17C0EF02450AAA813 /* Configuration.storekit in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4723B1EBC804DF33644F50BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		504EC3021FED79650016851F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +438,7 @@
 				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
+				7A20260829B1B1E501AC0001 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +462,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1F240D5E0F5472F8B4AF30C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E195C18F28759459485B9F0C /* AppUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		504EC3001FED79650016851F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,9 +497,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4CA976A66388560D29F499E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D48AA3547CDB11A46B599192 /* IapHostedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		95E36848915F57BCFF473A7F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = App;
+			target = 504EC3031FED79650016851F /* App */;
+			targetProxy = FA426C2C193673761CF7A837 /* PBXContainerItemProxy */;
+		};
 		B5C000000000000000000042 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B5C000000000000000000036 /* BibleStudyCoach Complication */;
@@ -363,6 +523,12 @@
 			isa = PBXTargetDependency;
 			target = B5C000000000000000000031 /* BibleStudyCoach Watch App */;
 			targetProxy = B5C000000000000000000045 /* PBXContainerItemProxy */;
+		};
+		B860A10DB53949F089250A9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = App;
+			target = 504EC3031FED79650016851F /* App */;
+			targetProxy = B7BECC26C59AA5970829F648 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -386,6 +552,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0C18B3C1A865E301E505F0E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acrogers.bibletriviacoach.uitests;
+				PRODUCT_NAME = AppUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = App;
+			};
+			name = Debug;
+		};
+		3C873A1171ACAAB4F683489B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acrogers.bibletriviacoach.uitests;
+				PRODUCT_NAME = AppUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = App;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		504EC3141FED79650016851F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
@@ -501,7 +698,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -528,7 +725,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				INFOPLIST_FILE = App/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -549,12 +746,29 @@
 			};
 			name = Release;
 		};
+		8E465D54750A43016F3883BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acrogers.bibletriviacoach.tests;
+				PRODUCT_NAME = AppTests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)App";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		B5C000000000000000000051 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				ENABLE_PREVIEWS = YES;
@@ -586,7 +800,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -616,7 +830,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -645,7 +859,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = W4S9QQB434;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BibleStudyCoachComplication/Info.plist;
@@ -669,9 +883,34 @@
 			};
 			name = Release;
 		};
+		DCBDB178C46F81AF7CD82839 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acrogers.bibletriviacoach.tests;
+				PRODUCT_NAME = AppTests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)App";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		17BFC2E20B0F7B41ED4B21FE /* Build configuration list for PBXNativeTarget "AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E465D54750A43016F3883BE /* Release */,
+				DCBDB178C46F81AF7CD82839 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -686,6 +925,15 @@
 			buildConfigurations = (
 				504EC3171FED79650016851F /* Debug */,
 				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5F6343FCEC48ACFD26656F4E /* Build configuration list for PBXNativeTarget "AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C873A1171ACAAB4F683489B /* Release */,
+				0C18B3C1A865E301E505F0E4 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
