@@ -109,24 +109,39 @@ async function ownsProEntitlement(): Promise<boolean> {
   }
 }
 
+export type RestoreResult = "restored" | "none" | "error";
+
 /**
- * Restore a previous Pro purchase (Apple requires a restore path for
- * non-consumables). Returns true if Pro is unlocked afterward.
+ * User-initiated Restore Purchases (Apple requires an explicit, tappable
+ * restore control for non-consumables — Guideline 3.1.1). Returns a real
+ * outcome so the UI can show success/no-purchase/error feedback instead of
+ * failing silently.
  */
-export async function restorePro(): Promise<boolean> {
-  if (!isIosNative()) return isPro();
+export async function restorePro(): Promise<RestoreResult> {
+  if (!isIosNative()) return isPro() ? "restored" : "none";
+  let syncFailed = false;
   try {
     await NativePurchases.restorePurchases();
+  } catch {
+    // AppStore.sync() throws if the user cancels the App Store sign-in.
+    // Still check entitlements — the purchase may already be present locally.
+    syncFailed = true;
+  }
+  try {
     const { purchases } = await NativePurchases.getPurchases({
       onlyCurrentEntitlements: true,
     });
     const owned = (purchases ?? []).some(
       (p) => p.productIdentifier === IAP_PRODUCT_ID,
     );
-    if (owned) setPro(true);
-    return owned || isPro();
+    if (owned) {
+      setPro(true);
+      return "restored";
+    }
+    if (isPro()) return "restored";
+    return syncFailed ? "error" : "none";
   } catch {
-    return isPro();
+    return isPro() ? "restored" : "error";
   }
 }
 

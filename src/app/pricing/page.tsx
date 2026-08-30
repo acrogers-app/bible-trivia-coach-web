@@ -8,7 +8,9 @@ import { useIsIosNative, purchasePro, restorePro } from "@/lib/iap";
 export default function PricingPage() {
   const pro = useIsPro();
   const ios = useIsIosNative();
-  const [status, setStatus] = useState<"idle" | "loading" | "soon" | "error" | "restoring">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
+  >("idle");
 
   async function unlock() {
     setStatus("loading");
@@ -38,10 +40,10 @@ export default function PricingPage() {
   async function restore() {
     setStatus("restoring");
     try {
-      await restorePro(); // sets Pro if a prior purchase is found
-      setStatus("idle");
+      const result = await restorePro(); // sets Pro if a prior purchase is found
+      setStatus(result === "restored" ? "restored" : result === "none" ? "restore-none" : "restore-error");
     } catch {
-      setStatus("error");
+      setStatus("restore-error");
     }
   }
 
@@ -191,6 +193,21 @@ export default function PricingPage() {
           {status === "error" && (
             <p style={{ marginTop: 10, fontSize: 13, color: "#b91c1c" }}>
               Something went wrong. Please try again.
+            </p>
+          )}
+          {status === "restored" && (
+            <p style={{ marginTop: 10, fontSize: 13, color: "var(--btc-accent-deep)", fontWeight: 600 }}>
+              ✓ Purchases restored.
+            </p>
+          )}
+          {status === "restore-none" && (
+            <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 13 }}>
+              No previous purchase was found for this Apple&nbsp;ID.
+            </p>
+          )}
+          {status === "restore-error" && (
+            <p style={{ marginTop: 10, fontSize: 13, color: "#b91c1c" }}>
+              Restore didn&apos;t complete. Check your App Store sign-in and try again.
             </p>
           )}
           <p className="btc-text-muted" style={{ marginTop: 10, fontSize: 12 }}>
