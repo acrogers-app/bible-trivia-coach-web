@@ -21,6 +21,7 @@ import { loadSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/streakUtils';
 import { stopSpeech } from '../../lib/speech';
 import { useIsPro } from '../../lib/pro';
+import { usePurchasesAvailable } from '../../lib/iap';
 import {
   APP_VERSION,
   VERSION_SEEN_KEY,
@@ -2033,6 +2034,8 @@ function HomeScreen(props: {
   const coachTip = getTodayCoachTip();
   const dailyNudgeText = getDailyChallengeNudgeLine();
   const pro = useIsPro();
+  // Android free-tier build: hide Pro upsells when no purchase path exists.
+  const purchasable = usePurchasesAvailable();
 
   const [streakInfo] = useState(() => getStreakInfo());
   const streak = streakInfo.current > 0 ? streakInfo.current : null;
@@ -2509,7 +2512,9 @@ function HomeScreen(props: {
 
         {/* ── Bible Coach Pro: upsell for free users, thank-you once
             unlocked. Entitlement via useIsPro (localStorage + cookie,
-            set only after server-side Stripe verification). ─ */}
+            set only after server-side Stripe verification). Hidden entirely
+            when no purchase path exists (Android free-tier build). ─ */}
+        {(pro || purchasable) && (
         <div
           style={{
             marginTop: 14,
@@ -2558,6 +2563,7 @@ function HomeScreen(props: {
             </>
           )}
         </div>
+        )}
 
         {/* ── Coach's tip (collapsible) ──────────────────────────── */}
         <details style={{ marginTop:14, borderRadius:14, overflow:'hidden',
@@ -4033,6 +4039,8 @@ function FamilyGameScreen(props: {
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+  // Android free-tier build: hide the Pro upsell when no purchase path exists.
+  const purchasable = usePurchasesAvailable();
   const [scores, setScores] = useState<number[]>(
     () => props.players.map(() => 0),
   );
@@ -4246,6 +4254,7 @@ function FamilyGameScreen(props: {
               Great game! Everyone planted more of God&apos;s Word tonight.
               Scores stay on this device — nothing is stored online.
             </p>
+            {purchasable && (
             <div
               style={{
                 marginTop: 12,
@@ -4266,6 +4275,7 @@ function FamilyGameScreen(props: {
                 Unlock →
               </a>
             </div>
+            )}
             <div
               style={{
                 display: 'flex',

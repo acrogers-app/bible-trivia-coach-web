@@ -24,6 +24,59 @@ export function isIosNative(): boolean {
   }
 }
 
+// ─── ANDROID FREE-TIER GATE ────────────────────────────────────────────────
+// The Android Capacitor build ships FREE-TIER ONLY until Google Play Billing
+// is wired (blocked on the Play org-account conversion — a Play Console IAP
+// product can't be created yet). Google Play policy forbids selling digital
+// goods through anything except Play Billing, so the Stripe path must never
+// be reachable inside the Android app.
+//
+// TO RE-ENABLE PURCHASES ON ANDROID LATER:
+//   1. Create the in-app product in Play Console (suggested id: the existing
+//      IAP_PRODUCT_ID) once the org account + Play Billing are live.
+//   2. Wire @capgo/native-purchases for Android (it supports Play Billing —
+//      mirror the iOS paths in this file with a platform branch).
+//   3. Flip ANDROID_PURCHASES_ENABLED to true. Every gated surface
+//      (pricing page, HomePricing, /play upsells, Settings restore) reads
+//      purchasesAvailable()/usePurchasesAvailable() — no other UI edits needed.
+export const ANDROID_PURCHASES_ENABLED = false;
+
+export function isAndroidNative(): boolean {
+  try {
+    return Capacitor.getPlatform() === "android" && Capacitor.isNativePlatform();
+  } catch {
+    return false;
+  }
+}
+
+/** React hook: true only inside the native Android app (same SSR-safe pattern as useIsIosNative). */
+export function useIsAndroidNative(): boolean {
+  return useSyncExternalStore(
+    () => () => {},
+    () => isAndroidNative(),
+    () => false,
+  );
+}
+
+/**
+ * Whether ANY purchase path exists on the current platform:
+ * web → Stripe, iOS native → StoreKit, Android native → none until Play
+ * Billing ships. All Pro-upsell UI must render nothing when this is false —
+ * never a dead button.
+ */
+export function purchasesAvailable(): boolean {
+  return !isAndroidNative() || ANDROID_PURCHASES_ENABLED;
+}
+
+/** React hook form of purchasesAvailable() (SSR snapshot: true = web default). */
+export function usePurchasesAvailable(): boolean {
+  return useSyncExternalStore(
+    () => () => {},
+    () => purchasesAvailable(),
+    () => true,
+  );
+}
+
 /**
  * React hook: true only inside the native iOS app. Uses useSyncExternalStore
  * (never subscribes) so it renders false on the server / during static export

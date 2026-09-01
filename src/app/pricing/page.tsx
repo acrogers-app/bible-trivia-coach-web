@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, usePurchasesAvailable, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 export default function PricingPage() {
   const pro = useIsPro();
   const ios = useIsIosNative();
+  // Android free-tier build: no purchase path exists — see the gate in lib/iap.ts.
+  const purchasable = usePurchasesAvailable();
   const price = useProPriceString();
   const [status, setStatus] = useState<
     "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
@@ -143,6 +145,11 @@ export default function PricingPage() {
             >
               ✓ Pro unlocked — thank you!
             </div>
+          ) : !purchasable ? (
+            <p className="btc-text-muted" style={{ marginTop: 16, fontSize: 14 }}>
+              Pro isn&apos;t available in this app yet — but the daily readings,
+              quizzes, and everything in the free tier are yours, free.
+            </p>
           ) : (
             <button
               onClick={unlock}
@@ -165,7 +172,7 @@ export default function PricingPage() {
           )}
 
           {/* Apple requires a restore path for non-consumable purchases. */}
-          {ios && !pro && (
+          {ios && purchasable && !pro && (
             <button
               onClick={restore}
               disabled={status === "loading" || status === "restoring"}

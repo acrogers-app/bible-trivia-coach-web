@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useIsPro } from "@/lib/pro";
-import { useIsIosNative, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
+import { useIsIosNative, usePurchasesAvailable, useProPriceString, purchasePro, restorePro } from "@/lib/iap";
 
 /**
  * Landing-page pricing section. The Unlock button starts Stripe Checkout
@@ -13,6 +13,9 @@ export default function HomePricing() {
   const pro = useIsPro();
   const ios = useIsIosNative();
   const price = useProPriceString();
+  // Android free-tier build: no purchase path — drop the whole pricing section
+  // rather than render a buy button that can't work (see lib/iap.ts gate).
+  const purchasable = usePurchasesAvailable();
   const [status, setStatus] = useState<
     "idle" | "loading" | "soon" | "error" | "restoring" | "restored" | "restore-none" | "restore-error"
   >("idle");
@@ -51,6 +54,8 @@ export default function HomePricing() {
       setStatus("restore-error");
     }
   }
+
+  if (!purchasable && !pro) return null;
 
   return (
     <section
