@@ -11,6 +11,12 @@ import { loadSettings } from './appSettings';
 import { isFamilyMode } from './familyMode';
 import { apiUrl } from './apiBase';
 
+// Analytics DISABLED 2026-09-06 (Allen's directive: don't collect data without an
+// immediate use). Both entry points below hard no-op — nothing is sent or queued,
+// so the app collects no usage data. Flip this to true to restore the previous
+// opt-out-gated behavior.
+const ANALYTICS_ENABLED = false;
+
 export type QuizAnswerEvent = {
   questionId:   string;
   questionText: string;
@@ -136,6 +142,7 @@ let flushing = false;
  */
 export function flushAnalyticsOutbox(): void {
   try {
+    if (!ANALYTICS_ENABLED) return;
     if (typeof window === 'undefined') return;
     if (flushing) return;
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
@@ -176,6 +183,7 @@ export function flushAnalyticsOutbox(): void {
 
 export function sendQuizAnalytics(payload: QuizAnalyticsPayload): void {
   try {
+    if (!ANALYTICS_ENABLED) return;
     if (typeof window === 'undefined') return;
     if (isFamilyMode()) return;
     const settings = loadSettings();
