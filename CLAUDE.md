@@ -2,6 +2,13 @@
 <!-- Then: memory files -->
 <!-- Then: this file -->
 
+> ⚠️ **Shared Stripe account — read before any checkout/webhook/verify code.** This app
+> bills through the ONE shared WeBeUseful Stripe account, so every app's events reach every
+> webhook. (1) Tag `metadata.app = "bible"` on checkout creation. (2) Every grant point — a
+> minting webhook OR an account-less `/api/verify` — must **allowlist** `metadata.app ===
+> "bible"`, never a denylist. Full rules + the 2026-09-05 incident:
+> `SHARED_STRIPE_ACCOUNT_RULES.md` (in the `webeuseful-projects` monorepo root).
+
 @AGENTS.md
 
 # Bible Study Coach
