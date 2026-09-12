@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useIsIosNative } from "@/lib/iap";
+import { useIsAndroidNative, useIsIosNative } from "@/lib/iap";
 
 /**
  * Portfolio cross-promo: live combined downloads+visits total across the whole
@@ -35,6 +35,8 @@ export function LiveTotalPromo() {
   // Inside the iOS app this is an outbound marketing link to other platforms —
   // an App Review 3.1.1/2.3.10 flag. Web-only.
   const ios = useIsIosNative();
+  // Outbound marketing link — keep it out of BOTH store builds.
+  const android = useIsAndroidNative();
 
   useEffect(() => {
     let cancelled = false;
@@ -72,7 +74,7 @@ export function LiveTotalPromo() {
     };
   }, []);
 
-  if (ios || total === null || total <= 0) return null;
+  if (ios || android || total === null || total <= 0) return null;
 
   const floored = Math.floor(total / 10) * 10;
   return (

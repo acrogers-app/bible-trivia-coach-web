@@ -25,7 +25,7 @@ import {
 import { subscribeLS } from '../../lib/gameFx';
 import { getThemePref, setThemePref, type ThemePref } from '../../lib/theme';
 import { useIsPro } from '../../lib/pro';
-import { restorePro, type RestoreResult } from '../../lib/iap';
+import { restorePro, usePurchasesAvailable, type RestoreResult } from '../../lib/iap';
 
 type VoiceOpt = SpeechSynthesisVoice;
 
@@ -445,6 +445,8 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Restore is meaningless where no purchase path exists (Android
+            free-tier build) — gate inside the card so hook order is stable. */}
         {isNative && <PurchasesCard />}
 
         <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -520,6 +522,7 @@ function ThemeCard() {
 // visible success/failure feedback — required by App Review Guideline 3.1.1.
 function PurchasesCard() {
   const pro = useIsPro();
+  const purchasable = usePurchasesAvailable();
   const [state, setState] = useState<'idle' | 'working' | RestoreResult>('idle');
 
   async function onRestore() {
@@ -530,6 +533,9 @@ function PurchasesCard() {
       setState('error');
     }
   }
+
+  // No purchase path on this platform (Android free-tier build) → no card.
+  if (!purchasable && !pro) return null;
 
   return (
     <div style={card}>
