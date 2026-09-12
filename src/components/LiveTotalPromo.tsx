@@ -93,7 +93,7 @@ export function LiveTotalPromo() {
         style={{ color: "var(--btc-text-mid)" }}
       >
         Part of a growing portfolio — {floored.toLocaleString()}+ combined
-        downloads &amp; visits across iOS and web ↗
+        downloads &amp; visits across iOS, Android, and web ↗
       </a>
     </p>
   );

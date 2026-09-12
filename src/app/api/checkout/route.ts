@@ -28,9 +28,12 @@ export async function POST(req: Request) {
     const stripe = new Stripe(secret);
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      // Shared Stripe account: tag the app so foreign webhooks (e.g.
+      // AssistantNotes) never mint a license for a Bible Coach sale.
+      metadata: { app: "bible" },
       // Per-app bank-statement descriptor: shows "WEBEUSEFUL* BIBLECOACH".
       // (Suffix kept ≤10 chars so account descriptor + suffix stays ≤22.)
-      payment_intent_data: { statement_descriptor_suffix: "BIBLECOACH" },
+      payment_intent_data: { statement_descriptor_suffix: "BIBLECOACH", metadata: { app: "bible" } },
       line_items: [{ price, quantity: 1 }],
       allow_promotion_codes: true,
       success_url: `${origin}/unlock/success?session_id={CHECKOUT_SESSION_ID}`,

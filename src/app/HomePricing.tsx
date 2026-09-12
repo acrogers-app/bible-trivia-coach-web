@@ -254,6 +254,15 @@ export default function HomePricing() {
                   style={{ color: "var(--btc-accent-deep)" }}
                 >
                   iOS App Store
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.acrogers.bibletriviacoach"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--btc-accent-deep)" }}
+                >
+                  Google Play
                 </a>
                 .
               </>
