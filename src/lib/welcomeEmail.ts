@@ -62,7 +62,7 @@ export async function sendWelcomeEmail({
       body: JSON.stringify({
         from: "Bible Study Coach <noreply@webeuseful.com>",
         to: [to],
-        reply_to: "allen.webeuseful@gmail.com",
+        reply_to: "allen@webeuseful.com",
         subject: "Welcome to Bible Study Coach!",
         html: welcomeHtml(),
       }),
