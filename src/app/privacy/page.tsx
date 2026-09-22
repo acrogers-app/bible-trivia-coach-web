@@ -153,8 +153,8 @@ export default function PrivacyPage() {
           <h2 style={headingStyle}>Contact</h2>
           <p style={textStyle}>
             Questions or concerns? Email{' '}
-            <a href="mailto:allen.webeuseful@gmail.com">
-              allen.webeuseful@gmail.com
+            <a href="mailto:allen@webeuseful.com">
+              allen@webeuseful.com
             </a>
             .
           </p>
