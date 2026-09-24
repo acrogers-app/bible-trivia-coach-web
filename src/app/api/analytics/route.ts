@@ -177,7 +177,7 @@ async function handlePost(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const res = allowRequest(req, 30)
+  const res = (await allowRequest(req, 30))
     ? await handlePost(req)
     : NextResponse.json({ ok: false, error: 'rate limited' }, { status: 429 });
   for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
