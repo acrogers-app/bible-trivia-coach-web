@@ -34,7 +34,7 @@ Next.js 16 (App Router, Turbopack), TypeScript, Capacitor iOS wrapper, static tr
 
 ## Architecture
 - Routes: `/` marketing, `/play` main hub (Today / Daily challenge / Quick), `/read`, `/levels`, `/settings`, `/privacy`, `/safety`, `/dev`.
-- APIs: `/api/passage` (params are `?start=John 3:16&end=...`, NOT book/chapter), `/api/chapter`, analytics route — all rate-limited via `src/lib/rateLimit.ts` (in-memory per-IP: passage/chapter 120/min, analytics 30/min → 429).
+- APIs: `/api/passage` (params are `?start=John 3:16&end=...`, NOT book/chapter), `/api/chapter`, analytics route — all rate-limited via `src/lib/rateLimit.ts` (per-IP, per-route: passage/chapter 120/min, analytics 30/min → 429). Since 2026-09-24 the window is SHARED via the portfolio Supabase `bible_rate_limit_hit` RPC (least-privilege: env RATELIMIT_SUPABASE_URL + RATELIMIT_SUPABASE_ANON_KEY + RATELIMIT_JWT, where the JWT is for Postgres role `bible_ratelimit` with EXECUTE on that one function only — mint with `node scripts/mint-ratelimit-jwt.mjs`; NEVER the service-role key; unset/failing store falls back to the per-instance window) and the IP comes from Vercel-set `x-vercel-forwarded-for` / `x-real-ip`, never client-writable `x-forwarded-for`.
 - `src/lib/familyMode.ts` + FamilyModeChrome — Family Mode (see spec below).
 - Trivia data: `public/packs` + `public/data/trivia_core_en_v1.json`; validation `scripts/validateQuestions.mjs` (`npm run validate:questions`).
 - `npm run check` = lint + build + question validation. Run before every push.
@@ -42,8 +42,15 @@ Next.js 16 (App Router, Turbopack), TypeScript, Capacitor iOS wrapper, static tr
 ## Deploy Workflow
 Auto-deploy is active (GitHub → Vercel): push to `main` deploys biblestudy.webeuseful.com. Commit author allen.webeuseful@gmail.com. Test locally first (`npm run check`); bump package.json version for significant releases. NOTE: repo policy (below) forbids pushes/deploys by default — Allen overrode this on 2026-07-21 for safety work only; **future sessions should still ask before pushing unless he directs otherwise.**
 
-## After Every Deploy — REQUIRED
-Always do these steps after deploying, without being asked:
+## After Every UI-Affecting Deploy — REQUIRED
+**Scope (clarified 2026-09-24, same as the dashboard repo):** this applies only to deploys that
+change what the site renders — new or changed pages, layout, visual components, theme/CSS, copy
+that appears on screen. It does NOT apply to backend-only changes: API routes, `src/lib/`
+internals, rate limiting, cron handlers, or database migrations with no UI surface. For those,
+the report states "backend-only, no visual change" and the post-deploy proof is the functional
+verification (curl/API/DB evidence) instead.
+
+For UI-affecting deploys, always do these steps without being asked:
 1. `open https://biblestudy.webeuseful.com/play` and `open https://biblestudy.webeuseful.com/settings` — opens in browser
 2. Take puppeteer screenshots of key screens (play top+bottom incl. Coach's tip, settings, day picker, By Book) in BOTH dark and light mode, at 390px and 768px, full-page. Save to `/tmp/bible-trivia-screenshots/`
 3. `open /tmp/bible-trivia-screenshots/` — opens the folder in Finder

@@ -243,7 +243,7 @@ async function handleGet(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const res = allowRequest(req, 120)
+  const res = (await allowRequest(req, 120))
     ? await handleGet(req)
     : NextResponse.json({ error: 'rate limited' }, { status: 429 });
   for (const [k, v] of Object.entries(corsHeaders(req.headers.get('origin')))) {
