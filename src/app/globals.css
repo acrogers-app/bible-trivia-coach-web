@@ -33,7 +33,7 @@ body {
   align-items: flex-start;
   /* top padding clears the iOS status bar on every width (env() is 0 on web/Android);
      the <=480px phone rule below moves the inset onto the card instead */
-  padding: calc(1.5rem + env(safe-area-inset-top)) 0.75rem 1.5rem;
+  padding: calc(1.5rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right)) 1.5rem calc(0.75rem + env(safe-area-inset-left));
   background: var(--app-root-bg, #020617);
   transition: background 0.3s ease;
 }
@@ -52,7 +52,8 @@ body {
 /* Phone: 390px centered column on a visible themed backdrop (v1.2.3) */
 @media (max-width: 480px) {
   .btc-root {
-    padding: 8px;
+    /* iPhone Duo outer display: an 84px status column on one side */
+    padding: 8px calc(8px + env(safe-area-inset-right)) 8px calc(8px + env(safe-area-inset-left));
   }
 
   .btc-card {
@@ -69,7 +70,7 @@ body {
 /* iPad portrait and up: wider canvas, roomier card (phones unaffected) */
 @media (min-width: 768px) {
   .btc-root {
-    padding: calc(2.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
+    padding: calc(2.5rem + env(safe-area-inset-top)) calc(2rem + env(safe-area-inset-right)) 2.5rem calc(2rem + env(safe-area-inset-left));
   }
   .btc-card {
     max-width: 720px;
@@ -977,7 +978,7 @@ html[data-btc-reduce-motion="1"] * {
 .theme-toggle {
   position: fixed;
   top: calc(12px + env(safe-area-inset-top));
-  right: 16px;
+  right: calc(16px + env(safe-area-inset-right));
   z-index: 1500; /* above content, below modals (2000) */
   width: 44px;
   height: 44px;
