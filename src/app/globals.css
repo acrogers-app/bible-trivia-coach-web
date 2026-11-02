@@ -31,7 +31,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 1.5rem 0.75rem;
+  /* top padding clears the iOS status bar on every width (env() is 0 on web/Android);
+     the <=480px phone rule below moves the inset onto the card instead */
+  padding: calc(1.5rem + env(safe-area-inset-top)) 0.75rem 1.5rem;
   background: var(--app-root-bg, #020617);
   transition: background 0.3s ease;
 }
@@ -67,7 +69,7 @@ body {
 /* iPad portrait and up: wider canvas, roomier card (phones unaffected) */
 @media (min-width: 768px) {
   .btc-root {
-    padding: 2.5rem 2rem;
+    padding: calc(2.5rem + env(safe-area-inset-top)) 2rem 2.5rem;
   }
   .btc-card {
     max-width: 720px;
@@ -318,6 +320,8 @@ html[data-btc-reduce-motion="1"] * {
   background: linear-gradient(135deg, #1a4a1a, #0d2b0d);
   border-bottom: 2px solid #4CAF50;
   padding: 8px 16px;
+  /* keep the banner text below the iOS status bar / camera (env() is 0 on web/Android) */
+  padding-top: calc(8px + env(safe-area-inset-top));
   text-align: center;
   font-size: 13px;
   color: #7BE87A;
