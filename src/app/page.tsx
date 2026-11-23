@@ -288,9 +288,9 @@ export default function HomePage() {
             margin: '18px 0 4px',
           }}
         >
-          <a href="/safety" style={{ color: 'var(--btc-text-mid)' }}>🔒 Child Safety</a>
+          <Link href="/safety" style={{ color: 'var(--btc-text-mid)' }}>🔒 Child Safety</Link>
           {' · '}
-          <a href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</a>
+          <Link href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</Link>
         </p>
 
         <LiveTotalPromo />

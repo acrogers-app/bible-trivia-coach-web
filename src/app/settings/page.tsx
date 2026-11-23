@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import Link from 'next/link';
 import BottomNav from '../../components/BottomNav';
 import {
   type AppSettings,
@@ -359,7 +360,7 @@ export default function SettingsPage() {
           </div>
           <div className="btc-text-muted" style={{ fontSize: 12, marginTop: 8 }}>
             {familyStatus || (familyOn ? 'Family Mode is ON.' : 'Family Mode is off.')}{' '}
-            <a href="/safety">Read our child safety promise →</a>
+            <Link href="/safety">Read our child safety promise →</Link>
           </div>
         </div>
 

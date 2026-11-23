@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import BackLink from '../../components/BackLink';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Bible Study Coach',
@@ -30,6 +32,7 @@ export default function PrivacyPage() {
   return (
     <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <main className="btc-card">
+        <BackLink />
         <h1 style={{ fontSize: 'var(--btc-heading-xl)', marginBottom: 4 }}>
           Privacy Policy
         </h1>
@@ -126,7 +129,7 @@ export default function PrivacyPage() {
             Bible Study Coach is made for all ages, including families
             playing together. Because we collect no personal information from
             anyone, we collect none from children either. See our{' '}
-            <a href="/safety">Child Safety page</a> for a plain-language guide
+            <Link href="/safety">Child Safety page</Link> for a plain-language guide
             for parents and teachers.
           </p>
         </section>

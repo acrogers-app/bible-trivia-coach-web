@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import BottomNav from '../../components/BottomNav';
 import { applySettingsToDocument, loadSettings, onSettingsChanged, type AppSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
@@ -285,7 +286,7 @@ export default function ReadPage() {
               {m === 'chapter' ? 'Whole chapter' : 'Verse range'}
             </button>
           ))}
-          <a href="/settings" style={{
+          <Link href="/settings" style={{
               marginLeft: 'auto',
               display: 'inline-flex',
               alignItems: 'center',
@@ -299,7 +300,7 @@ export default function ReadPage() {
               fontWeight: 600,
             }}>
               ⚙️ Reader settings
-            </a>
+            </Link>
         </div>
 
         {mode === 'range' && (

@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, {
   useEffect,
   useMemo,
@@ -1904,6 +1906,7 @@ function BookPickerScreen(props: {
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
   const [selectedChapter, setSelectedChapter] = useState<string>('');
   const maxChapters = BOOK_MAX_CHAPTERS[selectedBook] ?? 0;
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -1997,7 +2000,7 @@ function BookPickerScreen(props: {
           const url = `/read?start=${encodeURIComponent(
             selectedBook + ' ' + safeChapter + ':1',
           )}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
-          window.location.href = url;
+          router.push(url);
         }}
         className="btc-btn btc-btn-secondary"
         style={{ width: '100%', marginTop: 10 }}
@@ -2027,6 +2030,9 @@ function HomeScreen(props: {
   dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
+  // Client-side navigation: in the Capacitor shell a full page load of an
+  // extensionless path (/read, /levels) serves the landing page instead.
+  const router = useRouter();
   const easyCount = availableCount(pack, 'easy', 'scripture');
   const medCount = availableCount(pack, 'medium', 'scripture');
   const hardCount = availableCount(pack, 'hard', 'scripture');
@@ -2400,14 +2406,14 @@ function HomeScreen(props: {
               title="Read today"
               subtitle="Open today's passage in the Reader"
               onClick={() => {
-                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`;
+                router.push(`/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`);
               }}
             />
             <Row
               title="Listen now"
               subtitle="Read aloud with follow‑along highlighting"
               onClick={() => {
-                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}&autoplay=1`;
+                router.push(`/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}&autoplay=1`);
               }}
             />
           </>
@@ -2497,7 +2503,7 @@ function HomeScreen(props: {
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/levels'; }}
+            onClick={() => { router.push('/levels'); }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
@@ -4275,9 +4281,9 @@ function FamilyGameScreen(props: {
               <br />
               See how your family improves over 30 games — part of Bible Coach
               Pro.{' '}
-              <a href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
+              <Link href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
                 Unlock →
-              </a>
+              </Link>
             </div>
             )}
             <div

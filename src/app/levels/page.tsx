@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import BottomNav from '../../components/BottomNav';
 
 type TriviaQuestion = { id: string; difficulty: string; sourceType?: string; };
@@ -119,7 +121,7 @@ export default function LevelsPage() {
             const url = `/play?action=quiz&level=${lv.key}&count=${lv.count}&sourceType=scripture`;
 
             return (
-              <a
+              <Link
                 key={lv.key}
                 href={url}
                 style={{
@@ -146,7 +148,7 @@ export default function LevelsPage() {
                 }}>
                   {n === null ? 'Loading…' : `${n.toLocaleString()} available`}
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>
@@ -169,12 +171,14 @@ export default function LevelsPage() {
 }
 
 function CustomCountRow({ pack }: { pack: TriviaPack | null }) {
+  const router = useRouter();
   const [level, setLevel]   = useState<'easy'|'medium'|'hard'|'mixed'>('mixed');
   const [count, setCount]   = useState(20);
 
   function go() {
-    window.location.href =
-      `/play?action=quiz&level=${level}&count=${count}&sourceType=scripture`;
+    router.push(
+      `/play?action=quiz&level=${level}&count=${count}&sourceType=scripture`,
+    );
   }
 
   return (

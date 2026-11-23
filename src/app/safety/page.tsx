@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import BackLink from '../../components/BackLink';
 import SafetyContactForm from './SafetyContactForm';
 
 export const metadata: Metadata = {
@@ -31,6 +33,7 @@ export default function SafetyPage() {
   return (
     <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <main className="btc-card">
+        <BackLink />
         <h1 style={{ fontSize: 'var(--btc-heading-xl)', marginBottom: 4 }}>
           🔒 Child Safety
         </h1>
@@ -70,7 +73,7 @@ export default function SafetyPage() {
             (which questions are too hard or confusing), and parents can switch
             those off entirely with <strong>Family Mode</strong> in Settings or the
             analytics toggle. See the{' '}
-            <a href="/privacy">full privacy policy</a> for details.
+            <Link href="/privacy">full privacy policy</Link> for details.
           </p>
         </section>
 
