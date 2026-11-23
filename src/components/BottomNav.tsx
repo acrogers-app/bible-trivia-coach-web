@@ -77,6 +77,8 @@ export default function BottomNav() {
         borderTop: '1.5px solid var(--btc-nav-border, rgba(0,0,0,0.09))',
         boxShadow: '0 -2px 12px rgba(0,0,0,0.08)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       }}
     >
       <div style={{

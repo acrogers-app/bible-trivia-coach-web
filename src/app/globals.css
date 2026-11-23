@@ -321,8 +321,11 @@ html[data-btc-reduce-motion="1"] * {
   background: linear-gradient(135deg, #1a4a1a, #0d2b0d);
   border-bottom: 2px solid #4CAF50;
   padding: 8px 16px;
-  /* keep the banner text below the iOS status bar / camera (env() is 0 on web/Android) */
+  /* keep the banner text below the iOS status bar / camera and clear of the
+     iPhone Duo side status column (env() is 0 on web/Android) */
   padding-top: calc(8px + env(safe-area-inset-top));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
   text-align: center;
   font-size: 13px;
   color: #7BE87A;
@@ -921,7 +924,8 @@ html[data-btc-reduce-motion="1"] * {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  /* side insets keep the dialog clear of the iPhone Duo status column (env() is 0 elsewhere) */
+  padding: 20px calc(20px + env(safe-area-inset-right)) 20px calc(20px + env(safe-area-inset-left));
   animation: btc-verse-in 0.25s ease;
 }
 .btc-modal {

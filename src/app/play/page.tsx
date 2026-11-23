@@ -2702,7 +2702,8 @@ function DayPickerRow(props: {
               width: '100%', padding: '10px 14px', borderRadius: 12,
               border: '1px solid var(--btc-border-strong)', marginBottom: 6,
               background: 'var(--btc-elevated)', color: 'var(--btc-ink)',
-              boxSizing: 'border-box', fontSize: 14,
+              // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+              boxSizing: 'border-box', fontSize: 16,
             }}
           />
           <div style={{
@@ -3422,7 +3423,8 @@ function StickyNextBar(props: {
         // clears the 71px bottom nav; safe-area for iPhone home indicator
         bottom: 'calc(80px + env(safe-area-inset-bottom))',
         zIndex: 999,
-        padding: '0 16px',
+        paddingLeft: 'calc(16px + env(safe-area-inset-left))',
+        paddingRight: 'calc(16px + env(safe-area-inset-right))',
         pointerEvents: 'none',
       }}
     >
@@ -3888,7 +3890,8 @@ function FamilySetupScreen(props: {
                   borderRadius: 999,
                   border: '1px solid var(--btc-border)',
                   padding: '6px 10px',
-                  fontSize: 14,
+                  // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+                  fontSize: 16,
                 }}
               />
               {names.length > 2 && (
@@ -3997,7 +4000,8 @@ function FamilySetupScreen(props: {
             borderRadius: 999,
             border: '1px solid var(--btc-border)',
             padding: '6px 10px',
-            fontSize: 14,
+            // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+            fontSize: 16,
           }}
         />
         <div
