@@ -45,7 +45,7 @@ function SuccessInner() {
             Pro unlocked!
           </h1>
           <p className="btc-text-muted" style={{ marginTop: 8, fontSize: 15 }}>
-            Thank you for supporting Bible Coach. Everything is unlocked on this device.
+            Thank you for supporting Bible Study Coach. Everything is unlocked on this device.
           </p>
           <Link
             href="/play"

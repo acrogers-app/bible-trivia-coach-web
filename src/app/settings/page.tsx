@@ -543,8 +543,8 @@ function PurchasesCard() {
       <h2 style={h2}>Purchases</h2>
       <div className="btc-text-muted" style={{ marginTop: 6, fontSize: 13 }}>
         {pro
-          ? 'Bible Coach Pro is unlocked on this device. Thank you!'
-          : 'Already bought Bible Coach Pro? Restore it here on any device signed in to the same Apple ID.'}
+          ? 'Bible Study Coach Pro is unlocked on this device. Thank you!'
+          : 'Already bought Bible Study Coach Pro? Restore it here on any device signed in to the same Apple ID.'}
       </div>
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
         <button type="button" onClick={onRestore} disabled={state === 'working'} style={btn}>

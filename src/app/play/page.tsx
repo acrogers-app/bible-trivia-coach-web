@@ -2521,7 +2521,7 @@ function HomeScreen(props: {
         {/* ── Your Path: difficulty progression (device-local) ───── */}
         <PathSection onStartPathQuiz={props.onStartPathQuiz} />
 
-        {/* ── Bible Coach Pro: upsell for free users, thank-you once
+        {/* ── Bible Study Coach Pro: upsell for free users, thank-you once
             unlocked. Entitlement via useIsPro (localStorage + cookie,
             set only after server-side Stripe verification). Hidden entirely
             when no purchase path exists (Android free-tier build). ─ */}
@@ -2538,16 +2538,16 @@ function HomeScreen(props: {
           {pro ? (
             <>
               <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>
-                ✨ Bible Coach Pro — unlocked
+                ✨ Bible Study Coach Pro — unlocked
               </div>
               <div className="btc-text-muted" style={{ marginTop: 4, fontSize: 12 }}>
                 Unlimited challenges, every difficulty level, and family game
-                history are yours. Thank you for supporting Bible Coach!
+                history are yours. Thank you for supporting Bible Study Coach!
               </div>
             </>
           ) : (
             <>
-              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Coach Pro</div>
+              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Study Coach Pro</div>
               <div
                 className="btc-text-muted"
                 style={{ marginTop: 4, fontSize: 12 }}
@@ -4284,7 +4284,7 @@ function FamilyGameScreen(props: {
             >
               📊 <strong style={{ color: 'var(--game-ink)' }}>Family game history</strong>
               <br />
-              See how your family improves over 30 games — part of Bible Coach
+              See how your family improves over 30 games — part of Bible Study Coach
               Pro.{' '}
               <Link href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
                 Unlock →

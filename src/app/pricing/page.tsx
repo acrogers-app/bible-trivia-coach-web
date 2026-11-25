@@ -59,7 +59,7 @@ export default function PricingPage() {
       }}
     >
       <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--btc-accent-deep)" }}>
-        Bible Coach Pro
+        Bible Study Coach Pro
       </h1>
       <p className="btc-text-muted" style={{ marginTop: 6, fontSize: 15 }}>
         Bible study is a daily habit. Unlock everything once — no subscription.
@@ -250,7 +250,7 @@ export default function PricingPage() {
 
       <div style={{ marginTop: 28 }}>
         <Link href="/play" style={{ color: "var(--btc-accent-deep)", fontWeight: 600 }}>
-          ← Back to Bible Coach
+          ← Back to Bible Study Coach
         </Link>
       </div>
     </main>

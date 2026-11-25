@@ -140,7 +140,7 @@ export default function HomePricing() {
             PAY ONCE
           </span>
           <div style={{ fontWeight: 800, fontSize: 16, color: "var(--btc-accent-deep)" }}>
-            Bible Coach Pro
+            Bible Study Coach Pro
           </div>
           <div style={{ fontSize: 28, fontWeight: 800, margin: "4px 0" }}>
             {price} <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>

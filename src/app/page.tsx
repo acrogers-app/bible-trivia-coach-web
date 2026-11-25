@@ -49,7 +49,7 @@ export default function HomePage() {
                 color: 'var(--btc-ink)',
               }}
             >
-              Make Scripture stick with gentle daily quizzes
+              Read, listen, and remember Scripture
             </h1>
             <p
               style={{
@@ -86,7 +86,7 @@ export default function HomePage() {
               }}
             >
               <Link href="/play" className="btc-hero-cta">
-                Start today&apos;s quiz
+                Start today&apos;s study
               </Link>
               <span
                 style={{

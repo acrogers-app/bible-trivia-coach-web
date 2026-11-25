@@ -2,7 +2,7 @@ import Stripe from "stripe";
 
 export const runtime = "nodejs";
 
-// One-time $2.99 "Bible Coach Pro" unlock. Account-less: success is verified
+// One-time $2.99 "Bible Study Coach Pro" unlock. Account-less: success is verified
 // server-side (/api/checkout/verify) and mirrored to a local entitlement flag.
 // Dormant until env is set — returns 503 { error: "not_configured" } so the
 // pricing UI can show "coming soon" instead of a broken button.
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       // Shared Stripe account: tag the app so foreign webhooks (e.g.
-      // AssistantNotes) never mint a license for a Bible Coach sale.
+      // AssistantNotes) never mint a license for a Bible Study Coach sale.
       metadata: { app: "bible" },
       // Per-app bank-statement descriptor: shows "WEBEUSEFUL* BIBLECOACH".
       // (Suffix kept ≤10 chars so account descriptor + suffix stays ≤22.)
