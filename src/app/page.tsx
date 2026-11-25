@@ -30,7 +30,7 @@ export default function HomePage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '4px 10px',
-                borderRadius: 999,
+                borderRadius: 22,
                 backgroundColor: 'var(--btc-success-soft)',
                 color: 'var(--btc-green)',
                 fontSize: 12,

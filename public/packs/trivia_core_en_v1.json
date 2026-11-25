@@ -54369,7 +54369,7 @@
       "sourceType": "scripture",
       "learnMore": "",
       "sources": [],
-      "text": "According to Ephesians 2:1, believers were once what because of their trespasses?",
+      "text": "According to Ephesians 2:1, believers were once what because of their transgressions?",
       "options": [
         "Alive in Christ",
         "Dead in sins",
@@ -54377,7 +54377,7 @@
         "Free from bondage"
       ],
       "correctIndex": 1,
-      "explanation": "Ephesians 2:1 states that believers were 'dead in trespasses and sins', highlighting our previous spiritual state apart from God's grace.",
+      "explanation": "Ephesians 2:1 states that believers were 'dead in transgressions and sins', highlighting our previous spiritual state apart from God's grace.",
       "refStart": "Ephesians 2:1",
       "refEnd": "Ephesians 2:10"
     },
@@ -54437,7 +54437,7 @@
         "To follow religious rules"
       ],
       "correctIndex": 1,
-      "explanation": "Ephesians 2:10 states that believers are created in Christ Jesus for good works which God prepared beforehand for us to walk in.",
+      "explanation": "Ephesians 2:10 says believers are “created in Christ Jesus for good works, which God prepared before that we would walk in them.”",
       "refStart": "Ephesians 2:10",
       "refEnd": "Ephesians 2:10"
     },
@@ -54520,6 +54520,54 @@
       "explanation": "Verse 20 describes the church as a household built on the foundation of apostles and prophets, with Christ as the chief cornerstone.",
       "refStart": "Ephesians 2:19",
       "refEnd": "Ephesians 2:22"
+    },
+    {
+      "id": "ephesians-2-9",
+      "difficulty": "easy",
+      "category": "Letters",
+      "text": "In Ephesians 2:4, what does Paul say about God before saying God made us alive?",
+      "options": [
+        "Holy and just",
+        "Patient and slow to anger",
+        "Rich in mercy, with great love",
+        "Powerful and wise"
+      ],
+      "correctIndex": 2,
+      "explanation": "Verse 4 says God is “rich in mercy” and acted “for his great love with which he loved us.”",
+      "refStart": "Ephesians 2:4",
+      "refEnd": "Ephesians 2:5"
+    },
+    {
+      "id": "ephesians-2-10",
+      "difficulty": "medium",
+      "category": "Letters",
+      "text": "In Ephesians 2:8–9, why does Paul say salvation is “not of works”?",
+      "options": [
+        "Because good works are forbidden",
+        "So that no one would boast",
+        "So that the church would grow",
+        "Because people are too busy to do good works"
+      ],
+      "correctIndex": 1,
+      "explanation": "Verse 9 says salvation is “not of works, that no one would boast.”",
+      "refStart": "Ephesians 2:8",
+      "refEnd": "Ephesians 2:9"
+    },
+    {
+      "id": "ephesians-2-11",
+      "difficulty": "medium",
+      "category": "Letters",
+      "text": "Which statement best explains grace in Ephesians 2:8–10?",
+      "options": [
+        "Salvation is a reward God gives for good works; grace helps people do enough good works to earn it.",
+        "Salvation is God’s gift received through faith, so those saved no longer need to do any good works.",
+        "Salvation is God’s gift, received through faith rather than earned by works; those saved are created for good works.",
+        "Salvation is earned by faithful effort, so those who do the most good works may rightly boast in it."
+      ],
+      "correctIndex": 2,
+      "explanation": "Verses 8–9 say “by grace you have been saved through faith” and that it is “the gift of God, not of works, that no one would boast.” Verse 10 adds that we are “created in Christ Jesus for good works.”",
+      "refStart": "Ephesians 2:8",
+      "refEnd": "Ephesians 2:10"
     },
     {
       "id": "ephesians-3-1",

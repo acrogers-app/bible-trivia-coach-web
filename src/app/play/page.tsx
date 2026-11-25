@@ -24,6 +24,7 @@ import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/stre
 import { stopSpeech } from '../../lib/speech';
 import { useIsPro } from '../../lib/pro';
 import { usePurchasesAvailable } from '../../lib/iap';
+import LearnCard from '../../components/learn/LearnCard';
 import {
   APP_VERSION,
   VERSION_SEEN_KEY,
@@ -2156,7 +2157,7 @@ function HomeScreen(props: {
                   alignItems: 'center',
                   gap: 6,
                   padding: '6px 12px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   backgroundColor: 'var(--btc-warn-soft)',
                   border: '1px solid rgba(251,191,36,0.5)',
                   fontSize: 14,
@@ -2230,7 +2231,7 @@ function HomeScreen(props: {
                   display: 'inline-flex',
                   alignItems: 'center',
                   padding: '4px 10px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   backgroundColor: 'var(--btc-success-soft)',
                   border: '1px solid rgba(74,222,128,0.45)',
                   fontSize: 12,
@@ -2347,16 +2348,17 @@ function HomeScreen(props: {
           <div
             style={{
               marginTop: 12,
-              padding: '6px 10px',
-              borderRadius: 999,
+              padding: '14px 16px',
+              borderRadius: 16,
               backgroundColor: 'var(--btc-warn-soft)',
               border: '1px solid rgba(251,191,36,0.5)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              fontSize: 12,
+              fontSize: 15,
+              lineHeight: 1.4,
               color: 'var(--btc-gold)',
-              gap: 8,
+              gap: 12,
               flexWrap: 'wrap',
             }}
           >
@@ -2512,6 +2514,9 @@ function HomeScreen(props: {
             <div className="btc-text-muted" style={{ marginTop:4, fontSize:12 }}>Easy / Medium / Hard / Mixed</div>
           </button>
         </div>
+
+        {/* ── Learn: guided topic lessons (hidden until reviewed lessons exist) ── */}
+        <LearnCard />
 
         {/* ── Your Path: difficulty progression (device-local) ───── */}
         <PathSection onStartPathQuiz={props.onStartPathQuiz} />
@@ -2813,7 +2818,7 @@ function DisabledRow(props: { title: string }) {
       style={{
         width: '100%',
         backgroundColor: 'var(--btc-elevated)',
-        borderRadius: 999,
+        borderRadius: 22,
         padding: '10px 16px',
         border: '1px dashed var(--btc-border-strong)',
         marginBottom: 10,
@@ -3108,7 +3113,7 @@ function DailyReadingScreen(props: {
             disabled={isSpeaking && !isPaused}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor:
                 isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-panel-bg)',
@@ -3122,7 +3127,7 @@ function DailyReadingScreen(props: {
             disabled={!isSpeaking}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-panel-bg)',
               cursor: !isSpeaking ? 'default' : 'pointer',
@@ -3134,7 +3139,7 @@ function DailyReadingScreen(props: {
             onClick={stopSpeaking}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-panel-bg)',
               cursor: 'pointer',
@@ -3148,7 +3153,7 @@ function DailyReadingScreen(props: {
           onClick={props.onStartQuiz}
           style={{
             padding: '10px 16px',
-            borderRadius: 999,
+            borderRadius: 22,
             border: 'none',
             backgroundColor: 'var(--btc-accent)',
             color: 'white',
@@ -3729,7 +3734,7 @@ function QuizScreen(props: {
                 style={{
                   marginTop: 10,
                   padding: '8px 14px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   border: '1px solid var(--game-chip-border)',
                   backgroundColor: 'var(--game-chip-bg)',
                   color: 'var(--game-chip-ink)',
@@ -3905,7 +3910,7 @@ function FamilySetupScreen(props: {
                   type="button"
                   onClick={() => removePlayer(idx)}
                   style={{
-                    borderRadius: 999,
+                    borderRadius: 22,
                     border: 'none',
                     backgroundColor: 'var(--btc-red-soft)',
                     color: 'var(--btc-red)',
@@ -3925,7 +3930,7 @@ function FamilySetupScreen(props: {
               onClick={() => addPlayer()}
               style={{
                 marginTop: 4,
-                borderRadius: 999,
+                borderRadius: 22,
                 border: '1px dashed var(--btc-border-strong)',
                 backgroundColor: 'var(--btc-surface)',
                 color: 'var(--btc-ink)',
@@ -4026,7 +4031,7 @@ function FamilySetupScreen(props: {
         onClick={handleStart}
         style={{
           padding: '10px 16px',
-          borderRadius: 999,
+          borderRadius: 22,
           border: 'none',
           backgroundColor: 'var(--btc-accent)',
           color: 'white',
@@ -4521,7 +4526,7 @@ function PassageInline(props: {
             disabled={isSpeaking && !isPaused}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor:
                 isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-surface)',
@@ -4536,7 +4541,7 @@ function PassageInline(props: {
             disabled={!isSpeaking}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-surface)',
               cursor: !isSpeaking ? 'default' : 'pointer',
@@ -4549,7 +4554,7 @@ function PassageInline(props: {
             onClick={stopSpeaking}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-surface)',
               cursor: 'pointer',

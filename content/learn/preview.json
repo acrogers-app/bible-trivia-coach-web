@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "topics": [
+    {
+      "id": "grace",
+      "title": "Grace",
+      "type": "theme",
+      "relatedTopicIds": ["faith"],
+      "lessons": [
+        {
+          "id": "preview-grace-1",
+          "title": "Saved by grace (preview)",
+          "passages": [{ "start": "Ephesians 2:1", "end": "Ephesians 2:10" }],
+          "explanation": "[Placeholder. The explanation for this lesson is waiting for human review and is not shown in the app.]",
+          "deeper": { "text": "[Placeholder. Deeper notes are waiting for human review.]", "viewsDiffer": true },
+          "reflectPrompt": "[Placeholder reflection prompt.]",
+          "questionIds": ["ephesians-2-1", "ephesians-2-2", "ephesians-2-3", "ephesians-2-4", "ephesians-2-5"],
+          "review": { "status": "draft" }
+        },
+        {
+          "id": "preview-grace-2",
+          "title": "The father who runs (preview)",
+          "passages": [{ "start": "Luke 15:11", "end": "Luke 15:32" }],
+          "explanation": "[Placeholder. The explanation for this lesson is waiting for human review and is not shown in the app.]",
+          "questionIds": ["luke-15-2", "luke-15-3", "luke-15-4", "luke-15-5", "luke-15-6"],
+          "review": { "status": "draft" }
+        },
+        {
+          "id": "preview-grace-3",
+          "title": "Content gap example (preview)",
+          "passages": [{ "start": "Exodus 34:6", "end": "Exodus 34:7" }],
+          "explanation": "[Placeholder. This lesson has only two linked questions, so it is hidden until two more approved questions exist.]",
+          "questionIds": ["exodus-34-2", "exodus-34-3"],
+          "review": { "status": "draft" }
+        }
+      ]
+    },
+    { "id": "faith", "title": "Faith", "type": "theme", "lessons": [] }
+  ]
+}

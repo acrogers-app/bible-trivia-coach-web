@@ -6,6 +6,7 @@ import BottomNav from '../../components/BottomNav';
 import { applySettingsToDocument, loadSettings, onSettingsChanged, type AppSettings } from '../../lib/appSettings';
 import { getTodayKey, updateStreakForToday } from '../../lib/streakUtils';
 import { apiUrl } from '../../lib/apiBase';
+import { chapterCount, verseCount } from '../../lib/bibleStructure';
 
 type VerseLine = { chapter: number; verse: number; text: string };
 
@@ -20,6 +21,27 @@ const BOOKS = [
   '2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John',
   '3 John','Jude','Revelation'
 ];
+
+// Recorded narration for whole chapters (pilot: Mark, Sunny Singh), bundled with the app by
+// scripts/buildChapterAudio.mjs. The manifest carries the WEB text too, so a narrated chapter
+// reads and plays offline. A clip is used only when its verse text matches exactly, and only
+// when every loaded verse has one, so a passage is never read in mixed voices.
+const CHAPTER_AUDIO_MANIFEST = '/data/chapter_audio_en_v1.json';
+const CHAPTER_AUDIO_DIR = '/audio/chapters/';
+// Same as Learn: clips are made at ElevenLabs speed 1.1 and played 10% faster, pitch kept.
+const RECORDED_PLAYBACK_RATE = 1.1;
+type ChapterAudio = { label?: string; chapters?: Record<string, { v: number; text: string; file: string }[]> };
+
+function recordedUrlsFor(m: ChapterAudio | null, book: string, lines: VerseLine[]): string[] | null {
+  if (!m?.chapters || !lines.length) return null;
+  const urls: string[] = [];
+  for (const l of lines) {
+    const hit = m.chapters[`${book} ${l.chapter}`]?.find((x) => x.v === l.verse);
+    if (!hit || hit.text !== l.text.trim()) return null;
+    urls.push(CHAPTER_AUDIO_DIR + hit.file);
+  }
+  return urls;
+}
 
 function clamp(n: number, a: number, b: number) { return Math.max(a, Math.min(b, n)); }
 function primaryLang(tag: string) { return (tag||'').toLowerCase().split('-')[0]||''; }
@@ -69,6 +91,28 @@ export default function ReadPage() {
   const [chapter, setChapter] = useState(3);
   const [startVerse, setStartVerse] = useState(16);
   const [endVerse, setEndVerse] = useState<number|''>('');
+  // Pickers only offer chapters and verses that exist in the WEB (lib/bibleStructure).
+  const bookIdx = BOOKS.indexOf(book);
+  const maxChapter = Math.max(1, chapterCount(bookIdx));
+  const maxVerse = Math.max(1, verseCount(bookIdx, chapter));
+  const range = (n: number, from = 1) => Array.from({ length: Math.max(0, n - from + 1) }, (_, i) => from + i);
+  function chooseBook(b: string) {
+    setBook(b);
+    const i = BOOKS.indexOf(b);
+    const ch = clamp(chapter, 1, Math.max(1, chapterCount(i)));
+    setChapter(ch);
+    chooseVerses(startVerse, endVerse, i, ch);
+  }
+  function chooseChapter(ch: number) {
+    setChapter(ch);
+    chooseVerses(startVerse, endVerse, bookIdx, ch);
+  }
+  function chooseVerses(sv: number, ev: number|'', i = bookIdx, ch = chapter) {
+    const max = Math.max(1, verseCount(i, ch));
+    const s2 = clamp(sv, 1, max);
+    setStartVerse(s2);
+    setEndVerse(ev === '' || ev <= s2 ? '' : clamp(ev, s2, max));
+  }
   const [mode, setMode] = useState<'chapter'|'range'>('chapter');
   const [lines, setLines] = useState<VerseLine[]>([]);
   const [loading, setLoading] = useState(false);
@@ -90,6 +134,20 @@ export default function ReadPage() {
   const [boundarySupported, setBoundarySupported] = useState(true);
   const runIdRef = useRef(0);
   const pendingAutoplayRef = useRef(false);
+  // Book of the loaded lines (the Book picker can change before Load is pressed).
+  const [linesBook, setLinesBook] = useState('');
+  const [chapterAudio, setChapterAudio] = useState<ChapterAudio | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const recordedUrls = useMemo(() => recordedUrlsFor(chapterAudio, linesBook, lines), [chapterAudio, linesBook, lines]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(CHAPTER_AUDIO_MANIFEST)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((m: ChapterAudio | null) => { if (!cancelled) setChapterAudio(m); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     applySettingsToDocument(settings);
@@ -112,7 +170,7 @@ export default function ReadPage() {
       pendingAutoplayRef.current = autoplay;
       (async () => {
         const m = start.match(/^(.+?)\s+(\d+):\d+/);
-        if (m) { setBook(m[1]); setChapter(parseInt(m[2],10)); }
+        if (m) { setBook(m[1]); setChapter(parseInt(m[2],10)); setLinesBook(m[1]); }
         setError(null); setLoading(true); stop();
         try {
           const res = await fetch(apiUrl(`/api/passage?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`));
@@ -154,7 +212,17 @@ export default function ReadPage() {
   async function load() {
     setError(null); setLoading(true); stop();
     try {
+      setLinesBook(book);
       if (mode === 'chapter') {
+        // A narrated chapter loads from the bundle, so it works offline.
+        const bundled = await fetch(CHAPTER_AUDIO_MANIFEST)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((m: ChapterAudio | null) => m?.chapters?.[`${book} ${chapter}`] ?? null)
+          .catch(() => null);
+        if (bundled?.length) {
+          setLines(bundled.map((x) => ({ chapter, verse: x.v, text: x.text })));
+          return;
+        }
         const res = await fetch(apiUrl(`/api/chapter?book=${encodeURIComponent(book)}&chapter=${encodeURIComponent(String(chapter))}`));
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error || `Failed (${res.status})`);
@@ -181,19 +249,32 @@ export default function ReadPage() {
     setReadMarkedToday(true);
   }
 
+  function stopAudio() {
+    const a = audioRef.current;
+    if (!a) return;
+    a.onended = null;
+    a.onerror = null;
+    try { a.pause(); } catch {}
+    a.removeAttribute('src');
+    try { a.load(); } catch {}
+  }
+
   function stop() {
     runIdRef.current++;
+    stopAudio();
     try { window.speechSynthesis?.cancel(); } catch {}
     setTtsState('idle'); setActiveIdx(null); setActiveChar(null); setBoundarySupported(true);
   }
 
   function pause() {
-    try { window.speechSynthesis?.pause(); } catch {}
+    if (recordedUrls) { try { audioRef.current?.pause(); } catch {} }
+    else { try { window.speechSynthesis?.pause(); } catch {} }
     setTtsState('paused');
   }
 
   function resume() {
-    try { window.speechSynthesis?.resume(); } catch {}
+    if (recordedUrls) { audioRef.current?.play().catch(() => stop()); }
+    else { try { window.speechSynthesis?.resume(); } catch {} }
     setTtsState('speaking');
   }
 
@@ -222,13 +303,28 @@ export default function ReadPage() {
     window.speechSynthesis.speak(u);
   }
 
+  function playClip(urls: string[], i: number, runId: number) {
+    if (runIdRef.current !== runId) return;
+    if (i >= urls.length) { setTtsState('idle'); setActiveIdx(null); return; }
+    setActiveIdx(i); setActiveChar(null); setTtsState('speaking');
+    const a = audioRef.current ?? (audioRef.current = new Audio());
+    a.onended = () => playClip(urls, i + 1, runId);
+    a.onerror = () => { if (runIdRef.current === runId) { setTtsState('idle'); setActiveIdx(null); } };
+    a.src = urls[i];
+    a.preservesPitch = true;
+    a.playbackRate = RECORDED_PLAYBACK_RATE;
+    a.defaultPlaybackRate = RECORDED_PLAYBACK_RATE;
+    a.play().catch(() => { if (runIdRef.current === runId) { setTtsState('idle'); setActiveIdx(null); } });
+  }
+
   function listen() {
     if (!lines.length) { setError('Load a chapter or verse range first.'); return; }
     setError(null);
     if (ttsState === 'paused') { resume(); return; }
     stop();
     const runId = runIdRef.current;
-    speakVerse(0, runId);
+    if (recordedUrls) playClip(recordedUrls, 0, runId);
+    else speakVerse(0, runId);
   }
 
   useEffect(() => {
@@ -242,8 +338,38 @@ export default function ReadPage() {
   }, [activeIdx, settings.readerAutoFollow, settings.reduceMotion]);
 
   return (
-    <div className="btc-root" style={{ paddingBottom: 110 }}>
+    <div className="btc-root" style={{ paddingBottom: ttsState !== 'idle' ? 180 : 110 }}>
       <BottomNav />
+
+      {/* While reading, Pause/Resume and Stop float above the tab bar so they stay in reach
+          as the text scrolls along. */}
+      {ttsState !== 'idle' && (
+        <div role="region" aria-label="Reading controls" style={{
+          position:'fixed', left:12, right:12, zIndex:40,
+          bottom:'calc(80px + env(safe-area-inset-bottom))',
+          maxWidth:560, margin:'0 auto',
+          display:'flex', alignItems:'center', gap:10, padding:'10px 12px',
+          borderRadius:16, background:'var(--btc-nav-bg)',
+          border:'1px solid var(--btc-border)', boxShadow:'0 6px 24px rgba(0,0,0,0.35)',
+        }}>
+          <span aria-live="polite" style={{ flex:'1 1 auto', fontSize:14, fontWeight:600, color:'var(--btc-text)' }}>
+            {ttsState === 'paused' ? 'Paused' : 'Reading'}
+            {activeIdx != null && lines[activeIdx] ? ` ${linesBook} ${lines[activeIdx].chapter}:${lines[activeIdx].verse}` : ''}
+          </span>
+          <button type="button" onClick={ttsState === 'paused' ? resume : pause} style={{
+            minHeight:44, padding:'8px 16px', borderRadius:12, cursor:'pointer', fontWeight:800,
+            background:'var(--btc-accent-soft)', color:'var(--btc-accent)', border:'1.5px solid var(--btc-accent)',
+          }}>
+            {ttsState === 'paused' ? 'Resume' : 'Pause'}
+          </button>
+          <button type="button" onClick={stop} style={{
+            minHeight:44, padding:'8px 16px', borderRadius:12, cursor:'pointer', fontWeight:600,
+            background:'var(--btc-btn-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-btn-border)',
+          }}>
+            Stop
+          </button>
+        </div>
+      )}
 
       <div className="btc-card">
         {/* Aurora header */}
@@ -263,14 +389,15 @@ export default function ReadPage() {
         <div style={{ display:'grid', gridTemplateColumns:'1fr 140px', gap:10, marginTop:12 }}>
           <label style={{ display:'flex', flexDirection:'column', gap:6 }}>
             <span style={{ fontSize:12, color:'var(--btc-text-muted)' }}>Book</span>
-            <select value={book} onChange={e => setBook(e.target.value)} style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)' }}>
+            <select value={book} onChange={e => chooseBook(e.target.value)} style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)', fontSize:16 }}>
               {BOOKS.map(b => <option key={b} value={b}>{b}</option>)}
             </select>
           </label>
           <label style={{ display:'flex', flexDirection:'column', gap:6 }}>
             <span style={{ fontSize:12, color:'var(--btc-text-muted)' }}>Chapter</span>
-            <input inputMode="numeric" value={chapter} onChange={e => setChapter(clamp(parseInt(e.target.value||'1',10),1,150))}
-              style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)' }} />
+            <select value={chapter} onChange={e => chooseChapter(parseInt(e.target.value,10))} aria-label={`Chapter, ${maxChapter} in ${book}`} style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)', fontSize:16 }}>
+              {range(maxChapter).map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
           </label>
         </div>
 
@@ -278,7 +405,7 @@ export default function ReadPage() {
         <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginTop:10, alignItems:'center' }}>
           {(['chapter','range'] as const).map(m => (
             <button key={m} type="button" onClick={() => setMode(m)} style={{
-              padding:'8px 14px', borderRadius:999, cursor:'pointer',
+              padding:'8px 14px', borderRadius:22, cursor:'pointer',
               border: mode===m ? '2px solid var(--btc-accent)' : '1px solid var(--btc-border)',
               background: mode===m ? 'var(--btc-accent-soft)' : 'var(--btc-btn-bg)',
               color: 'var(--btc-text)', fontWeight: mode===m ? 700 : 500,
@@ -291,7 +418,7 @@ export default function ReadPage() {
               display: 'inline-flex',
               alignItems: 'center',
               padding: '6px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               background: 'var(--btc-surface)',
               color: 'var(--btc-text-mid)',
@@ -307,13 +434,16 @@ export default function ReadPage() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginTop:10 }}>
             <label style={{ display:'flex', flexDirection:'column', gap:6 }}>
               <span style={{ fontSize:12, color:'var(--btc-text-muted)' }}>Start verse</span>
-              <input inputMode="numeric" value={startVerse} onChange={e => setStartVerse(clamp(parseInt(e.target.value||'1',10),1,176))}
-                style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)' }} />
+              <select value={startVerse} onChange={e => chooseVerses(parseInt(e.target.value,10), endVerse)} style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)', fontSize:16 }}>
+                {range(maxVerse).map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
             </label>
             <label style={{ display:'flex', flexDirection:'column', gap:6 }}>
               <span style={{ fontSize:12, color:'var(--btc-text-muted)' }}>End verse (optional)</span>
-              <input inputMode="numeric" value={endVerse} onChange={e => setEndVerse(e.target.value==='' ? '' : clamp(parseInt(e.target.value,10),1,176))}
-                style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)' }} />
+              <select value={endVerse === '' ? '' : endVerse} onChange={e => chooseVerses(startVerse, e.target.value === '' ? '' : parseInt(e.target.value,10))} style={{ padding:10, borderRadius:12, background:'var(--btc-input-bg)', color:'var(--btc-text)', border:'1px solid var(--btc-input-border)', fontSize:16 }}>
+                <option value="">Just verse {startVerse}</option>
+                {range(maxVerse, startVerse + 1).map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
             </label>
           </div>
         )}
@@ -343,6 +473,12 @@ export default function ReadPage() {
             {ttsState !== 'idle' && activeIdx != null ? ` • ${progress}%` : ''}
           </span>
         </div>
+
+        {recordedUrls && (
+          <p style={{ marginTop:8, marginBottom:0, fontSize:13, color:'var(--btc-text-muted)' }}>
+            <span aria-hidden="true">🎧 </span>Narrated by {chapterAudio?.label || 'a recorded narrator'}. Works offline.
+          </p>
+        )}
 
         {error && <div style={{ marginTop:10, color:'#ef4444', fontWeight:700 }}>{error}</div>}
 

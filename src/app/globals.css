@@ -129,6 +129,53 @@ body {
   color: var(--btc-text-main) !important;
 }
 
+/* Learn headings follow the app text size and the iOS system text size
+   (--learn-dt-head, set by src/lib/learn/textScale.ts; headings grow half as much as body). Same default sizes as above. */
+.btc-card h1.learn-h1 {
+  font-size: calc(var(--btc-heading-xl) * var(--btc-font-mult, 1) * var(--learn-dt-head, 1)) !important;
+  overflow-wrap: anywhere;
+}
+
+.btc-card h2.learn-h2 {
+  font-size: calc(var(--btc-heading-lg) * var(--btc-font-mult, 1) * var(--learn-dt-head, 1)) !important;
+  overflow-wrap: anywhere;
+}
+
+/* The verse being read aloud in a Learn passage. Not colour alone: a solid bar marks the
+   start of every line of the verse. Text colour is never changed.
+   Dark is the default; light uses the same two routes as the theme blocks below. */
+:root {
+  --learn-spoken-bg: rgba(129, 140, 248, 0.3);
+  --learn-spoken-bar: #a5b4fc;
+}
+:root[data-theme='light'] {
+  --learn-spoken-bg: rgba(79, 70, 229, 0.12);
+  --learn-spoken-bar: #4f46e5;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --learn-spoken-bg: rgba(79, 70, 229, 0.12);
+    --learn-spoken-bar: #4f46e5;
+  }
+}
+.learn-verse {
+  /* Keep a followed verse clear of the fixed tab bar (and the home indicator). */
+  scroll-margin-top: 16px;
+  scroll-margin-bottom: calc(110px + env(safe-area-inset-bottom));
+  /* Same padding on every verse, so the text doesn't shift when the highlight moves. */
+  border-radius: 4px;
+  padding: 2px 4px 2px 9px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.learn-verse.learn-spoken {
+  background: var(--learn-spoken-bg);
+  box-shadow: inset 4px 0 0 var(--learn-spoken-bar);
+}
+@media (forced-colors: active) {
+  .learn-verse.learn-spoken { outline: 2px solid Highlight; }
+}
+
 .btc-card h3 {
   font-size: var(--btc-heading-md) !important;
   font-weight: 700 !important;
@@ -155,7 +202,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 12px 24px;
-  border-radius: 9999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   background: linear-gradient(135deg, #16a34a, #22c55e);
   color: #ffffff;
   font-size: 15px;
@@ -279,7 +326,7 @@ html[data-btc-reduce-motion="1"] * {
   gap: 6px;
   min-height: 44px;
   padding: 10px 20px;
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   border: none;
   background-color: var(--btc-btn-primary, var(--btc-accent));
   color: var(--btc-btn-text, #ffffff);
@@ -391,7 +438,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-border-strong: rgba(255, 255, 255, 0.28);
   --btc-text-strong: #f0f0ff;
   --btc-text-mid: rgba(240, 240, 255, 0.78);
-  --btc-nav-bg: rgba(8, 8, 24, 0.97);
+  --btc-nav-bg: #080818; /* opaque: text must not show through the tab bar */
   --btc-nav-border: rgba(255, 255, 255, 0.08);
   --btc-nav-active: #818cf8;
   --btc-nav-inactive: rgba(240, 240, 255, 0.6);
@@ -480,7 +527,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-border-strong: rgba(0, 0, 0, 0.15);
   --btc-text-strong: #1a1040;
   --btc-text-mid: #3f3a5e;
-  --btc-nav-bg: rgba(255, 255, 255, 0.97);
+  --btc-nav-bg: #ffffff;
   --btc-nav-border: rgba(0, 0, 0, 0.08);
   --btc-nav-active: #4f46e5;
   --btc-nav-inactive: #6b7280;
@@ -564,7 +611,7 @@ html[data-btc-reduce-motion="1"] * {
     --btc-border-strong: rgba(0, 0, 0, 0.15);
     --btc-text-strong: #1a1040;
     --btc-text-mid: #3f3a5e;
-    --btc-nav-bg: rgba(255, 255, 255, 0.97);
+    --btc-nav-bg: #ffffff;
     --btc-nav-border: rgba(0, 0, 0, 0.08);
     --btc-nav-active: #4f46e5;
     --btc-nav-inactive: #6b7280;
@@ -799,7 +846,7 @@ html[data-btc-reduce-motion="1"] * {
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   background: var(--game-flame-bg);
   border: 1px solid var(--game-flame-border);
   color: var(--game-flame-ink);
@@ -957,7 +1004,7 @@ html[data-btc-reduce-motion="1"] * {
   margin-top: 8px;
 }
 .btc-name-chip {
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   border: 1px solid var(--btc-border);
   background: var(--btc-surface);
   padding: 6px 8px;

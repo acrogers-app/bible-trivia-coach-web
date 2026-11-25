@@ -499,7 +499,7 @@ function ThemeCard() {
             aria-pressed={pref === o.key}
             style={{
               padding: '10px 16px',
-              borderRadius: 999,
+              borderRadius: 22,
               fontWeight: 700,
               fontSize: 13,
               cursor: 'pointer',

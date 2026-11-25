@@ -16,6 +16,9 @@ if (fs.existsSync(HIDDEN_DIR)) {
   throw new Error(`${HIDDEN_DIR} already exists — a previous build may have failed to restore it. Rename it back to ${API_DIR} first.`);
 }
 
+// Bundle Learn lesson Scripture so lessons work offline.
+execSync("node scripts/buildLearnPassages.mjs", { stdio: "inherit" });
+
 fs.renameSync(API_DIR, HIDDEN_DIR);
 try {
   execSync("next build", {

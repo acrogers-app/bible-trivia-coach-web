@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "validate:questions": "node scripts/validateQuestions.mjs",
-    "check": "npm run lint && npm run build && npm run validate:questions",
+    "validate:topics": "node scripts/validateTopics.mjs",
+    "build:learn-passages": "node scripts/buildLearnPassages.mjs",
+    "generate:learn-audio": "node scripts/generateLearnAudio.mjs",
+    "test:learn": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test 'tests/learn/*.test.mjs'",
+    "check": "npm run lint && npm run build && npm run validate:questions && npm run validate:topics && npm run test:learn",
     "build:mobile": "node scripts/buildMobile.mjs",
     "cap:sync": "npm run build:mobile && npx cap sync",
     "postinstall": "node scripts/patchNativePurchases.mjs"
