@@ -1099,3 +1099,12 @@ input[type='range'],
 input[type='checkbox'] {
   accent-color: var(--btc-accent);
 }
+
+/* iPhone Duo / large displays: side-by-side panes (components/duo/DuoSplit) are ~370–450px wide,
+   so quiz answers stack in one column there instead of the tablet 2×2 grid. */
+[data-duo-split="columns"] .duo-pane .answer-grid {
+  display: flex;
+  flex-direction: column;
+}
+[data-duo-split="columns"] .duo-pane .answer-btn { padding: 14px 14px; }
+[data-duo-split="columns"] .duo-pane .question-card { padding: 20px; }

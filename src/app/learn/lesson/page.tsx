@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { CHECK_SIZE, PASS_CORRECT, selectCheckQuestions } from '../../../lib/learn/content';
 import { isPassingCheck, lessonStatus, markStarted, recordCheck } from '../../../lib/learn/progress';
 import { useLearnData, useLearnProgress, useNow, useUsableTopics } from '../../../lib/learn/useLearn';
-import { LearnFrame, LoadingOrError, StatusChip } from '../../../components/learn/LearnChrome';
+import { LearnFrame, LoadingOrError, StatusChip, useLearnSplit } from '../../../components/learn/LearnChrome';
 import LearnCheck from '../../../components/learn/LearnCheck';
 import ScripturePassage from '../../../components/learn/ScripturePassage';
 import { BODY_FS, fs } from '../../../lib/learn/textScale';
@@ -27,6 +27,9 @@ function LessonScreen() {
   const [result, setResult] = useState<{ correct: number; total: number } | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const firstMode = useRef(true);
+  // Two panes (iPhone Duo inner display, iPad): Scripture stays in view beside the lesson,
+  // its check and its result. Phone: unchanged single column.
+  const split = useLearnSplit();
 
   // Screen readers: when the screen switches (back to the lesson, or to the result), move
   // focus to its title; the button that was pressed no longer exists. Not on first load.
@@ -34,6 +37,7 @@ function LessonScreen() {
     if (firstMode.current) { firstMode.current = false; return; }
     if (mode === 'check') return; // LearnCheck scrolls and focuses its first question
     window.scrollTo(0, 0);
+    titleRef.current?.closest('.duo-pane')?.scrollTo(0, 0); // two-pane: the pane scrolls
     titleRef.current?.focus({ preventScroll: true });
   }, [mode]);
 
@@ -64,10 +68,22 @@ function LessonScreen() {
   const questions = selectCheckQuestions(lesson, data.bank);
   const back = { href: `/learn/topic?id=${encodeURIComponent(topic.id)}`, label: topic.title };
   const isReview = status === 'understood' || status === 'review_ready';
+  const scripture = (
+    <section style={split ? { marginTop: 0 } : sectionStyle} aria-label="Scripture">
+      <div style={labelStyle}><span aria-hidden="true">📖 </span>Scripture · World English Bible</div>
+      {/* readable measure in a wide pane */}
+      <div style={split ? { maxWidth: '36em' } : undefined}>
+        {lesson.passages.map((p) => (
+          <ScripturePassage key={`${p.start}-${p.end}`} passage={p} />
+        ))}
+      </div>
+    </section>
+  );
+  const aside = split ? { label: `Scripture for ${lesson.title}`, content: scripture } : null;
 
   if (mode === 'check' && questions) {
     return (
-      <LearnFrame back={back} preview={data.preview}>
+      <LearnFrame back={back} preview={data.preview} aside={aside}>
         <LearnCheck
           questions={questions}
           label={isReview ? `Review: ${lesson.title}` : `Check: ${lesson.title}`}
@@ -85,7 +101,7 @@ function LessonScreen() {
   if (mode === 'result' && result) {
     const passed = isPassingCheck(result.correct, result.total);
     return (
-      <LearnFrame back={back} preview={data.preview}>
+      <LearnFrame back={back} preview={data.preview} aside={aside}>
         <h1 ref={titleRef} tabIndex={-1} className="learn-h1" style={{ marginTop: 0, outline: 'none' }}>{lesson.title}</h1>
         <div role="status" style={{ ...sectionStyle, marginTop: 8 }}>
           <div style={{ fontSize: fs(18), fontWeight: 800 }}>
@@ -122,7 +138,7 @@ function LessonScreen() {
   }
 
   return (
-    <LearnFrame back={back} preview={data.preview}>
+    <LearnFrame back={back} preview={data.preview} aside={aside}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
         <span className="btc-text-muted" style={{ fontSize: fs(13) }}>
           {topic.title} · Lesson {position + 1} of {lessons.length}
@@ -131,12 +147,7 @@ function LessonScreen() {
       </div>
       <h1 ref={titleRef} tabIndex={-1} className="learn-h1" style={{ marginTop: 4, marginBottom: 0, outline: 'none' }}>{lesson.title}</h1>
 
-      <section style={sectionStyle} aria-label="Scripture">
-        <div style={labelStyle}><span aria-hidden="true">📖 </span>Scripture · World English Bible</div>
-        {lesson.passages.map((p) => (
-          <ScripturePassage key={`${p.start}-${p.end}`} passage={p} />
-        ))}
-      </section>
+      {!split && scripture}
 
       <section style={sectionStyle} aria-label="Explanation">
         <div style={labelStyle}><span aria-hidden="true">💬 </span>Explanation · not Scripture</div>

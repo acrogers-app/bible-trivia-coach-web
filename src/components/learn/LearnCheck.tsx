@@ -29,6 +29,7 @@ export default function LearnCheck({
   // announced (the Check button or the Next button that started it is gone or disabled).
   useEffect(() => {
     window.scrollTo(0, 0);
+    questionRef.current?.closest('.duo-pane')?.scrollTo(0, 0); // two-pane: the pane scrolls
     questionRef.current?.focus({ preventScroll: true });
   }, [index]);
 

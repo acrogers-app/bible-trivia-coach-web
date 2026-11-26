@@ -5,23 +5,44 @@ import Link from 'next/link';
 import BottomNav from '../BottomNav';
 import { STATUS_ICON, STATUS_LABEL, type LessonStatus } from '../../lib/learn/progress';
 import { fs, useSystemTextScale } from '../../lib/learn/textScale';
+import { useDuoSplit } from '../../lib/duoLayout';
+import DuoSplit from '../duo/DuoSplit';
 
-/** Page frame shared by the Learn screens: same root/card/bottom-nav pattern as Play. */
+/** True when Learn shows two panes (iPhone Duo inner display, iPad): Scripture beside the lesson. */
+export function useLearnSplit() {
+  return useDuoSplit().mode !== 'single';
+}
+
+/**
+ * Page frame shared by the Learn screens: same root/card/bottom-nav pattern as Play.
+ * `aside` (the lesson's Scripture) gets its own pane when the display is split; screens pass it
+ * only then (see useLearnSplit), so the phone layout is unchanged. The lesson content always sits
+ * in the same pane element, so a check in progress survives folding and unfolding.
+ */
 export function LearnFrame({
   back,
   preview,
   children,
+  aside,
 }: {
   back: { href: string; label: string };
   preview: boolean;
   children: ReactNode;
+  aside?: { label: string; content: ReactNode } | null;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   useSystemTextScale(rootRef);
+  const layout = useDuoSplit();
   return (
     <div ref={rootRef} className="btc-root" style={{ paddingBottom: 'calc(110px + env(safe-area-inset-bottom))' }}>
       <BottomNav />
       <main className="btc-card">
+        <DuoSplit
+          layout={layout}
+          primary={layout.mode !== 'single' && aside ? aside.content : null}
+          primaryLabel={aside?.label ?? 'Scripture'}
+          secondaryLabel="Lesson"
+          secondary={<>
         <Link href={back.href} style={{ fontSize: fs(14), opacity: 0.75, textDecoration: 'none', color: 'inherit', display: 'inline-flex', alignItems: 'center', minHeight: 44 }}>
           <span aria-hidden="true">‹&nbsp;</span>{back.label}
         </Link>
@@ -37,6 +58,8 @@ export function LearnFrame({
           </div>
         )}
         {children}
+          </>}
+        />
       </main>
     </div>
   );

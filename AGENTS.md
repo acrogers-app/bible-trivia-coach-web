@@ -42,6 +42,13 @@ These are shorthand names that may appear in conversations:
 - `daily-challenge-nudge` – Surface today’s 5-question daily challenge.
 - `coach-voice-text` – Centralized, consistent coach messages.
 
+## iPhone Duo work
+
+Before any iPhone Duo (foldable) layout work, read `DUO.md` at the repo root. Then recheck the
+current Apple sources listed there (HIG "Designing for iPhone Duo", "Preparing your app for iPhone
+Duo"). Apple documentation is normative; forum posts and user reports are anecdotal. Update
+`DUO.md` (dated) when guidance or findings change.
+
 ## Coding guidelines for assistants
 
 When generating or editing code:

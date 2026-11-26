@@ -45,6 +45,8 @@ import {
   subscribeLS,
   type PathKey,
 } from '../../lib/gameFx';
+import { useDuoSplit } from '../../lib/duoLayout';
+import DuoSplit from '../../components/duo/DuoSplit';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -3512,6 +3514,10 @@ function QuizScreen(props: {
   const { title, questions } = props;
   const verseMatch = title.match(/^Verse of the day:\s*(.+)$/);
   const verseRefStr = verseMatch ? verseMatch[1] : null;
+  // Two panes (iPhone Duo inner display, iPad): question + answers in one pane, the answer's
+  // explanation and Scripture in the other. Phone: unchanged single column.
+  const duo = useDuoSplit();
+  const twoPane = duo.mode !== 'single';
 
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -3640,6 +3646,196 @@ function QuizScreen(props: {
       stopSpeech();
     };
   }, []);
+
+  if (twoPane) {
+    return (
+      <div style={{ color: 'var(--btc-ink)' }}>
+        <DuoSplit
+          layout={duo}
+          primaryLabel={`Question ${index + 1} of ${questions.length}`}
+          secondaryLabel="Answer and Scripture"
+          primary={<>
+      <BackButton
+        onClick={() => {
+          stopSpeech();
+          props.onBack();
+        }}
+      />
+      <h2>{title}</h2>
+
+      <div className="btc-game">
+        <Starfield />
+        <div className="question-card" key={index}>
+          <div className="q-text">{q.text}</div>
+        </div>
+
+        <div className="answer-grid">
+          {q.options.map((opt, i) => (
+            <GameAnswerButton
+              key={i}
+              option={opt}
+              index={i}
+              selected={selected}
+              correctIndex={q.correctIndex}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+
+      </div>
+          </>}
+          secondary={<>
+      {/* Session progress, score and timer sit beside the question; the answers stay with it. */}
+      <div className="btc-game" style={{ marginBottom: 16 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12,
+            marginBottom: 4,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 13, color: 'var(--game-muted)' }}>
+              Question {index + 1} of {questions.length}
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--game-muted)' }}>
+              {correctCount} correct
+            </div>
+            {streak >= 2 && (
+              <div className="btc-streak-flame" style={{ marginTop: 6 }}>
+                🔥 {streak} in a row!
+              </div>
+            )}
+          </div>
+          <div style={{ position: 'relative', textAlign: 'right' }}>
+            <div className="score-display">{displayPoints}</div>
+            <div
+              style={{
+                fontSize: 10,
+                color: 'var(--game-muted)',
+                letterSpacing: 3,
+                fontWeight: 700,
+              }}
+            >
+              PTS
+            </div>
+            {fly && (
+              <span
+                key={fly.key}
+                className="btc-points-fly"
+                style={{ right: 0, top: -4 }}
+              >
+                {fly.text}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <TimerBar secondsLeft={secondsLeft} total={QUESTION_SECONDS} />
+        {secondsLeft <= 0 && selected === null && (
+          <div
+            style={{
+              fontSize: 13,
+              color: 'var(--game-flame-ink)',
+              fontWeight: 600,
+              marginBottom: 10,
+            }}
+          >
+            ⏰ Time! Take your best guess — no pressure.
+          </div>
+        )}
+
+      </div>
+      {verseRefStr && (
+        <div style={{ marginBottom: 16 }}>
+          <PassageInline
+            refStart={verseRefStr}
+            refEnd={verseRefStr}
+            onClose={() => {}}
+          />
+        </div>
+      )}
+
+      {showFeedback ? (
+        <div className="btc-game">
+        {showFeedback && (
+          <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
+            <div
+              style={{
+                fontWeight: 700,
+                marginBottom: 4,
+                color:
+                  selected === q.correctIndex
+                    ? 'var(--game-good)'
+                    : 'var(--game-bad)',
+              }}
+            >
+              {coachReaction(selected === q.correctIndex, index)}
+            </div>
+            <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
+              {q.explanation}
+            </div>
+            {selected === q.correctIndex &&
+              q.refStart &&
+              q.refStart.trim() !== '' && (
+                <div className="verse-reveal">
+                  📖 {q.refStart}
+                  {q.refEnd && q.refEnd.trim() !== '' && q.refEnd !== q.refStart
+                    ? ` – ${q.refEnd}`
+                    : ''}{' '}
+                  — God&apos;s Word, well remembered.
+                </div>
+              )}
+            {selected !== q.correctIndex && passageRef && !showPassage && (
+              <button
+                onClick={() => setShowPassage(true)}
+                style={{
+                  marginTop: 10,
+                  padding: '8px 14px',
+                  borderRadius: 22,
+                  border: '1px solid var(--game-chip-border)',
+                  backgroundColor: 'var(--game-chip-bg)',
+                  color: 'var(--game-chip-ink)',
+                  fontSize: 13,
+                  cursor: 'pointer',
+                }}
+              >
+                📖 Read this passage (
+                {passageRef.start}
+                {passageRef.end !== passageRef.start
+                  ? ` – ${passageRef.end}`
+                  : ''}
+                )
+              </button>
+            )}
+          </div>
+        )}
+        </div>
+      ) : !verseRefStr && (
+        <p className="btc-text-muted" style={{ marginTop: 0 }}>
+          Choose an answer. Its explanation and Scripture reference will appear here.
+        </p>
+      )}
+      {showPassage && passageRef && (
+        <PassageInline
+          refStart={passageRef.start}
+          refEnd={passageRef.end}
+          onClose={() => setShowPassage(false)}
+        />
+      )}
+
+      {selected !== null && (
+        <button onClick={handleNext} className="btc-btn" style={{ width: '100%', minHeight: 52, marginTop: 16, fontSize: 16 }}>
+          {isLast ? 'Finish' : 'Next'} →
+        </button>
+      )}
+          </>}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
