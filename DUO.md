@@ -156,6 +156,14 @@ for iPhone Duo", forum thread 848036 (WKWebView: native host must pass the geome
 - `AppBridgeViewController` (subclass of `CAPBridgeViewController`, set in `Main.storyboard`)
   registers the plugin. **No device checks, no hardcoded sizes or hinge coordinates.** On phones,
   iPad and iOS < 27.1 the region lists are empty and the web layer uses plain width rules.
+- Versions (verified locally 2026-11-26 with `xcodebuild -version`, `xcrun --show-sdk-version`
+  / `--show-sdk-build-version`, `simctl list runtimes`):
+  - **Toolchain / build SDK:** Xcode 27.2 (27B52), iOS SDK 27.2 (build 24B8118).
+  - **API availability (separate from the build SDK):** in that SDK, `reservedRegions`,
+    `UIView.ReservedRegion`, `UIHingeInteraction` and `UIHinge` are marked available starting
+    in **iOS 27.1**, so the bridge guards them with `#available(iOS 27.1, *)` (deployment target
+    15.0/17.0).
+  - **Duo simulator runtime:** iOS 27.1 (24A94425).
 
 ### Web layout (`src/lib/duoLayout.ts`, `src/components/duo/DuoSplit.tsx`)
 | Reported | Layout | Condition |
