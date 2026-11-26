@@ -42,13 +42,16 @@ export function headingRatio(r: number): number {
   return 1 + (r - 1) * 0.5;
 }
 
-/** Keeps --learn-dt on `ref` in step with the system text size (re-read on return to the app). */
-export function useSystemTextScale(ref: RefObject<HTMLElement | null>) {
+/** Keeps --learn-dt on `ref` in step with the system text size (re-read on return to the app).
+ *  With no ref it sets the variables on <html>, so the quiz and the Read passage can use them
+ *  too (see SystemTextScale in the root layout). */
+export function useSystemTextScale(ref?: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const apply = () => {
       const r = systemTextRatio();
-      ref.current?.style.setProperty('--learn-dt', String(r));
-      ref.current?.style.setProperty('--learn-dt-head', String(headingRatio(r)));
+      const el = ref ? ref.current : document.documentElement;
+      el?.style.setProperty('--learn-dt', String(r));
+      el?.style.setProperty('--learn-dt-head', String(headingRatio(r)));
     };
     apply();
     const onVisible = () => { if (document.visibilityState === 'visible') apply(); };

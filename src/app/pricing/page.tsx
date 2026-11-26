@@ -55,7 +55,8 @@ export default function PricingPage() {
       style={{
         maxWidth: 760,
         margin: "0 auto",
-        padding: "32px 18px 64px",
+        // top clears the status bar and the theme toggle strip
+        padding: "calc(76px + env(safe-area-inset-top)) 18px 64px",
       }}
     >
       <h1 style={{ fontSize: 28, fontWeight: 800, color: "var(--btc-accent-deep)" }}>
@@ -108,7 +109,7 @@ export default function PricingPage() {
               top: -12,
               right: 16,
               background: "var(--btc-accent-deep)",
-              color: "#fff",
+              color: "var(--btc-on-accent-deep)",
               fontSize: 11,
               fontWeight: 700,
               padding: "3px 10px",
@@ -138,7 +139,7 @@ export default function PricingPage() {
                 padding: "12px 16px",
                 borderRadius: 12,
                 background: "var(--btc-accent-deep)",
-                color: "#fff",
+                color: "var(--btc-on-accent-deep)",
                 fontWeight: 700,
                 textAlign: "center",
               }}
@@ -161,7 +162,7 @@ export default function PricingPage() {
                 borderRadius: 12,
                 border: "none",
                 background: "var(--btc-accent-deep)",
-                color: "#fff",
+                color: "var(--btc-on-accent-deep)",
                 fontWeight: 700,
                 fontSize: 15,
                 cursor: status === "loading" ? "default" : "pointer",

@@ -486,7 +486,8 @@ export default function ReadPage() {
         <div style={{
           marginTop:14, padding:14, borderRadius:16,
           background:'var(--btc-surface)', lineHeight:1.7,
-          fontSize: settings.readerFontSize, maxWidth:820,
+          // reader size setting x iPhone text size at half strength (--learn-dt-head, SystemTextScale)
+          fontSize: `calc(${settings.readerFontSize}px * var(--learn-dt-head, 1))`, maxWidth:820,
           color:'var(--btc-text)',
           border:'1px solid var(--btc-border)',
         }}>

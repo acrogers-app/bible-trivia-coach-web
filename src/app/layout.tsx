@@ -6,6 +6,7 @@ import RegisterServiceWorker from "../components/RegisterServiceWorker";
 import CapacitorBridge from "../components/CapacitorBridge";
 import OfflineBanner from "../components/OfflineBanner";
 import ThemeToggle from "../components/ThemeToggle";
+import SystemTextScale from "../components/SystemTextScale";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -148,6 +149,7 @@ export default function RootLayout({
         />
         {children}
         <ThemeToggle />
+        <SystemTextScale />
         <FamilyModeChrome />
         <OfflineBanner />
         <RegisterServiceWorker />

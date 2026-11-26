@@ -73,7 +73,7 @@ export default function HomePage() {
             >
               <li>• 30‑day Gospel reading plan with auto‑generated quizzes</li>
               <li>• Scripture and Bible‑history question packs</li>
-              <li>• Read‑along audio with word‑by‑word highlighting</li>
+              <li>• Listen along, verse by verse</li>
             </ul>
             <div
               style={{
@@ -85,7 +85,7 @@ export default function HomePage() {
                 marginTop: 6,
               }}
             >
-              <Link href="/play" className="btc-hero-cta">
+              <Link href="/play?action=daily" className="btc-hero-cta">
                 Start today&apos;s study
               </Link>
               <span

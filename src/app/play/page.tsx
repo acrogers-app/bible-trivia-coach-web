@@ -1401,7 +1401,7 @@ export default function PlayPage() {
   const today = todaysReadingDay(plan);
   const verseOfDay = today ? today.start : null;
 
-  // btc:url-actions — handle ?action=quiz|scroll|verse from Levels/More pages
+  // btc:url-actions — handle ?action=quiz|scroll|verse|daily from Levels/More/landing pages
   useEffect(() => {
     if (!pack) return;
     const params = new URLSearchParams(window.location.search);
@@ -1437,6 +1437,21 @@ export default function PlayPage() {
     if (action === 'verse') {
       cleanUrl();
       startVerseQuiz();
+    }
+
+    // From the landing page's "Start today's study": open today's Daily
+    // Challenge directly (same quiz as the hub button). If it's already done
+    // today, stay on the hub, which shows the "Done for today" card.
+    if (action === 'daily') {
+      cleanUrl();
+      let doneToday = false;
+      try {
+        doneToday =
+          window.localStorage.getItem('btc_daily_challenge_last_completed') === getTodayKey();
+      } catch {}
+      if (!doneToday) {
+        startQuiz({ title: 'Daily Quiz', count: 5, level: 'mixed', sourceType: 'scripture' });
+      }
     }
   }, [pack]);
 
@@ -2563,7 +2578,7 @@ function HomeScreen(props: {
                   padding: '8px 14px',
                   borderRadius: 10,
                   background: 'var(--btc-accent-deep)',
-                  color: '#fff',
+                  color: 'var(--btc-on-accent-deep)',
                   fontWeight: 700,
                   fontSize: 12,
                   textDecoration: 'none',
@@ -3419,6 +3434,36 @@ function coachReaction(isCorrect: boolean, questionIndex: number): string {
 }
 
 
+// Space the sticky Next bar takes at the bottom of the screen: bottom nav (80px)
+// + bar (52px) + a small gap, plus the iPhone home-indicator inset.
+const STICKY_BAR_CLEARANCE = "calc(150px + env(safe-area-inset-bottom))";
+const FEEDBACK_TOP_GAP = "calc(16px + env(safe-area-inset-top))";
+
+// After an answer, scroll the feedback (coach line, explanation, "Read this
+// passage") up so it sits above the sticky Next bar instead of behind it.
+function useRevealAboveStickyBar(show: boolean) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!show) return;
+    const reduce =
+      loadSettings().reduceMotion ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // wait a frame so the feedback and bottom padding are laid out
+    const id = requestAnimationFrame(() => {
+      const el = ref.current;
+      if (!el) return;
+      const cs = getComputedStyle(el);
+      const room =
+        window.innerHeight - parseFloat(cs.scrollMarginTop || "0") - parseFloat(cs.scrollMarginBottom || "0");
+      // Taller than the visible space (large text): show its top ("Correct!") rather than its end.
+      const block = el.getBoundingClientRect().height > room ? "start" : "nearest";
+      el.scrollIntoView({ block, behavior: reduce ? "auto" : "smooth" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [show]);
+  return ref;
+}
+
 function StickyNextBar(props: {
   visible: boolean;
   label: string;
@@ -3471,6 +3516,7 @@ function QuizScreen(props: {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const feedbackRef = useRevealAboveStickyBar(showFeedback);
   const [correctCount, setCorrectCount] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
 
@@ -3600,7 +3646,7 @@ function QuizScreen(props: {
       style={{
         color: 'var(--btc-ink)',
         // keep explanation clear of the sticky Next bar
-        paddingBottom: selected !== null ? 150 : 0,
+        paddingBottom: selected !== null ? STICKY_BAR_CLEARANCE : 0,
       }}
     >
       <BackButton
@@ -3701,7 +3747,7 @@ function QuizScreen(props: {
         </div>
 
         {showFeedback && (
-          <div style={{ marginTop: 16 }}>
+          <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
             <div
               style={{
                 fontWeight: 700,
@@ -3714,7 +3760,7 @@ function QuizScreen(props: {
             >
               {coachReaction(selected === q.correctIndex, index)}
             </div>
-            <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
+            <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
               {q.explanation}
             </div>
             {selected === q.correctIndex &&
@@ -4061,6 +4107,7 @@ function FamilyGameScreen(props: {
   );
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const feedbackRef = useRevealAboveStickyBar(showFeedback);
   const [finished, setFinished] = useState(false);
 
   const totalQuestions = props.questions.length;
@@ -4163,7 +4210,7 @@ function FamilyGameScreen(props: {
       style={{
         color: 'var(--btc-ink)',
         // keep explanation clear of the sticky Next bar
-        paddingBottom: selected !== null && !finished ? 150 : 0,
+        paddingBottom: selected !== null && !finished ? STICKY_BAR_CLEARANCE : 0,
       }}
     >
       <BackButton onClick={props.onBackHome} />
@@ -4205,7 +4252,7 @@ function FamilyGameScreen(props: {
           </div>
 
           {showFeedback && (
-            <div style={{ marginTop: 16 }}>
+            <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
               <div
                 style={{
                   fontWeight: 700,
@@ -4218,7 +4265,7 @@ function FamilyGameScreen(props: {
               >
                 {coachReaction(selected === q.correctIndex, currentIndex)}
               </div>
-              <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
+              <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
                 {q.explanation}
               </div>
               <MiniLeaderboard entries={combined} compact />
