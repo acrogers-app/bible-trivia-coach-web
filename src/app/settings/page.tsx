@@ -117,7 +117,7 @@ export default function SettingsPage() {
       }
       enableFamilyMode(familyPin);
       setFamilyPin('');
-      setFamilyStatus('Family Mode is ON. All analytics are off. Keep the PIN somewhere safe.');
+      setFamilyStatus('Family Mode is ON. Keep the PIN somewhere safe.');
     } else if (disableFamilyMode(familyPin)) {
       setFamilyPin('');
       setFamilyStatus('Family Mode is off.');
@@ -288,19 +288,12 @@ export default function SettingsPage() {
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />
               <span><strong>Reduce motion</strong></span>
             </label>
-            <label style={row}>
-              <input
-                type="checkbox"
-                checked={draft.analyticsEnabled !== false}
-                onChange={(e) => update({ analyticsEnabled: e.target.checked })}
-              />
-              <span>
-                <strong>Anonymous analytics</strong>
-                <span className="btc-text-muted" style={{ fontSize: 12, display: 'block', marginTop: 2 }}>
-                  Helps improve questions. No personal data collected.
-                </span>
-              </span>
-            </label>
+            {/* Analytics are hard-disabled (ANALYTICS_ENABLED=false in src/lib/analytics.ts), so the
+                former opt-out checkbox had no effect. The stored analyticsEnabled preference is still
+                read there as an opt-out gate; it is left untouched. */}
+            <p className="btc-text-muted" style={{ ...row, fontSize: 12, margin: 0 }}>
+              Quiz analytics are currently off; no quiz results are sent.
+            </p>
             {isNative && (
               <label style={row}>
                 <input
@@ -341,13 +334,13 @@ export default function SettingsPage() {
         <div style={card}>
           <h2 style={h2}>👨‍👩‍👧 Family Mode</h2>
           <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
-            For families and classrooms. When on, <strong>all</strong> analytics are
-            turned off (overriding the toggle above) and a Family Mode banner shows
-            so everyone can see it&apos;s active. A parent PIN is required to turn it
-            back off. Applies immediately — no Save needed.
+            For families and classrooms. When on, a Family Mode banner shows so
+            everyone can see it&apos;s active, and turning it off asks for the parent
+            PIN. Applies immediately — no Save needed.
           </p>
           <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 6, marginBottom: 0 }}>
-            💡 Set a PIN so kids can&apos;t change settings without permission.
+            💡 The PIN is a simple deterrent against casual changes. It
+            doesn&apos;t lock other settings and isn&apos;t strong security.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <input
