@@ -7,6 +7,7 @@ import { loadSettings } from '../../lib/appSettings';
 import { hasHighQualityVoice, pickReadingVoice, stopSpeech } from '../../lib/speech';
 import { formatPassage, type LessonPassage } from '../../lib/learn/content';
 import { fs } from '../../lib/learn/textScale';
+import { useDuoSplit } from '../../lib/duoLayout';
 
 type VerseLine = { chapter: number; verse: number; text: string };
 
@@ -40,6 +41,9 @@ const DEBUG_VOICE = process.env.NEXT_PUBLIC_LEARN_PREVIEW === '1';
  * picker in lib/speech), and stops when the lesson is left or the app is hidden.
  */
 export default function ScripturePassage({ passage }: { passage: LessonPassage }) {
+  // Two panes (iPhone Duo inner display, iPad): the reading controls stick to the bottom of the
+  // Scripture pane instead of floating across the whole screen (and the fold).
+  const inPane = useDuoSplit().mode !== 'single';
   const [lines, setLines] = useState<VerseLine[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [speaking, setSpeaking] = useState(false);
@@ -308,13 +312,18 @@ export default function ScripturePassage({ passage }: { passage: LessonPassage }
       {/* While reading, Pause/Resume and Stop float above the tab bar so they stay in reach
           as the passage scrolls along. */}
       {speaking ? (
-        <div role="region" aria-label="Reading controls" style={{
-          position: 'fixed', left: 12, right: 12, zIndex: 40,
-          bottom: 'calc(80px + env(safe-area-inset-bottom))',
-          maxWidth: 560, margin: '0 auto',
+        <div role="region" aria-label="Reading controls" className={inPane ? undefined : 'duo-float'} style={{
+          ...(inPane
+            ? { position: 'sticky', marginTop: 12 }
+            // side insets keep the bar out of reserved columns (e.g. iPhone Duo's camera/status column)
+            : { position: 'fixed', left: 'calc(12px + env(safe-area-inset-left))', right: 'calc(12px + env(safe-area-inset-right))',
+                bottom: 'calc(80px + env(safe-area-inset-bottom))', maxWidth: 560, margin: '0 auto' }),
+          zIndex: 40,
           display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
           borderRadius: 16, background: 'var(--btc-nav-bg)',
           border: '1px solid var(--btc-border)', boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
+          // In a pane: sit over the pane's bottom padding, and mask the text scrolling past it.
+          ...(inPane ? { bottom: -16, boxShadow: '0 0 0 8px var(--app-card-bg, #ffffff)' } : null),
         }}>
           <span aria-live="polite" style={{ flex: '1 1 auto', fontSize: fs(14), fontWeight: 600 }}>
             {paused ? 'Paused' : 'Reading'}

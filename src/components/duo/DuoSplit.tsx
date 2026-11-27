@@ -39,20 +39,21 @@ export default function DuoSplit({
   }, [split]);
 
   const edge = 8;
-  const top = `calc(env(safe-area-inset-top) + ${edge}px)`;
+  // --duo-banner: height of the fixed Family Mode banner while it shows (globals.css), else 0.
+  const top = `calc(env(safe-area-inset-top) + var(--duo-banner, 0px) + ${edge}px)`;
   const left = `calc(env(safe-area-inset-left) + ${edge}px)`;
   const right = `calc(env(safe-area-inset-right) + ${edge}px)`;
   const bottom = `${layout.bottom + edge}px`;
   // The theme toggle floats at the top-right corner: the pane under it starts below it, so
   // scrolled content never slides under the toggle.
-  const belowToggle = `calc(env(safe-area-inset-top) + 64px)`;
+  const belowToggle = `calc(env(safe-area-inset-top) + var(--duo-banner, 0px) + 64px)`;
   let primaryStyle: CSSProperties | undefined;
   let secondaryStyle: CSSProperties | undefined;
   if (layout.mode === 'columns') {
     primaryStyle = { top, bottom, left, width: `calc(${layout.leadEnd}px - env(safe-area-inset-left) - ${edge * 1.5}px)` };
     secondaryStyle = { top: belowToggle, bottom, right, left: `${layout.trailStart + edge / 2}px` };
   } else if (layout.mode === 'rows') {
-    primaryStyle = { top: belowToggle, left, right, height: `calc(${layout.topEnd}px - env(safe-area-inset-top) - 64px - ${edge / 2}px)` };
+    primaryStyle = { top: belowToggle, left, right, height: `calc(${layout.topEnd}px - env(safe-area-inset-top) - var(--duo-banner, 0px) - 64px - ${edge / 2}px)` };
     secondaryStyle = { left, right, bottom, top: `${layout.bottomStart + edge / 2}px` };
   }
 

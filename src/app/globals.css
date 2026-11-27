@@ -1108,3 +1108,24 @@ input[type='checkbox'] {
 }
 [data-duo-split="columns"] .duo-pane .answer-btn { padding: 14px 14px; }
 [data-duo-split="columns"] .duo-pane .question-card { padding: 20px; }
+
+/* iPhone Duo half-open as a book (fold reported active by the iOS host, lib/duoLayout):
+   screens that stay one column, and the floating playback bars, sit beside the fold instead of
+   across it. --duo-fold-start comes from the host's reported geometry, never a fixed number.
+   Two-pane screens cover this card with their own panes, so this only affects one-column ones. */
+html[data-duo-fold="vertical-active"] .btc-root > .btc-card {
+  /* !important: some screens (e.g. the landing page) set an inline max-width */
+  max-width: calc(var(--duo-fold-start) - 2rem - env(safe-area-inset-left) - 12px) !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+html[data-duo-fold="vertical-active"] .duo-float {
+  left: calc(env(safe-area-inset-left) + 12px) !important;
+  right: auto !important;
+  width: calc(var(--duo-fold-start) - env(safe-area-inset-left) - 24px);
+  margin: 0 !important;
+}
+/* Family Mode's fixed banner sits above everything; two-pane layouts start below it. */
+html:has(.family-mode-banner) { --duo-banner: 56px; }

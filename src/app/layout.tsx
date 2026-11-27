@@ -7,6 +7,7 @@ import CapacitorBridge from "../components/CapacitorBridge";
 import OfflineBanner from "../components/OfflineBanner";
 import ThemeToggle from "../components/ThemeToggle";
 import SystemTextScale from "../components/SystemTextScale";
+import DuoLayoutRoot from "../components/duo/DuoLayoutRoot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -148,6 +149,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         {children}
+        <DuoLayoutRoot />
         <ThemeToggle />
         <SystemTextScale />
         <FamilyModeChrome />

@@ -2058,6 +2058,7 @@ function HomeScreen(props: {
   const coachTip = getTodayCoachTip();
   const dailyNudgeText = getDailyChallengeNudgeLine();
   const pro = useIsPro();
+  const duo = useDuoSplit();
   // Android free-tier build: hide Pro upsells when no purchase path exists.
   const purchasable = usePurchasesAvailable();
 
@@ -2146,7 +2147,14 @@ function HomeScreen(props: {
   }
 
   return (
-    <div>
+    // Large/foldable displays (iPhone Duo inner display, iPad): today's study beside everything
+    // else (quick tiles, Learn, Your Path, Pro, Coach's tip). DuoSplit renders plain wrappers on
+    // phones, so the phone hub is unchanged; the same tree in every mode keeps state when folding.
+    <DuoSplit
+      layout={duo}
+      primaryLabel="Today"
+      secondaryLabel="More ways to study"
+      primary={<>
       <section
         style={{
           marginBottom: 20,
@@ -2439,7 +2447,8 @@ function HomeScreen(props: {
         )}
 
       </Section>
-
+      </>}
+      secondary={<>
       <div style={{ marginTop:14 }}>
 
         {/* ── Quick action tile grid ─────────────────────────────── */}
@@ -2612,8 +2621,8 @@ function HomeScreen(props: {
         </details>
 
       </div>
-
-    </div>
+      </>}
+    />
   );
 }
 

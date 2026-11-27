@@ -140,6 +140,14 @@ function update() {
   const root = document.documentElement;
   root.dataset.duoSplit = next.mode;
   root.dataset.duoFold = next.fold ? `${next.fold.axis}${next.fold.active ? '-active' : ''}` : 'none';
+  // Fold edges for CSS (one-column screens keep clear of an active book fold; see globals.css).
+  if (next.fold) {
+    root.style.setProperty('--duo-fold-start', `${next.fold.start}px`);
+    root.style.setProperty('--duo-fold-end', `${next.fold.end}px`);
+  } else {
+    root.style.removeProperty('--duo-fold-start');
+    root.style.removeProperty('--duo-fold-end');
+  }
   if (snapshot?.hinge) root.dataset.duoHinge = snapshot.hinge;
   subscribers.forEach((fn) => fn());
 }

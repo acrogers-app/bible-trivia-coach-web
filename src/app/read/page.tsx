@@ -641,7 +641,7 @@ export default function ReadPage() {
       {/* While reading, Pause/Resume and Stop float above the tab bar so they stay in reach
           as the text scrolls along. */}
       {ttsState !== 'idle' && (
-        <div role="region" aria-label="Reading controls" style={{
+        <div role="region" aria-label="Reading controls" className="duo-float" style={{
           // side insets keep the bar out of reserved columns (e.g. iPhone Duo's camera/status column)
           position:'fixed', zIndex:40,
           left:'calc(12px + env(safe-area-inset-left))', right:'calc(12px + env(safe-area-inset-right))',

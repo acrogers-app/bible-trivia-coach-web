@@ -5,9 +5,10 @@ documentation is normative. Developer-forum answers are implementation advice. N
 reports are anecdotal feedback, not platform requirements.
 
 - Created: 2026-11-25. Sources last checked: 2026-11-25 (some first read 2026-11-10, noted below).
-- Status (2026-11-25, uncommitted, awaiting Allen's review): **fold bridge + two-pane Read,
-  Lesson and Quiz implemented** (section 7). Play hub, Settings, Learn index/topic and Family
-  Night are still one column. Verified on the simulator only — **no hardware test yet**.
+- Status (2026-11-26): fold bridge + two-pane Read, Lesson and Quiz committed (752c1ea, 1c554e5).
+  **Play hub and Settings two-pane, fold safety net for one-column screens: uncommitted, awaiting
+  Allen's review** (section 8). Learn index/topic and Family Night are still one column. Verified
+  on the simulator only — **no hardware test yet**.
 - Screenshots (outside the repo, not committed), under `/Users/allenrogers/Projects/duo-shots/bible/`:
   before = `2026-11-25-duo-audit/` and `2026-11-25-playback-fix/`; after = `2026-11-25-duo-two-pane/`.
 
@@ -192,7 +193,8 @@ for iPhone Duo", forum thread 848036 (WKWebView: native host must pass the geome
   prompt and its answers always stay together in the lesson pane.
 - **Quiz** — question and answers together in the leading pane; score/timer, verse of the day,
   feedback and Next/Finish in the trailing pane. Answers stack in one column in a pane.
-- Not split (deliberate or not yet): Play hub, Settings, Learn index/topic, Family Night quiz.
+- Not split (deliberate or not yet): Learn index/topic, Family Night quiz. (Play hub and
+  Settings: section 8.)
 
 ### Test evidence (simulator, Duo iOS 27.1 + iPhone 17e / 17 iOS 27.2)
 Screenshots in `duo-shots/bible/2026-11-25-duo-two-pane/`:
@@ -212,12 +214,70 @@ scroll. `tsc` clean; ESLint 0 errors (7 warnings, all pre-existing in `play/page
 - Flat open portrait is one column and runs across the inactive crease (Apple allows this for an
   inactive fold; revisit if it reads badly on hardware).
 - The large-text fallback is conservative (one column already at 1.30×).
-- Play hub and Settings are still one stretched column on the inner display; in book pose their
-  cards can cross the fold.
+- ~~Play hub and Settings are still one stretched column~~ — split on 2026-11-26 (section 8).
 - Read state resets on a tab switch (pre-existing, unchanged).
 - The Read passage pane shows a card inside the pane card (cosmetic).
+
+## 8. Polish pass (2026-11-26, uncommitted)
+
+### Versions and rules (official Apple sources, checked 2026-11-26)
+| Item | Value | Source |
+|---|---|---|
+| Latest public iOS | iOS 27.2.1 (2026-11-09) | developer.apple.com/news/releases |
+| Current beta | iOS 27.3 beta 2 (24C5049f, 2026-11-19) | same |
+| Latest Xcode | 27.2 (2026-10-29) | same |
+| Upload minimum now | Xcode 26 + iOS 26 SDK (since 2026-04-28) | developer.apple.com/news/upcoming-requirements |
+| Upload minimum from April 2027 | iOS 27 SDK | same |
+| Duo screenshots | Required from April 2027: inner 2007×2853 / 2853×2007, outer 1398×2034 | App Store Connect screenshot specs |
+| App Review Guidelines | last updated 2026-10-16; 4.2 / 4.2.2 (minimum functionality) is a risk for a web-view app | developer.apple.com/app-store/review/guidelines |
+| Local build | Xcode 27.2 (27B52), iOS SDK 27.2 (24B8118); Duo runtime iOS 27.1 (24A94425); deployment target 15.0/17.0; fold APIs available iOS 27.1+ | `xcodebuild -version`, `xcrun`, `simctl` |
+
+Not verified from an official page this pass: Apple's current required-reason API category list.
+
+### Decisions (made in this pass — review)
+- **Play hub** splits: "Today" (header + today's study) | "More ways to study" (mode tiles, Learn,
+  path, Pro, coach's tip). Phone path renders the same tree with no styles — unchanged.
+- **Settings** splits: "Settings to preview and save" (appearance, read & listen, Save) |
+  "Applies immediately" (theme, Family Mode, purchases). New heading text "Applies immediately"
+  in the second pane only. Phone order unchanged.
+- **Fold safety net** (`globals.css`): while a vertical fold is *active* (book), one-column screens
+  (`.btc-root > .btc-card`) and floating bars (`.duo-float`) stay in the leading half, sized from
+  `--duo-fold-start` (set by `duoLayout.ts` from the reported fold — no hardcoded sizes). Flat open
+  is unaffected.
+- `DuoLayoutRoot` in the root layout starts the fold listener on every screen (needed for the
+  safety net on screens with no split).
+- Lesson Listen controls stay inside the Scripture pane (sticky) when split; fixed bar on phones.
+- Panes start below the Family Mode banner (`--duo-banner`) while it shows.
+- Out of Duo scope but in the security review: the welcome-email dry-run log no longer prints the
+  buyer's address.
+
+### Test evidence (simulator only)
+Screenshots in `duo-shots/bible/2026-11-26-duo-polish/`: 00 before (Settings across the fold);
+01/06 landing before/after beside the fold; 02 Quiz book pose; 03 Play hub two-pane; 04 Settings
+two-pane; 05 Lesson controls in pane; 07 flat open landing full width; 08 closed Settings
+unchanged; 09 iPhone 17e hub unchanged; 10 laptop landing (crosses the fold — see limits);
+11 laptop Quiz rows; 12 laptop hub rows. Checks: `tsc` clean; `eslint .` 0 errors, 9 warnings
+(same as HEAD for touched files); `test:learn` 34/34; `validate:questions` and `validate:topics`
+pass; `xcodebuild` simulator build succeeded (warnings pre-existing in NativePurchasesPlugin.swift).
+
+### Limits
+- Laptop pose: one-column screens (landing, Learn index) still run across the horizontal fold;
+  the safety net covers the vertical (book) fold only. Product decision needed.
+- Book pose: one-column screens now leave the trailing half empty (product decision: second-pane
+  content or accept).
+- Accessibility: pane DOM order = reading order (primary, then secondary), panes are labelled
+  regions; VoiceOver, AX1–AX5 text, Switch Control not run. RTL: English-only, physical left/right.
+- Physical-device testing: none.
+
+### Compliance-assessment boundaries
+This file records engineering evidence only. It does **not** show that the app or its publisher is
+GDPR-compliant, HIPAA-compliant, SOC 2 attested, ISO/IEC 27001 or 27701 certified, or meets
+EN 18031. None of those claims or badges may be added to the app, store listing or site without
+current, verifiable evidence for the right organization and scope. The full assessment table and
+security findings are in `duo-shots/bible/2026-11-26-duo-polish/REVIEW.md` (outside the repo).
 
 ## Changelog
 - 2026-11-25 — Created. Sources checked, first audit of fd39786 on the iPhone Duo simulator (iOS 27.1).
 - 2026-11-25 — P1 fixed: Read playback bar now uses `calc(12px + env(safe-area-inset-left/right))`. Fold crossing in book pose still unverified on hardware.
 - 2026-11-25 — Implemented the fold bridge (P1) and two-pane Read, Lesson and Quiz (P2) — section 7. Fold band re-measured through the bridge. Uncommitted for review.
+- 2026-11-26 — Polish pass (section 8): Play hub and Settings two-pane, fold safety net, versions re-verified, compliance boundaries. Uncommitted for review.
