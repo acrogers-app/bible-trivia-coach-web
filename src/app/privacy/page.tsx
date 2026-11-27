@@ -129,8 +129,8 @@ export default function PrivacyPage() {
             email address and payment details. Your email address is kept with
             the purchase record in our Stripe account; we never see your card
             number. We do not currently send emails after a purchase.
-            {/* Checked 2026-11-26 only (recheck the release deployment before publishing): production had no EMAILS_ENABLED or RESEND_API_KEY, so welcome emails
-                are off (src/lib/welcomeEmail.ts). Before turning them on, disclose Resend here. */}
+            {/* Project-level settings check 2026-11-26, names only (NOT the release deployment, which doesn't exist yet; its settings are unverified): EMAILS_ENABLED and RESEND_API_KEY unset.
+                src/lib/welcomeEmail.ts sends only when RESEND_API_KEY is set and EMAILS_ENABLED is "true"; otherwise nothing is sent. Before turning them on, disclose Resend here. */}
           </p>
         </section>
 
@@ -151,8 +151,8 @@ export default function PrivacyPage() {
             web server, it receives standard request information, such as IP
             addresses, when it delivers content. Our server code uses the IP
             address only to count requests, to prevent abuse.
-            {/* Checked 2026-11-26 only (recheck the release deployment before publishing): production had no RATELIMIT_JWT, so the count stays in the server's memory
-                and is not sent to Supabase (src/lib/rateLimit.ts). If that is configured, disclose Supabase here.
+            {/* Project-level settings check 2026-11-26, names only (NOT the release deployment, which doesn't exist yet; its settings are unverified): EMAILS_ENABLED, RESEND_API_KEY and RATELIMIT_JWT unset; RATELIMIT_SUPABASE_URL and RATELIMIT_SUPABASE_ANON_KEY present.
+                src/lib/rateLimit.ts uses Supabase only when all three RATELIMIT_* variables are set; otherwise it counts in server memory. If all three are set on the release deployment, disclose Supabase here.
                 OPEN (Allen): how long Vercel keeps request logs, and what Vercel itself does with them.
                 Verified 2026-11-26: the only IP use in src/ is the rate limiter (src/lib/rateLimit.ts). */}
             {' '}The home page
