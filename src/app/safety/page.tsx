@@ -139,21 +139,19 @@ export default function SafetyPage() {
         <section style={sectionStyle}>
           <h2 style={headingStyle}>For churches and classrooms</h2>
           <p style={textStyle}>
-            {/* OPEN (Allen/counsel): "safe to recommend" is a judgment, not a verifiable fact; confirm or soften. */}
-            The app is safe to recommend to your congregation or class: it works
-            without accounts, its reading and quiz features need no personal
-            information, and it
-            works offline once loaded. Teachers can enable Family Mode on shared
-            devices before handing them out.
+            Some things to know before recommending the app to your congregation
+            or class: it works without accounts, its reading and quiz features
+            need no personal information, and it works offline once loaded.
+            Teachers can enable Family Mode on shared devices before handing
+            them out.
           </p>
         </section>
 
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Questions?</h2>
           <p style={textStyle}>
-            {/* OPEN (Allen): "safety team" and "within 48 hours" are service commitments; confirm or change. */}
-            Send us your question or concern — our safety team reads every
-            message and reviews it within 48 hours.
+            Send us a question or concern using the form below. If you include
+            an email address, we can reply.
           </p>
           <SafetyContactForm />
         </section>

@@ -56,7 +56,7 @@ export default function SafetyContactForm() {
           padding: '12px 14px',
         }}
       >
-        ✅ Message sent. We&rsquo;ll review it within 48 hours.
+        ✅ Thank you. If you included an email address, we can reply.
       </p>
     );
   }
@@ -94,7 +94,7 @@ export default function SafetyContactForm() {
           cursor: status === 'sending' ? 'wait' : 'pointer',
         }}
       >
-        {status === 'sending' ? 'Sending…' : 'Send to Safety Team'}
+        {status === 'sending' ? 'Sending…' : 'Send message'}
       </button>
     </form>
   );
