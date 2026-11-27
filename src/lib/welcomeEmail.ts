@@ -46,7 +46,9 @@ export async function sendWelcomeEmail({
   const key = process.env.RESEND_API_KEY;
   if (!key) return { skipped: "RESEND_API_KEY not set" };
   if (process.env.EMAILS_ENABLED !== "true") {
-    console.log(`[email] DRY RUN (EMAILS_ENABLED != "true") — would send Bible welcome to ${to}`);
+    // Never log a buyer's full email address (server logs are not a place for personal data).
+    const masked = to ? to.replace(/^[^@]*/, "***") : "(no address)";
+    console.log(`[email] DRY RUN (EMAILS_ENABLED != "true") — would send Bible welcome to ${masked}`);
     return { skipped: "EMAILS_ENABLED not true" };
   }
   if (!to) return { skipped: "no customer email on session" };
