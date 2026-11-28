@@ -2581,7 +2581,7 @@ function HomeScreen(props: {
                 Unlock unlimited challenges, all difficulty levels, family game
                 history, and more.
               </div>
-              <a
+              <Link
                 href="/pricing"
                 style={{
                   display: 'inline-block',
@@ -2596,7 +2596,7 @@ function HomeScreen(props: {
                 }}
               >
                 Unlock Pro →
-              </a>
+              </Link>
             </>
           )}
         </div>

@@ -91,12 +91,12 @@ export default function LevelsPage() {
 
         {/* Header */}
         <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
-          <a
+          <Link
             href="/play"
             style={{ fontSize:13, opacity:0.7, textDecoration:'none', color:'inherit' }}
           >
             ‹ Play
-          </a>
+          </Link>
         </div>
 
         <h1 style={{ marginTop:0, marginBottom:4 }}>Levels</h1>
