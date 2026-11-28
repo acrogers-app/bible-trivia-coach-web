@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { applySettingsToDocument, loadSettings, onSettingsChanged } from '../lib/appSettings';
+import { useDuoSplit } from '../lib/duoLayout';
 
 function BoltIcon() {
   return (
@@ -55,6 +56,10 @@ const items = [
 
 export default function BottomNav() {
   const pathname = usePathname() || '';
+  // iPhone Duo half-open as a book: the centred tabs would sit on the active fold, so they move
+  // into the leading half (fold position reported by the iOS host; see lib/duoLayout).
+  const { fold } = useDuoSplit();
+  const besideFold = fold?.axis === 'vertical' && fold.active;
 
   useEffect(() => {
     const apply = () => applySettingsToDocument(loadSettings());
@@ -77,10 +82,13 @@ export default function BottomNav() {
         borderTop: '1.5px solid var(--btc-nav-border, rgba(0,0,0,0.09))',
         boxShadow: '0 -2px 12px rgba(0,0,0,0.08)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       }}
     >
       <div style={{
-        maxWidth: 520, margin: '0 auto',
+        maxWidth: besideFold ? `calc(${fold.start}px - env(safe-area-inset-left) - 16px)` : 520,
+        margin: besideFold ? '0 auto 0 8px' : '0 auto',
         display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
       }}>
         {items.map((it) => {

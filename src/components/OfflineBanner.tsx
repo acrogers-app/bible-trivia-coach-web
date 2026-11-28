@@ -1,32 +1,27 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { flushAnalyticsOutbox } from '../lib/analytics';
+import { clearAnalyticsOutbox } from '../lib/analyticsOutboxCleanup';
 
 /**
  * Fixed, non-intrusive banner shown while the device is offline.
  * All quiz progress lives in localStorage, so offline play is safe —
- * this just reassures the user. Also triggers a replay of any queued
- * analytics events on app start and whenever connectivity returns.
+ * this just reassures the user. On app start it also deletes any quiz
+ * analytics that older versions queued on the device (they are never sent).
  */
 export default function OfflineBanner() {
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
-    const handleOnline = () => {
-      update();
-      flushAnalyticsOutbox();
-    };
-
     update();
-    // App start: replay any analytics queued while offline last session.
-    flushAnalyticsOutbox();
+    // App start: delete analytics queued by 1.2.6 and earlier; analytics are disabled.
+    void clearAnalyticsOutbox();
 
-    window.addEventListener('online', handleOnline);
+    window.addEventListener('online', update);
     window.addEventListener('offline', update);
     return () => {
-      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('online', update);
       window.removeEventListener('offline', update);
     };
   }, []);

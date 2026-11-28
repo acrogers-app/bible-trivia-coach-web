@@ -20,7 +20,7 @@ export async function GET(req: Request) {
     const stripe = new Stripe(secret);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     // Bind to this app: the shared Stripe account delivers other apps' sessions
-    // here too, so a paid session from ANOTHER app must NOT unlock Bible Coach.
+    // here too, so a paid session from ANOTHER app must NOT unlock Bible Study Coach.
     // Requires metadata.app === "bible" (see SHARED_STRIPE_ACCOUNT_RULES.md).
     const paid =
       session.payment_status === "paid" && session.metadata?.app === "bible";

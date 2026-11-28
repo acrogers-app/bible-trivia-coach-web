@@ -1,4 +1,4 @@
-// Bible Coach Pro — account-less one-time unlock ($2.99).
+// Bible Study Coach Pro — account-less one-time unlock ($2.99).
 // The app has no accounts (device-local by design), so entitlement is stored
 // locally after a verified Stripe purchase. Purchase integrity is enforced
 // server-side (Stripe session must be `paid` — see /api/checkout/verify);

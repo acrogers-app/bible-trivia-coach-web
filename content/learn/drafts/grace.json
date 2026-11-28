@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "topics": [
+    {
+      "id": "grace",
+      "title": "Grace",
+      "type": "theme",
+      "summary": "God's kindness and gifts that people do not earn.",
+      "lessons": [
+        {
+          "id": "grace-1",
+          "title": "Saved by grace",
+          "passages": [
+            {
+              "start": "Ephesians 2:1",
+              "end": "Ephesians 2:10"
+            }
+          ],
+          "explanation": "Paul describes two pictures. In the first (verses 1–3), people are \"dead in transgressions and sins,\" living the way the world around them lives. In the second (verses 4–7), God acts: because he is \"rich in mercy\" and loves us, he makes people alive together with Christ. Paul's word for this is grace, God's kindness that we do not earn. Verses 8–9 put it plainly: salvation is \"the gift of God,\" received through faith and \"not of works,\" so no one can boast. Verse 10 then shows what follows. People saved by grace are \"his workmanship,\" made for the good works God prepared for them. In this passage, good works are the result of grace, not the way to earn it.",
+          "deeper": {
+            "text": "Christians broadly agree that salvation is grounded in God’s grace, not something people can earn. Traditions differ in how they understand faith, baptism, and the role of good works in receiving and living out that grace. Lutheran, Reformed, Catholic, Orthodox, Methodist, and Baptist teachers read Ephesians 2:8–10 within their wider teachings. If you want to go further, ask a pastor or teacher in your church how they understand these verses.",
+            "viewsDiffer": true
+          },
+          "reflectPrompt": "Verse 10 says you are God's workmanship. What is one good thing you could do this week as a response to grace, not as a way to earn it?",
+          "questionIds": [
+            "ephesians-2-1",
+            "ephesians-2-9",
+            "ephesians-2-10",
+            "ephesians-2-4",
+            "ephesians-2-11"
+          ],
+          "review": {
+            "status": "approved",
+            "reviewer": "Allen Rogers",
+            "reviewedAt": "2026-11-25"
+          }
+        }
+      ]
+    }
+  ]
+}

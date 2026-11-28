@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, {
   useEffect,
   useMemo,
@@ -22,6 +24,7 @@ import { getTodayKey, updateStreakForToday, getStreakInfo } from '../../lib/stre
 import { stopSpeech } from '../../lib/speech';
 import { useIsPro } from '../../lib/pro';
 import { usePurchasesAvailable } from '../../lib/iap';
+import LearnCard from '../../components/learn/LearnCard';
 import {
   APP_VERSION,
   VERSION_SEEN_KEY,
@@ -42,6 +45,8 @@ import {
   subscribeLS,
   type PathKey,
 } from '../../lib/gameFx';
+import { useDuoSplit } from '../../lib/duoLayout';
+import DuoSplit from '../../components/duo/DuoSplit';
 
 // btc:voice-helpers
 function btcPrimaryLang(tag: string) {
@@ -1398,7 +1403,7 @@ export default function PlayPage() {
   const today = todaysReadingDay(plan);
   const verseOfDay = today ? today.start : null;
 
-  // btc:url-actions — handle ?action=quiz|scroll|verse from Levels/More pages
+  // btc:url-actions — handle ?action=quiz|scroll|verse|daily from Levels/More/landing pages
   useEffect(() => {
     if (!pack) return;
     const params = new URLSearchParams(window.location.search);
@@ -1434,6 +1439,21 @@ export default function PlayPage() {
     if (action === 'verse') {
       cleanUrl();
       startVerseQuiz();
+    }
+
+    // From the landing page's "Start today's study": open today's Daily
+    // Challenge directly (same quiz as the hub button). If it's already done
+    // today, stay on the hub, which shows the "Done for today" card.
+    if (action === 'daily') {
+      cleanUrl();
+      let doneToday = false;
+      try {
+        doneToday =
+          window.localStorage.getItem('btc_daily_challenge_last_completed') === getTodayKey();
+      } catch {}
+      if (!doneToday) {
+        startQuiz({ title: 'Daily Quiz', count: 5, level: 'mixed', sourceType: 'scripture' });
+      }
     }
   }, [pack]);
 
@@ -1904,6 +1924,7 @@ function BookPickerScreen(props: {
   const [selectedBook, setSelectedBook] = useState<string>('Genesis');
   const [selectedChapter, setSelectedChapter] = useState<string>('');
   const maxChapters = BOOK_MAX_CHAPTERS[selectedBook] ?? 0;
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -1997,7 +2018,7 @@ function BookPickerScreen(props: {
           const url = `/read?start=${encodeURIComponent(
             selectedBook + ' ' + safeChapter + ':1',
           )}&end=${encodeURIComponent(selectedBook + ' ' + safeChapter + ':999')}`;
-          window.location.href = url;
+          router.push(url);
         }}
         className="btc-btn btc-btn-secondary"
         style={{ width: '100%', marginTop: 10 }}
@@ -2027,6 +2048,9 @@ function HomeScreen(props: {
   dailyChallengeCompleted?: boolean;
 }) {
   const { today, pack } = props;
+  // Client-side navigation: in the Capacitor shell a full page load of an
+  // extensionless path (/read, /levels) serves the landing page instead.
+  const router = useRouter();
   const easyCount = availableCount(pack, 'easy', 'scripture');
   const medCount = availableCount(pack, 'medium', 'scripture');
   const hardCount = availableCount(pack, 'hard', 'scripture');
@@ -2034,6 +2058,7 @@ function HomeScreen(props: {
   const coachTip = getTodayCoachTip();
   const dailyNudgeText = getDailyChallengeNudgeLine();
   const pro = useIsPro();
+  const duo = useDuoSplit();
   // Android free-tier build: hide Pro upsells when no purchase path exists.
   const purchasable = usePurchasesAvailable();
 
@@ -2122,7 +2147,14 @@ function HomeScreen(props: {
   }
 
   return (
-    <div>
+    // Large/foldable displays (iPhone Duo inner display, iPad): today's study beside everything
+    // else (quick tiles, Learn, Your Path, Pro, Coach's tip). DuoSplit renders plain wrappers on
+    // phones, so the phone hub is unchanged; the same tree in every mode keeps state when folding.
+    <DuoSplit
+      layout={duo}
+      primaryLabel="Today"
+      secondaryLabel="More ways to study"
+      primary={<>
       <section
         style={{
           marginBottom: 20,
@@ -2150,7 +2182,7 @@ function HomeScreen(props: {
                   alignItems: 'center',
                   gap: 6,
                   padding: '6px 12px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   backgroundColor: 'var(--btc-warn-soft)',
                   border: '1px solid rgba(251,191,36,0.5)',
                   fontSize: 14,
@@ -2224,7 +2256,7 @@ function HomeScreen(props: {
                   display: 'inline-flex',
                   alignItems: 'center',
                   padding: '4px 10px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   backgroundColor: 'var(--btc-success-soft)',
                   border: '1px solid rgba(74,222,128,0.45)',
                   fontSize: 12,
@@ -2341,16 +2373,17 @@ function HomeScreen(props: {
           <div
             style={{
               marginTop: 12,
-              padding: '6px 10px',
-              borderRadius: 999,
+              padding: '14px 16px',
+              borderRadius: 16,
               backgroundColor: 'var(--btc-warn-soft)',
               border: '1px solid rgba(251,191,36,0.5)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              fontSize: 12,
+              fontSize: 15,
+              lineHeight: 1.4,
               color: 'var(--btc-gold)',
-              gap: 8,
+              gap: 12,
               flexWrap: 'wrap',
             }}
           >
@@ -2400,21 +2433,22 @@ function HomeScreen(props: {
               title="Read today"
               subtitle="Open today's passage in the Reader"
               onClick={() => {
-                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`;
+                router.push(`/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}`);
               }}
             />
             <Row
               title="Listen now"
               subtitle="Read aloud with follow‑along highlighting"
               onClick={() => {
-                window.location.href = `/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}&autoplay=1`;
+                router.push(`/read?start=${encodeURIComponent(today.start)}&end=${encodeURIComponent(today.end)}&autoplay=1`);
               }}
             />
           </>
         )}
 
       </Section>
-
+      </>}
+      secondary={<>
       <div style={{ marginTop:14 }}>
 
         {/* ── Quick action tile grid ─────────────────────────────── */}
@@ -2497,7 +2531,7 @@ function HomeScreen(props: {
 
           <button
             type="button"
-            onClick={() => { window.location.href = '/levels'; }}
+            onClick={() => { router.push('/levels'); }}
             style={{ textAlign:'left', padding:14, borderRadius:16, cursor:'pointer',
               border:'1px solid var(--btc-border)', background:'var(--btc-surface)', color:'var(--btc-ink)', minHeight:90,  }}
           >
@@ -2507,10 +2541,13 @@ function HomeScreen(props: {
           </button>
         </div>
 
+        {/* ── Learn: guided topic lessons (hidden until reviewed lessons exist) ── */}
+        <LearnCard />
+
         {/* ── Your Path: difficulty progression (device-local) ───── */}
         <PathSection onStartPathQuiz={props.onStartPathQuiz} />
 
-        {/* ── Bible Coach Pro: upsell for free users, thank-you once
+        {/* ── Bible Study Coach Pro: upsell for free users, thank-you once
             unlocked. Entitlement via useIsPro (localStorage + cookie,
             set only after server-side Stripe verification). Hidden entirely
             when no purchase path exists (Android free-tier build). ─ */}
@@ -2527,16 +2564,16 @@ function HomeScreen(props: {
           {pro ? (
             <>
               <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>
-                ✨ Bible Coach Pro — unlocked
+                ✨ Bible Study Coach Pro — unlocked
               </div>
               <div className="btc-text-muted" style={{ marginTop: 4, fontSize: 12 }}>
                 Unlimited challenges, every difficulty level, and family game
-                history are yours. Thank you for supporting Bible Coach!
+                history are yours. Thank you for supporting Bible Study Coach!
               </div>
             </>
           ) : (
             <>
-              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Coach Pro</div>
+              <div style={{ fontWeight: 800, color: 'var(--btc-accent-deep)' }}>🔒 Bible Study Coach Pro</div>
               <div
                 className="btc-text-muted"
                 style={{ marginTop: 4, fontSize: 12 }}
@@ -2544,7 +2581,7 @@ function HomeScreen(props: {
                 Unlock unlimited challenges, all difficulty levels, family game
                 history, and more.
               </div>
-              <a
+              <Link
                 href="/pricing"
                 style={{
                   display: 'inline-block',
@@ -2552,14 +2589,14 @@ function HomeScreen(props: {
                   padding: '8px 14px',
                   borderRadius: 10,
                   background: 'var(--btc-accent-deep)',
-                  color: '#fff',
+                  color: 'var(--btc-on-accent-deep)',
                   fontWeight: 700,
                   fontSize: 12,
                   textDecoration: 'none',
                 }}
               >
                 Unlock Pro →
-              </a>
+              </Link>
             </>
           )}
         </div>
@@ -2584,8 +2621,8 @@ function HomeScreen(props: {
         </details>
 
       </div>
-
-    </div>
+      </>}
+    />
   );
 }
 
@@ -2702,7 +2739,8 @@ function DayPickerRow(props: {
               width: '100%', padding: '10px 14px', borderRadius: 12,
               border: '1px solid var(--btc-border-strong)', marginBottom: 6,
               background: 'var(--btc-elevated)', color: 'var(--btc-ink)',
-              boxSizing: 'border-box', fontSize: 14,
+              // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+              boxSizing: 'border-box', fontSize: 16,
             }}
           />
           <div style={{
@@ -2806,7 +2844,7 @@ function DisabledRow(props: { title: string }) {
       style={{
         width: '100%',
         backgroundColor: 'var(--btc-elevated)',
-        borderRadius: 999,
+        borderRadius: 22,
         padding: '10px 16px',
         border: '1px dashed var(--btc-border-strong)',
         marginBottom: 10,
@@ -3101,7 +3139,7 @@ function DailyReadingScreen(props: {
             disabled={isSpeaking && !isPaused}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor:
                 isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-panel-bg)',
@@ -3115,7 +3153,7 @@ function DailyReadingScreen(props: {
             disabled={!isSpeaking}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-panel-bg)',
               cursor: !isSpeaking ? 'default' : 'pointer',
@@ -3127,7 +3165,7 @@ function DailyReadingScreen(props: {
             onClick={stopSpeaking}
             style={{
               padding: '8px 14px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-panel-bg)',
               cursor: 'pointer',
@@ -3141,7 +3179,7 @@ function DailyReadingScreen(props: {
           onClick={props.onStartQuiz}
           style={{
             padding: '10px 16px',
-            borderRadius: 999,
+            borderRadius: 22,
             border: 'none',
             backgroundColor: 'var(--btc-accent)',
             color: 'white',
@@ -3407,6 +3445,36 @@ function coachReaction(isCorrect: boolean, questionIndex: number): string {
 }
 
 
+// Space the sticky Next bar takes at the bottom of the screen: bottom nav (80px)
+// + bar (52px) + a small gap, plus the iPhone home-indicator inset.
+const STICKY_BAR_CLEARANCE = "calc(150px + env(safe-area-inset-bottom))";
+const FEEDBACK_TOP_GAP = "calc(16px + env(safe-area-inset-top))";
+
+// After an answer, scroll the feedback (coach line, explanation, "Read this
+// passage") up so it sits above the sticky Next bar instead of behind it.
+function useRevealAboveStickyBar(show: boolean) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!show) return;
+    const reduce =
+      loadSettings().reduceMotion ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // wait a frame so the feedback and bottom padding are laid out
+    const id = requestAnimationFrame(() => {
+      const el = ref.current;
+      if (!el) return;
+      const cs = getComputedStyle(el);
+      const room =
+        window.innerHeight - parseFloat(cs.scrollMarginTop || "0") - parseFloat(cs.scrollMarginBottom || "0");
+      // Taller than the visible space (large text): show its top ("Correct!") rather than its end.
+      const block = el.getBoundingClientRect().height > room ? "start" : "nearest";
+      el.scrollIntoView({ block, behavior: reduce ? "auto" : "smooth" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [show]);
+  return ref;
+}
+
 function StickyNextBar(props: {
   visible: boolean;
   label: string;
@@ -3422,7 +3490,8 @@ function StickyNextBar(props: {
         // clears the 71px bottom nav; safe-area for iPhone home indicator
         bottom: 'calc(80px + env(safe-area-inset-bottom))',
         zIndex: 999,
-        padding: '0 16px',
+        paddingLeft: 'calc(16px + env(safe-area-inset-left))',
+        paddingRight: 'calc(16px + env(safe-area-inset-right))',
         pointerEvents: 'none',
       }}
     >
@@ -3454,10 +3523,15 @@ function QuizScreen(props: {
   const { title, questions } = props;
   const verseMatch = title.match(/^Verse of the day:\s*(.+)$/);
   const verseRefStr = verseMatch ? verseMatch[1] : null;
+  // Two panes (iPhone Duo inner display, iPad): question + answers in one pane, the answer's
+  // explanation and Scripture in the other. Phone: unchanged single column.
+  const duo = useDuoSplit();
+  const twoPane = duo.mode !== 'single';
 
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const feedbackRef = useRevealAboveStickyBar(showFeedback);
   const [correctCount, setCorrectCount] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
 
@@ -3582,12 +3656,202 @@ function QuizScreen(props: {
     };
   }, []);
 
+  if (twoPane) {
+    return (
+      <div style={{ color: 'var(--btc-ink)' }}>
+        <DuoSplit
+          layout={duo}
+          primaryLabel={`Question ${index + 1} of ${questions.length}`}
+          secondaryLabel="Answer and Scripture"
+          primary={<>
+      <BackButton
+        onClick={() => {
+          stopSpeech();
+          props.onBack();
+        }}
+      />
+      <h2>{title}</h2>
+
+      <div className="btc-game">
+        <Starfield />
+        <div className="question-card" key={index}>
+          <div className="q-text">{q.text}</div>
+        </div>
+
+        <div className="answer-grid">
+          {q.options.map((opt, i) => (
+            <GameAnswerButton
+              key={i}
+              option={opt}
+              index={i}
+              selected={selected}
+              correctIndex={q.correctIndex}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+
+      </div>
+          </>}
+          secondary={<>
+      {/* Session progress, score and timer sit beside the question; the answers stay with it. */}
+      <div className="btc-game" style={{ marginBottom: 16 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12,
+            marginBottom: 4,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 13, color: 'var(--game-muted)' }}>
+              Question {index + 1} of {questions.length}
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--game-muted)' }}>
+              {correctCount} correct
+            </div>
+            {streak >= 2 && (
+              <div className="btc-streak-flame" style={{ marginTop: 6 }}>
+                🔥 {streak} in a row!
+              </div>
+            )}
+          </div>
+          <div style={{ position: 'relative', textAlign: 'right' }}>
+            <div className="score-display">{displayPoints}</div>
+            <div
+              style={{
+                fontSize: 10,
+                color: 'var(--game-muted)',
+                letterSpacing: 3,
+                fontWeight: 700,
+              }}
+            >
+              PTS
+            </div>
+            {fly && (
+              <span
+                key={fly.key}
+                className="btc-points-fly"
+                style={{ right: 0, top: -4 }}
+              >
+                {fly.text}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <TimerBar secondsLeft={secondsLeft} total={QUESTION_SECONDS} />
+        {secondsLeft <= 0 && selected === null && (
+          <div
+            style={{
+              fontSize: 13,
+              color: 'var(--game-flame-ink)',
+              fontWeight: 600,
+              marginBottom: 10,
+            }}
+          >
+            ⏰ Time! Take your best guess — no pressure.
+          </div>
+        )}
+
+      </div>
+      {verseRefStr && (
+        <div style={{ marginBottom: 16 }}>
+          <PassageInline
+            refStart={verseRefStr}
+            refEnd={verseRefStr}
+            onClose={() => {}}
+          />
+        </div>
+      )}
+
+      {showFeedback ? (
+        <div className="btc-game">
+        {showFeedback && (
+          <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
+            <div
+              style={{
+                fontWeight: 700,
+                marginBottom: 4,
+                color:
+                  selected === q.correctIndex
+                    ? 'var(--game-good)'
+                    : 'var(--game-bad)',
+              }}
+            >
+              {coachReaction(selected === q.correctIndex, index)}
+            </div>
+            <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
+              {q.explanation}
+            </div>
+            {selected === q.correctIndex &&
+              q.refStart &&
+              q.refStart.trim() !== '' && (
+                <div className="verse-reveal">
+                  📖 {q.refStart}
+                  {q.refEnd && q.refEnd.trim() !== '' && q.refEnd !== q.refStart
+                    ? ` – ${q.refEnd}`
+                    : ''}{' '}
+                  — God&apos;s Word, well remembered.
+                </div>
+              )}
+            {selected !== q.correctIndex && passageRef && !showPassage && (
+              <button
+                onClick={() => setShowPassage(true)}
+                style={{
+                  marginTop: 10,
+                  padding: '8px 14px',
+                  borderRadius: 22,
+                  border: '1px solid var(--game-chip-border)',
+                  backgroundColor: 'var(--game-chip-bg)',
+                  color: 'var(--game-chip-ink)',
+                  fontSize: 13,
+                  cursor: 'pointer',
+                }}
+              >
+                📖 Read this passage (
+                {passageRef.start}
+                {passageRef.end !== passageRef.start
+                  ? ` – ${passageRef.end}`
+                  : ''}
+                )
+              </button>
+            )}
+          </div>
+        )}
+        </div>
+      ) : !verseRefStr && (
+        <p className="btc-text-muted" style={{ marginTop: 0 }}>
+          Choose an answer. Its explanation and Scripture reference will appear here.
+        </p>
+      )}
+      {showPassage && passageRef && (
+        <PassageInline
+          refStart={passageRef.start}
+          refEnd={passageRef.end}
+          onClose={() => setShowPassage(false)}
+        />
+      )}
+
+      {selected !== null && (
+        <button onClick={handleNext} className="btc-btn" style={{ width: '100%', minHeight: 52, marginTop: 16, fontSize: 16 }}>
+          {isLast ? 'Finish' : 'Next'} →
+        </button>
+      )}
+          </>}
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
         color: 'var(--btc-ink)',
         // keep explanation clear of the sticky Next bar
-        paddingBottom: selected !== null ? 150 : 0,
+        paddingBottom: selected !== null ? STICKY_BAR_CLEARANCE : 0,
       }}
     >
       <BackButton
@@ -3688,7 +3952,7 @@ function QuizScreen(props: {
         </div>
 
         {showFeedback && (
-          <div style={{ marginTop: 16 }}>
+          <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
             <div
               style={{
                 fontWeight: 700,
@@ -3701,7 +3965,7 @@ function QuizScreen(props: {
             >
               {coachReaction(selected === q.correctIndex, index)}
             </div>
-            <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
+            <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
               {q.explanation}
             </div>
             {selected === q.correctIndex &&
@@ -3721,7 +3985,7 @@ function QuizScreen(props: {
                 style={{
                   marginTop: 10,
                   padding: '8px 14px',
-                  borderRadius: 999,
+                  borderRadius: 22,
                   border: '1px solid var(--game-chip-border)',
                   backgroundColor: 'var(--game-chip-bg)',
                   color: 'var(--game-chip-ink)',
@@ -3888,7 +4152,8 @@ function FamilySetupScreen(props: {
                   borderRadius: 999,
                   border: '1px solid var(--btc-border)',
                   padding: '6px 10px',
-                  fontSize: 14,
+                  // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+                  fontSize: 16,
                 }}
               />
               {names.length > 2 && (
@@ -3896,7 +4161,7 @@ function FamilySetupScreen(props: {
                   type="button"
                   onClick={() => removePlayer(idx)}
                   style={{
-                    borderRadius: 999,
+                    borderRadius: 22,
                     border: 'none',
                     backgroundColor: 'var(--btc-red-soft)',
                     color: 'var(--btc-red)',
@@ -3916,7 +4181,7 @@ function FamilySetupScreen(props: {
               onClick={() => addPlayer()}
               style={{
                 marginTop: 4,
-                borderRadius: 999,
+                borderRadius: 22,
                 border: '1px dashed var(--btc-border-strong)',
                 backgroundColor: 'var(--btc-surface)',
                 color: 'var(--btc-ink)',
@@ -3997,7 +4262,8 @@ function FamilySetupScreen(props: {
             borderRadius: 999,
             border: '1px solid var(--btc-border)',
             padding: '6px 10px',
-            fontSize: 14,
+            // 16px: iOS zooms the page, and stays zoomed, on focusing a smaller input
+            fontSize: 16,
           }}
         />
         <div
@@ -4016,7 +4282,7 @@ function FamilySetupScreen(props: {
         onClick={handleStart}
         style={{
           padding: '10px 16px',
-          borderRadius: 999,
+          borderRadius: 22,
           border: 'none',
           backgroundColor: 'var(--btc-accent)',
           color: 'white',
@@ -4046,6 +4312,7 @@ function FamilyGameScreen(props: {
   );
   const [selected, setSelected] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const feedbackRef = useRevealAboveStickyBar(showFeedback);
   const [finished, setFinished] = useState(false);
 
   const totalQuestions = props.questions.length;
@@ -4148,7 +4415,7 @@ function FamilyGameScreen(props: {
       style={{
         color: 'var(--btc-ink)',
         // keep explanation clear of the sticky Next bar
-        paddingBottom: selected !== null && !finished ? 150 : 0,
+        paddingBottom: selected !== null && !finished ? STICKY_BAR_CLEARANCE : 0,
       }}
     >
       <BackButton onClick={props.onBackHome} />
@@ -4190,7 +4457,7 @@ function FamilyGameScreen(props: {
           </div>
 
           {showFeedback && (
-            <div style={{ marginTop: 16 }}>
+            <div ref={feedbackRef} style={{ marginTop: 16, scrollMarginTop: FEEDBACK_TOP_GAP, scrollMarginBottom: STICKY_BAR_CLEARANCE }}>
               <div
                 style={{
                   fontWeight: 700,
@@ -4203,7 +4470,7 @@ function FamilyGameScreen(props: {
               >
                 {coachReaction(selected === q.correctIndex, currentIndex)}
               </div>
-              <div style={{ fontSize: 14, color: 'var(--game-ink)' }}>
+              <div style={{ fontSize: 'calc(14px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1))', color: 'var(--game-ink)' }}>
                 {q.explanation}
               </div>
               <MiniLeaderboard entries={combined} compact />
@@ -4269,11 +4536,11 @@ function FamilyGameScreen(props: {
             >
               📊 <strong style={{ color: 'var(--game-ink)' }}>Family game history</strong>
               <br />
-              See how your family improves over 30 games — part of Bible Coach
+              See how your family improves over 30 games — part of Bible Study Coach
               Pro.{' '}
-              <a href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
+              <Link href="/pricing" style={{ color: 'var(--game-ink)', fontWeight: 700 }}>
                 Unlock →
-              </a>
+              </Link>
             </div>
             )}
             <div
@@ -4511,7 +4778,7 @@ function PassageInline(props: {
             disabled={isSpeaking && !isPaused}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor:
                 isSpeaking && !isPaused ? 'var(--btc-border)' : 'var(--btc-surface)',
@@ -4526,7 +4793,7 @@ function PassageInline(props: {
             disabled={!isSpeaking}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-surface)',
               cursor: !isSpeaking ? 'default' : 'pointer',
@@ -4539,7 +4806,7 @@ function PassageInline(props: {
             onClick={stopSpeaking}
             style={{
               padding: '4px 10px',
-              borderRadius: 999,
+              borderRadius: 22,
               border: '1px solid var(--btc-border)',
               backgroundColor: 'var(--btc-surface)',
               cursor: 'pointer',

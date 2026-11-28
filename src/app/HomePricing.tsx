@@ -130,7 +130,7 @@ export default function HomePricing() {
               top: -11,
               right: 14,
               background: "var(--btc-accent-deep)",
-              color: "#fff",
+              color: "var(--btc-on-accent-deep)",
               fontSize: 11,
               fontWeight: 700,
               padding: "3px 10px",
@@ -140,7 +140,7 @@ export default function HomePricing() {
             PAY ONCE
           </span>
           <div style={{ fontWeight: 800, fontSize: 16, color: "var(--btc-accent-deep)" }}>
-            Bible Coach Pro
+            Bible Study Coach Pro
           </div>
           <div style={{ fontSize: 28, fontWeight: 800, margin: "4px 0" }}>
             {price} <span style={{ fontSize: 13, fontWeight: 600 }}>one-time</span>
@@ -162,7 +162,7 @@ export default function HomePricing() {
                 padding: "11px 14px",
                 borderRadius: 12,
                 background: "var(--btc-accent-deep)",
-                color: "#fff",
+                color: "var(--btc-on-accent-deep)",
                 fontWeight: 700,
                 textAlign: "center",
                 fontSize: 14,
@@ -181,7 +181,7 @@ export default function HomePricing() {
                 borderRadius: 12,
                 border: "none",
                 background: "var(--btc-accent-deep)",
-                color: "#fff",
+                color: "var(--btc-on-accent-deep)",
                 fontWeight: 700,
                 fontSize: 14,
                 cursor: status === "loading" ? "default" : "pointer",

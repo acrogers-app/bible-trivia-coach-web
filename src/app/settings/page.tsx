@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import Link from 'next/link';
 import BottomNav from '../../components/BottomNav';
+import DuoSplit from '../../components/duo/DuoSplit';
+import { useDuoSplit } from '../../lib/duoLayout';
 import {
   type AppSettings,
   applySettingsToDocument,
@@ -99,6 +102,7 @@ export default function SettingsPage() {
   const [voices, setVoices] = useState<VoiceOpt[]>([]);
   const [status, setStatus] = useState<string>('');
   const [isNative] = useState<boolean>(() => isNativeApp());
+  const duo = useDuoSplit();
   const familyOn = useSyncExternalStore(onFamilyModeChanged, isFamilyMode, () => false);
   const [familyPin, setFamilyPin] = useState<string>('');
   const [familyStatus, setFamilyStatus] = useState<string>('');
@@ -113,7 +117,7 @@ export default function SettingsPage() {
       }
       enableFamilyMode(familyPin);
       setFamilyPin('');
-      setFamilyStatus('Family Mode is ON. All analytics are off. Keep the PIN somewhere safe.');
+      setFamilyStatus('Family Mode is ON. Keep the PIN somewhere safe.');
     } else if (disableFamilyMode(familyPin)) {
       setFamilyPin('');
       setFamilyStatus('Family Mode is off.');
@@ -248,13 +252,16 @@ export default function SettingsPage() {
 
   const autoLabel = best ? `Auto (best: ${best.name} • ${best.lang})` : 'Auto (best available)';
 
-  return (
-    <div className="btc-root" style={{ paddingBottom: 110 }}>
-      <BottomNav />
-      <div className="btc-card">
+  // Large/foldable displays (iPhone Duo inner display, iPad): two panes, the settings you preview
+  // and Save on one side, the ones that apply immediately on the other. Phone: the original order.
+  const blocks = {
+    header: (
+      <>
         <h1 style={{ marginTop: 0 }}>Settings</h1>
         <p className="btc-text-muted">Preview changes, then Save.</p>
-
+      </>
+    ),
+    appearance: (
         <div style={card}>
           <h2 style={h2}>App appearance</h2>
 
@@ -281,19 +288,12 @@ export default function SettingsPage() {
               <input type="checkbox" checked={draft.reduceMotion} onChange={(e) => update({ reduceMotion: e.target.checked })} />
               <span><strong>Reduce motion</strong></span>
             </label>
-            <label style={row}>
-              <input
-                type="checkbox"
-                checked={draft.analyticsEnabled !== false}
-                onChange={(e) => update({ analyticsEnabled: e.target.checked })}
-              />
-              <span>
-                <strong>Anonymous analytics</strong>
-                <span className="btc-text-muted" style={{ fontSize: 12, display: 'block', marginTop: 2 }}>
-                  Helps improve questions. No personal data collected.
-                </span>
-              </span>
-            </label>
+            {/* Analytics are hard-disabled (ANALYTICS_ENABLED=false in src/lib/analytics.ts), so the
+                former opt-out checkbox had no effect. The stored analyticsEnabled preference is still
+                read there as an opt-out gate; it is left untouched. */}
+            <p className="btc-text-muted" style={{ ...row, fontSize: 12, margin: 0 }}>
+              Quiz analytics are currently off; no quiz results are sent.
+            </p>
             {isNative && (
               <label style={row}>
                 <input
@@ -328,19 +328,19 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-
-        <ThemeCard />
-
+    ),
+    theme: <ThemeCard />,
+    family: (
         <div style={card}>
           <h2 style={h2}>👨‍👩‍👧 Family Mode</h2>
           <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
-            For families and classrooms. When on, <strong>all</strong> analytics are
-            turned off (overriding the toggle above) and a Family Mode banner shows
-            so everyone can see it&apos;s active. A parent PIN is required to turn it
-            back off. Applies immediately — no Save needed.
+            For families and classrooms. When on, a Family Mode banner shows so
+            everyone can see it&apos;s active, and turning it off asks for the parent
+            PIN. Applies immediately — no Save needed.
           </p>
           <p className="btc-text-muted" style={{ fontSize: 13, marginTop: 6, marginBottom: 0 }}>
-            💡 Set a PIN so kids can&apos;t change settings without permission.
+            💡 The PIN is a simple deterrent against casual changes. It
+            doesn&apos;t lock other settings and isn&apos;t strong security.
           </p>
           <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <input
@@ -359,10 +359,11 @@ export default function SettingsPage() {
           </div>
           <div className="btc-text-muted" style={{ fontSize: 12, marginTop: 8 }}>
             {familyStatus || (familyOn ? 'Family Mode is ON.' : 'Family Mode is off.')}{' '}
-            <a href="/safety">Read our child safety promise →</a>
+            <Link href="/safety">Read our child safety promise →</Link>
           </div>
         </div>
-
+    ),
+    readListen: (
         <div style={card}>
           <h2 style={h2}>Read &amp; Listen</h2>
 
@@ -444,11 +445,15 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-
+    ),
+    purchases: (
+      <>
         {/* Restore is meaningless where no purchase path exists (Android
             free-tier build) — gate inside the card so hook order is stable. */}
         {isNative && <PurchasesCard />}
-
+      </>
+    ),
+    saveBar: (
         <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" onClick={save} disabled={!dirty} style={btnPrimary}>Save</button>
           <button type="button" onClick={cancel} disabled={!dirty} style={btn}>Cancel</button>
@@ -457,10 +462,61 @@ export default function SettingsPage() {
             {dirty ? 'Unsaved changes' : 'All changes saved'} {status ? `• ${status}` : ''}
           </span>
         </div>
-
+    ),
+    note: (
         <div className="btc-text-muted" style={{ marginTop: 12 }}>
           Note: word highlighting depends on browser/voice support.
         </div>
+    ),
+  };
+
+  if (duo.mode !== 'single') {
+    return (
+      <div className="btc-root" style={{ paddingBottom: 110 }}>
+        <BottomNav />
+        <div className="btc-card">
+          <DuoSplit
+            layout={duo}
+            primaryLabel="Settings to preview and save"
+            secondaryLabel="Settings that apply immediately"
+            primary={<>
+              {blocks.header}
+              {blocks.appearance}
+              {blocks.readListen}
+              {blocks.saveBar}
+              {blocks.note}
+            </>}
+            secondary={<>
+              <h2 style={{ ...h2, marginTop: 4 }}>Applies immediately</h2>
+              {blocks.theme}
+              {blocks.family}
+              {blocks.purchases}
+            </>}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="btc-root" style={{ paddingBottom: 110 }}>
+      <BottomNav />
+      <div className="btc-card">
+        {blocks.header}
+
+        {blocks.appearance}
+
+        {blocks.theme}
+
+        {blocks.family}
+
+        {blocks.readListen}
+
+        {blocks.purchases}
+
+        {blocks.saveBar}
+
+        {blocks.note}
       </div>
     </div>
   );
@@ -498,7 +554,7 @@ function ThemeCard() {
             aria-pressed={pref === o.key}
             style={{
               padding: '10px 16px',
-              borderRadius: 999,
+              borderRadius: 22,
               fontWeight: 700,
               fontSize: 13,
               cursor: 'pointer',
@@ -542,8 +598,8 @@ function PurchasesCard() {
       <h2 style={h2}>Purchases</h2>
       <div className="btc-text-muted" style={{ marginTop: 6, fontSize: 13 }}>
         {pro
-          ? 'Bible Coach Pro is unlocked on this device. Thank you!'
-          : 'Already bought Bible Coach Pro? Restore it here on any device signed in to the same Apple ID.'}
+          ? 'Bible Study Coach Pro is unlocked on this device. Thank you!'
+          : 'Already bought Bible Study Coach Pro? Restore it here on any device signed in to the same Apple ID.'}
       </div>
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
         <button type="button" onClick={onRestore} disabled={state === 'working'} style={btn}>

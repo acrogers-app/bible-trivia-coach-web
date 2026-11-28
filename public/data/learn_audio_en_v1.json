@@ -1,0 +1,79 @@
+{
+  "voices": {
+    "sunny": {
+      "label": "Sunny Singh",
+      "model": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.4,
+        "similarity_boost": 0.87,
+        "style": 0.25,
+        "use_speaker_boost": true,
+        "speed": 1.1
+      },
+      "format": "mp3_44100_64",
+      "voiceId": "6Bs1TaIOmMB2rR4xv0wD",
+      "verses": {
+        "Ephesians 2:1": {
+          "file": "66b0cfee09581716.mp3",
+          "chars": 66,
+          "textSha": "60ce8c4724e04ada",
+          "bytes": 30554
+        },
+        "Ephesians 2:2": {
+          "file": "331405970e8a5364.mp3",
+          "chars": 170,
+          "textSha": "40945215cce8fee2",
+          "bytes": 75693
+        },
+        "Ephesians 2:3": {
+          "file": "c296e6839ec534fa.mp3",
+          "chars": 164,
+          "textSha": "01d2e27937ac13ec",
+          "bytes": 80500
+        },
+        "Ephesians 2:4": {
+          "file": "d342408abec81c9a.mp3",
+          "chars": 72,
+          "textSha": "f4ed8dc7c36baf6e",
+          "bytes": 38495
+        },
+        "Ephesians 2:5": {
+          "file": "868941c273a32b2e.mp3",
+          "chars": 111,
+          "textSha": "bca056674839eae0",
+          "bytes": 51034
+        },
+        "Ephesians 2:6": {
+          "file": "c5a9ca4ca71ff860.mp3",
+          "chars": 94,
+          "textSha": "1bdb309c244f821a",
+          "bytes": 45600
+        },
+        "Ephesians 2:7": {
+          "file": "a97c35555802963b.mp3",
+          "chars": 111,
+          "textSha": "4fa65ee9af6ac167",
+          "bytes": 51452
+        },
+        "Ephesians 2:8": {
+          "file": "eaa2b63a93c1ae6f.mp3",
+          "chars": 98,
+          "textSha": "1c3953f82afe0e5c",
+          "bytes": 53959
+        },
+        "Ephesians 2:9": {
+          "file": "386ad1a449ac79d8.mp3",
+          "chars": 38,
+          "textSha": "e77eb859cb64be22",
+          "bytes": 19060
+        },
+        "Ephesians 2:10": {
+          "file": "b556e67fd96878af.mp3",
+          "chars": 121,
+          "textSha": "545f32cc1cdb60b0",
+          "bytes": 60647
+        }
+      }
+    }
+  }
+}

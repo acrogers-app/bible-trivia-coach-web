@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import BackLink from '../../components/BackLink';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Bible Study Coach',
   description:
-    'How Bible Study Coach handles your data: everything important stays on your device, and quiz analytics are anonymous and optional.',
+    'How Bible Study Coach handles your data: your progress stays on your device, there are no accounts, and the app sends only what each feature needs.',
 };
 
 const sectionStyle = { marginTop: 28 } as const;
@@ -30,10 +32,12 @@ export default function PrivacyPage() {
   return (
     <div className="btc-root" style={{ backgroundColor: 'var(--btc-elevated)' }}>
       <main className="btc-card">
+        <BackLink />
         <h1 style={{ fontSize: 'var(--btc-heading-xl)', marginBottom: 4 }}>
           Privacy Policy
         </h1>
         <p style={{ ...textStyle, color: 'var(--btc-text-muted)' }}>
+          {/* OPEN (Allen/counsel): REQUIRED before publishing: update the effective date below to the publish date of this version. */}
           Bible Study Coach · Effective July 8, 2026
         </p>
 
@@ -42,9 +46,11 @@ export default function PrivacyPage() {
           <p style={textStyle}>
             Bible Study Coach is designed to work without knowing who you are.
             There are no accounts, no sign-in, and no ads. Your name, streaks,
-            and scores stay on your device. The only data that ever leaves your
-            device is anonymous quiz statistics — and you can turn those off in
-            Settings.
+            and scores stay on your device. Data leaves your device only when a
+            feature needs it: fetching Scripture from our servers, loading the
+            website home page&apos;s portfolio total, sending a message through
+            the contact form on our website, or buying Pro. Each is described
+            below.
           </p>
         </section>
 
@@ -60,6 +66,12 @@ export default function PrivacyPage() {
             <li>Questions you missed, so you can practice them again</li>
             <li>Daily reading and challenge completion dates</li>
             <li>App settings (reader voice, speed, and preferences)</li>
+            <li>Whether you have unlocked Pro</li>
+            <li>
+              Your Family Mode PIN, if you set one. It is stored in a scrambled
+              form, but that form is not strong protection: anyone with access
+              to the app&apos;s stored data could work out a 4-digit PIN.
+            </li>
           </ul>
           <p style={textStyle}>
             None of this is transmitted to us or anyone else. Deleting the app
@@ -68,35 +80,70 @@ export default function PrivacyPage() {
         </section>
 
         <section style={sectionStyle}>
-          <h2 style={headingStyle}>Anonymous quiz analytics</h2>
+          <h2 style={headingStyle}>Quiz analytics</h2>
           <p style={textStyle}>
-            To learn which questions are too hard, too easy, or confusing, the
-            app sends anonymous quiz results to our server: a random session
-            ID, the quiz title, which questions were answered correctly or
-            incorrectly, and the related Scripture references.
-          </p>
-          <p style={textStyle}>
-            These reports contain no name, email, device identifier, or
-            location — the random session ID is not connected to you and
-            resets with every quiz session. We use{' '}
-            <a href="https://langfuse.com">Langfuse</a> to aggregate these
-            statistics.
-          </p>
-          <p style={textStyle}>
-            You can turn analytics off any time in <strong>Settings</strong>,
-            and the app respects that choice immediately.
+            The website does not send quiz results. Starting with version
+            1.2.7, the iPhone app doesn&apos;t either: your answers and scores
+            stay on your device, and the app deletes, without sending, any
+            reports that earlier versions saved on the device. Versions 1.2.6
+            and earlier of the iPhone app sent quiz results unless analytics
+            were turned off in Settings (and not while Family Mode was on), and
+            could save unsent reports to send later. Our server no longer
+            accepts quiz results from any version.
+            {/* Release check: publish only with the backend deploy that makes /api/analytics return 410 (before 1.2.7 ships); confirm the version is 1.2.7.
+                OPEN (Allen/counsel): LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL are set on the current production project (names only, checked 2026-11-27), so reports from 1.2.6 and earlier were likely forwarded to Langfuse. Region and retention unverified; whether and how to disclose past forwarding is undecided. */}
           </p>
         </section>
 
         <section style={sectionStyle}>
-          <h2 style={headingStyle}>What we never collect</h2>
+          <h2 style={headingStyle}>What the app doesn&apos;t ask for</h2>
           <ul style={listStyle}>
-            <li>No accounts, passwords, or email addresses</li>
-            <li>No advertising or advertising identifiers</li>
-            <li>No location data</li>
-            <li>No contacts, photos, or files</li>
-            <li>No selling or sharing of data with data brokers — ever</li>
+            <li>No accounts or passwords</li>
+            <li>No email address in the app; the optional contact form on our website is described below</li>
+            <li>No advertising identifiers, and no advertising code in the app</li>
+            <li>No access to your location, contacts, photos, or files</li>
           </ul>
+          <p style={textStyle}>
+            Data that is sent to service providers to run the app is described
+            below.
+            {/* OPEN (counsel): whether and how to characterize this under sale/sharing laws (e.g. CCPA/CPRA, GDPR); no such claim is made here. */}
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2 style={headingStyle}>Contact form</h2>
+          <p style={textStyle}>
+            The contact form is on the Child Safety page of our website
+            (biblestudy.webeuseful.com). The iPhone and Android apps don&apos;t
+            include the form; they open that page in your browser. If you send
+            a message through the form, your browser sends four things to our
+            server at dashboard.webeuseful.com:
+            your message, the email address you enter (optional), a label saying
+            it came from this page, and the time it was sent. This lets us read
+            your message; if you include an email address, we can reply. Like any web
+            server, it also receives standard request information such as your
+            IP address, and it stores your IP address with the message. Please don&apos;t include anyone else&apos;s personal
+            information.
+            {/* OPEN (Allen/counsel): how long messages and request logs are kept, and how deletion requests are handled. */}
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2 style={headingStyle}>Buying Pro</h2>
+          <p style={textStyle}>
+            In the iPhone app, purchases are handled by Apple. We do not
+            receive your payment details or Apple ID; the app only stores on
+            your device that Pro is unlocked.
+          </p>
+          <p style={textStyle}>
+            On the website, checkout is handled by{' '}
+            <a href="https://stripe.com/privacy">Stripe</a>, which collects your
+            email address and payment details. Your email address is kept with
+            the purchase record in our Stripe account; we never see your card
+            number. We do not currently send emails after a purchase.
+            {/* Project-level settings check 2026-11-26, names only (NOT the release deployment, which doesn't exist yet; its settings are unverified): EMAILS_ENABLED and RESEND_API_KEY unset.
+                src/lib/welcomeEmail.ts sends only when RESEND_API_KEY is set and EMAILS_ENABLED is "true"; otherwise nothing is sent. Before turning them on, disclose Resend here. */}
+          </p>
         </section>
 
         <section style={sectionStyle}>
@@ -113,10 +160,19 @@ export default function PrivacyPage() {
           <p style={textStyle}>
             Scripture passages and daily readings are fetched from our own
             server, hosted on <a href="https://vercel.com">Vercel</a>. Like any
-            web server, it briefly processes standard request information
-            (such as IP addresses) to deliver content; we do not use this to
-            identify or profile you. Anonymous analytics are processed by
-            Langfuse as described above.
+            web server, it receives standard request information, such as IP
+            addresses, when it delivers content. Our server code uses the IP
+            address only to count requests, to prevent abuse.
+            {/* Project-level settings check 2026-11-26, names only (NOT the release deployment, which doesn't exist yet; its settings are unverified): EMAILS_ENABLED, RESEND_API_KEY and RATELIMIT_JWT unset; RATELIMIT_SUPABASE_URL and RATELIMIT_SUPABASE_ANON_KEY present.
+                src/lib/rateLimit.ts uses Supabase only when all three RATELIMIT_* variables are set; otherwise it counts in server memory. If all three are set on the release deployment, disclose Supabase here.
+                OPEN (Allen): how long Vercel keeps request logs, and what Vercel itself does with them.
+                Checked 2026-11-27 (read-only, current production project, not the release deployment): Observability Plus is enabled for this project; Firewall traffic lists client IP addresses, user agents and request paths with ranges up to 30 days; request-log details show path, host and user agent. Actual retention per log type is not confirmed.
+                Verified 2026-11-26: the only IP use in src/ is the rate limiter (src/lib/rateLimit.ts). */}
+            {' '}On the website, the home page
+            also loads a public total of downloads and visits across the
+            Webeuseful portfolio of apps from dashboard.webeuseful.com, which
+            sees the same standard request information. The iPhone and Android
+            apps don&apos;t load it.
           </p>
         </section>
 
@@ -124,9 +180,14 @@ export default function PrivacyPage() {
           <h2 style={headingStyle}>Children</h2>
           <p style={textStyle}>
             Bible Study Coach is made for all ages, including families
-            playing together. Because we collect no personal information from
-            anyone, we collect none from children either. See our{' '}
-            <a href="/safety">Child Safety page</a> for a plain-language guide
+            playing together. The app has no accounts, and reading, listening,
+            and quizzes need no personal information. The optional contact form
+            on our website is different: it sends a free-text message and, if
+            one is entered, an email address. Children should ask a parent
+            before using the contact form or buying Pro.
+            {/* OPEN (counsel): children's-privacy (COPPA/GDPR-K) wording for the contact form. */}
+            {' '}See our{' '}
+            <Link href="/safety">Child Safety page</Link> for a plain-language guide
             for parents and teachers.
           </p>
         </section>
@@ -135,9 +196,9 @@ export default function PrivacyPage() {
           <h2 style={headingStyle}>Deleting your data</h2>
           <p style={textStyle}>
             Local data: delete the app, or clear site data in your browser.
-            Analytics: because reports are anonymous, they cannot be traced
-            back to you — there is nothing linking them to your identity that
-            we could look up or delete.
+            Contact-form messages and web purchase records: email us at the
+            address below.
+            {/* OPEN (Allen/counsel): what we delete on request and what must be kept (e.g. payment records). */}
           </p>
         </section>
 
@@ -151,6 +212,7 @@ export default function PrivacyPage() {
 
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Contact</h2>
+          {/* OPEN (counsel): name the legal entity responsible for this data (controller) and its address. */}
           <p style={textStyle}>
             Questions or concerns? Email{' '}
             <a href="mailto:allen@webeuseful.com">

@@ -34,7 +34,7 @@ function SuccessInner() {
   }, [sessionId]);
 
   return (
-    <main style={{ maxWidth: 520, margin: "0 auto", padding: "56px 20px", textAlign: "center" }}>
+    <main style={{ maxWidth: 520, margin: "0 auto", padding: "calc(76px + env(safe-area-inset-top)) 20px 56px", textAlign: "center" }}>
       {state === "verifying" && (
         <p className="btc-text-muted" style={{ fontSize: 16 }}>Confirming your purchase…</p>
       )}
@@ -45,7 +45,7 @@ function SuccessInner() {
             Pro unlocked!
           </h1>
           <p className="btc-text-muted" style={{ marginTop: 8, fontSize: 15 }}>
-            Thank you for supporting Bible Coach. Everything is unlocked on this device.
+            Thank you for supporting Bible Study Coach. Everything is unlocked on this device.
           </p>
           <Link
             href="/play"
@@ -55,7 +55,7 @@ function SuccessInner() {
               padding: "12px 24px",
               borderRadius: 12,
               background: "var(--btc-accent-deep)",
-              color: "#fff",
+              color: "var(--btc-on-accent-deep)",
               fontWeight: 700,
               textDecoration: "none",
             }}

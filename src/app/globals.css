@@ -31,7 +31,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 1.5rem 0.75rem;
+  /* top padding clears the iOS status bar on every width (env() is 0 on web/Android);
+     the <=480px phone rule below moves the inset onto the card instead */
+  padding: calc(1.5rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right)) 1.5rem calc(0.75rem + env(safe-area-inset-left));
   background: var(--app-root-bg, #020617);
   transition: background 0.3s ease;
 }
@@ -50,7 +52,8 @@ body {
 /* Phone: 390px centered column on a visible themed backdrop (v1.2.3) */
 @media (max-width: 480px) {
   .btc-root {
-    padding: 8px;
+    /* iPhone Duo outer display: an 84px status column on one side */
+    padding: 8px calc(8px + env(safe-area-inset-right)) 8px calc(8px + env(safe-area-inset-left));
   }
 
   .btc-card {
@@ -67,7 +70,7 @@ body {
 /* iPad portrait and up: wider canvas, roomier card (phones unaffected) */
 @media (min-width: 768px) {
   .btc-root {
-    padding: 2.5rem 2rem;
+    padding: calc(2.5rem + env(safe-area-inset-top)) calc(2rem + env(safe-area-inset-right)) 2.5rem calc(2rem + env(safe-area-inset-left));
   }
   .btc-card {
     max-width: 720px;
@@ -126,6 +129,53 @@ body {
   color: var(--btc-text-main) !important;
 }
 
+/* Learn headings follow the app text size and the iOS system text size
+   (--learn-dt-head, set by src/lib/learn/textScale.ts; headings grow half as much as body). Same default sizes as above. */
+.btc-card h1.learn-h1 {
+  font-size: calc(var(--btc-heading-xl) * var(--btc-font-mult, 1) * var(--learn-dt-head, 1)) !important;
+  overflow-wrap: anywhere;
+}
+
+.btc-card h2.learn-h2 {
+  font-size: calc(var(--btc-heading-lg) * var(--btc-font-mult, 1) * var(--learn-dt-head, 1)) !important;
+  overflow-wrap: anywhere;
+}
+
+/* The verse being read aloud in a Learn passage. Not colour alone: a solid bar marks the
+   start of every line of the verse. Text colour is never changed.
+   Dark is the default; light uses the same two routes as the theme blocks below. */
+:root {
+  --learn-spoken-bg: rgba(129, 140, 248, 0.3);
+  --learn-spoken-bar: #a5b4fc;
+}
+:root[data-theme='light'] {
+  --learn-spoken-bg: rgba(79, 70, 229, 0.12);
+  --learn-spoken-bar: #4f46e5;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --learn-spoken-bg: rgba(79, 70, 229, 0.12);
+    --learn-spoken-bar: #4f46e5;
+  }
+}
+.learn-verse {
+  /* Keep a followed verse clear of the fixed tab bar (and the home indicator). */
+  scroll-margin-top: 16px;
+  scroll-margin-bottom: calc(110px + env(safe-area-inset-bottom));
+  /* Same padding on every verse, so the text doesn't shift when the highlight moves. */
+  border-radius: 4px;
+  padding: 2px 4px 2px 9px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.learn-verse.learn-spoken {
+  background: var(--learn-spoken-bg);
+  box-shadow: inset 4px 0 0 var(--learn-spoken-bar);
+}
+@media (forced-colors: active) {
+  .learn-verse.learn-spoken { outline: 2px solid Highlight; }
+}
+
 .btc-card h3 {
   font-size: var(--btc-heading-md) !important;
   font-weight: 700 !important;
@@ -152,7 +202,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 12px 24px;
-  border-radius: 9999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   background: linear-gradient(135deg, #16a34a, #22c55e);
   color: #ffffff;
   font-size: 15px;
@@ -276,7 +326,7 @@ html[data-btc-reduce-motion="1"] * {
   gap: 6px;
   min-height: 44px;
   padding: 10px 20px;
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   border: none;
   background-color: var(--btc-btn-primary, var(--btc-accent));
   color: var(--btc-btn-text, #ffffff);
@@ -318,6 +368,11 @@ html[data-btc-reduce-motion="1"] * {
   background: linear-gradient(135deg, #1a4a1a, #0d2b0d);
   border-bottom: 2px solid #4CAF50;
   padding: 8px 16px;
+  /* keep the banner text below the iOS status bar / camera and clear of the
+     iPhone Duo side status column (env() is 0 on web/Android) */
+  padding-top: calc(8px + env(safe-area-inset-top));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
   text-align: center;
   font-size: 13px;
   color: #7BE87A;
@@ -383,7 +438,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-border-strong: rgba(255, 255, 255, 0.28);
   --btc-text-strong: #f0f0ff;
   --btc-text-mid: rgba(240, 240, 255, 0.78);
-  --btc-nav-bg: rgba(8, 8, 24, 0.97);
+  --btc-nav-bg: #080818; /* opaque: text must not show through the tab bar */
   --btc-nav-border: rgba(255, 255, 255, 0.08);
   --btc-nav-active: #818cf8;
   --btc-nav-inactive: rgba(240, 240, 255, 0.6);
@@ -396,6 +451,8 @@ html[data-btc-reduce-motion="1"] * {
   --btc-text-muted: rgba(240, 240, 255, 0.62);
   --btc-accent: #818cf8;
   --btc-accent-deep: #a5b4fc;
+  /* text on an --btc-accent-deep fill (Pro button/badge); white on light lavender was ~1.9:1 */
+  --btc-on-accent-deep: #1e1b4b;
   --btc-accent-soft: rgba(129, 140, 248, 0.15);
   --btc-accent-border: rgba(129, 140, 248, 0.3);
   --btc-gold: #fbbf24;
@@ -472,7 +529,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-border-strong: rgba(0, 0, 0, 0.15);
   --btc-text-strong: #1a1040;
   --btc-text-mid: #3f3a5e;
-  --btc-nav-bg: rgba(255, 255, 255, 0.97);
+  --btc-nav-bg: #ffffff;
   --btc-nav-border: rgba(0, 0, 0, 0.08);
   --btc-nav-active: #4f46e5;
   --btc-nav-inactive: #6b7280;
@@ -485,6 +542,7 @@ html[data-btc-reduce-motion="1"] * {
   --btc-text-muted: #6f7787;
   --btc-accent: #4f46e5;
   --btc-accent-deep: #4338ca;
+  --btc-on-accent-deep: #ffffff;
   --btc-accent-soft: rgba(79, 70, 229, 0.1);
   --btc-accent-border: rgba(79, 70, 229, 0.3);
   --btc-gold: #b45309;
@@ -556,7 +614,7 @@ html[data-btc-reduce-motion="1"] * {
     --btc-border-strong: rgba(0, 0, 0, 0.15);
     --btc-text-strong: #1a1040;
     --btc-text-mid: #3f3a5e;
-    --btc-nav-bg: rgba(255, 255, 255, 0.97);
+    --btc-nav-bg: #ffffff;
     --btc-nav-border: rgba(0, 0, 0, 0.08);
     --btc-nav-active: #4f46e5;
     --btc-nav-inactive: #6b7280;
@@ -569,6 +627,7 @@ html[data-btc-reduce-motion="1"] * {
     --btc-text-muted: #6f7787;
     --btc-accent: #4f46e5;
     --btc-accent-deep: #4338ca;
+    --btc-on-accent-deep: #ffffff;
     --btc-accent-soft: rgba(79, 70, 229, 0.1);
     --btc-accent-border: rgba(79, 70, 229, 0.3);
     --btc-gold: #b45309;
@@ -662,7 +721,8 @@ html[data-btc-reduce-motion="1"] * {
   border-radius: 16px;
   border: none;
   padding: 16px 18px;
-  font-size: 16px;
+  font-size: calc(16px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1));
+  overflow-wrap: anywhere;
   font-weight: 700;
   color: white;
   cursor: pointer;
@@ -755,7 +815,9 @@ html[data-btc-reduce-motion="1"] * {
   animation: question-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .question-card .q-text {
-  font-size: 16px;
+  /* follows the app text size and, at half strength like Learn headings, the iPhone text size (--learn-dt-head, SystemTextScale) */
+  font-size: calc(16px * var(--btc-font-mult, 1) * var(--learn-dt-head, 1));
+  overflow-wrap: anywhere;
   font-weight: 600;
   color: var(--game-ink);
 }
@@ -791,7 +853,7 @@ html[data-btc-reduce-motion="1"] * {
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   background: var(--game-flame-bg);
   border: 1px solid var(--game-flame-border);
   color: var(--game-flame-ink);
@@ -916,7 +978,8 @@ html[data-btc-reduce-motion="1"] * {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  /* side insets keep the dialog clear of the iPhone Duo status column (env() is 0 elsewhere) */
+  padding: 20px calc(20px + env(safe-area-inset-right)) 20px calc(20px + env(safe-area-inset-left));
   animation: btc-verse-in 0.25s ease;
 }
 .btc-modal {
@@ -948,7 +1011,7 @@ html[data-btc-reduce-motion="1"] * {
   margin-top: 8px;
 }
 .btc-name-chip {
-  border-radius: 999px;
+  border-radius: 22px; /* pill on one line, rounded box when text wraps */
   border: 1px solid var(--btc-border);
   background: var(--btc-surface);
   padding: 6px 8px;
@@ -968,12 +1031,20 @@ html[data-btc-reduce-motion="1"] * {
   color: var(--btc-accent-deep);
 }
 
-/* Floating ☀️/🌙 theme toggle (v1.2.2) — fixed top-right on every screen.
-   Shows the mode you'll switch TO; Settings keeps the 3-way System picker. */
+/* ☀️/🌙 theme toggle (v1.2.2) — top-right on every screen.
+   Shows the mode you'll switch TO; Settings keeps the 3-way System picker.
+   It sits in a strip reserved at the top of the page card (.btc-card::before)
+   and scrolls away with the page, so it never covers content or controls.
+   (It used to be position: fixed and floated over headings and buttons.) */
+.btc-card::before {
+  content: "";
+  display: block;
+  height: 40px; /* toggle (44px) + 8px gap, minus the card's own top padding */
+}
 .theme-toggle {
-  position: fixed;
-  top: calc(12px + env(safe-area-inset-top));
-  right: 16px;
+  position: absolute;
+  top: calc(16px + env(safe-area-inset-top));
+  right: calc(16px + env(safe-area-inset-right));
   z-index: 1500; /* above content, below modals (2000) */
   width: 44px;
   height: 44px;
@@ -1028,3 +1099,33 @@ input[type='range'],
 input[type='checkbox'] {
   accent-color: var(--btc-accent);
 }
+
+/* iPhone Duo / large displays: side-by-side panes (components/duo/DuoSplit) are ~370–450px wide,
+   so quiz answers stack in one column there instead of the tablet 2×2 grid. */
+[data-duo-split="columns"] .duo-pane .answer-grid {
+  display: flex;
+  flex-direction: column;
+}
+[data-duo-split="columns"] .duo-pane .answer-btn { padding: 14px 14px; }
+[data-duo-split="columns"] .duo-pane .question-card { padding: 20px; }
+
+/* iPhone Duo half-open as a book (fold reported active by the iOS host, lib/duoLayout):
+   screens that stay one column, and the floating playback bars, sit beside the fold instead of
+   across it. --duo-fold-start comes from the host's reported geometry, never a fixed number.
+   Two-pane screens cover this card with their own panes, so this only affects one-column ones. */
+html[data-duo-fold="vertical-active"] .btc-root > .btc-card {
+  /* !important: some screens (e.g. the landing page) set an inline max-width */
+  max-width: calc(var(--duo-fold-start) - 2rem - env(safe-area-inset-left) - 12px) !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+html[data-duo-fold="vertical-active"] .duo-float {
+  left: calc(env(safe-area-inset-left) + 12px) !important;
+  right: auto !important;
+  width: calc(var(--duo-fold-start) - env(safe-area-inset-left) - 24px);
+  margin: 0 !important;
+}
+/* Family Mode's fixed banner sits above everything; two-pane layouts start below it. */
+html:has(.family-mode-banner) { --duo-banner: 56px; }

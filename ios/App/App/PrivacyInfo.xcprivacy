@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<!-- PROVISIONAL (2026-11-27), not approved for release: NSPrivacyCollectedDataTypes is empty because 1.2.7 opens the contact form in Safari and sends no analytics. Scripture requests still reach the Vercel backend, whose IP and log retention and use are unverified; decide the final declaration (and the App Store Connect answers) after provider facts and counsel review. -->
 <dict>
 	<key>NSPrivacyTracking</key>
 	<false/>

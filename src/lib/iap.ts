@@ -1,6 +1,6 @@
 // iOS in-app purchase (StoreKit 2, via @capgo/native-purchases).
 //
-// Bible Coach Pro is a one-time non-consumable unlock. On the web this stays a
+// Bible Study Coach Pro is a one-time non-consumable unlock. On the web this stays a
 // Stripe purchase (see src/lib/pro.ts + /api/checkout). Inside the iOS app,
 // Apple requires the unlock to go through StoreKit — so on iOS the "Unlock Pro"
 // buttons call purchasePro() here instead of Stripe. Either path ends the same

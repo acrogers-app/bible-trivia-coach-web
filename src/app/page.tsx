@@ -30,7 +30,7 @@ export default function HomePage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '4px 10px',
-                borderRadius: 999,
+                borderRadius: 22,
                 backgroundColor: 'var(--btc-success-soft)',
                 color: 'var(--btc-green)',
                 fontSize: 12,
@@ -49,7 +49,7 @@ export default function HomePage() {
                 color: 'var(--btc-ink)',
               }}
             >
-              Make Scripture stick with gentle daily quizzes
+              Read, listen, and remember Scripture
             </h1>
             <p
               style={{
@@ -73,7 +73,7 @@ export default function HomePage() {
             >
               <li>• 30‑day Gospel reading plan with auto‑generated quizzes</li>
               <li>• Scripture and Bible‑history question packs</li>
-              <li>• Read‑along audio with word‑by‑word highlighting</li>
+              <li>• Listen along, verse by verse</li>
             </ul>
             <div
               style={{
@@ -85,8 +85,8 @@ export default function HomePage() {
                 marginTop: 6,
               }}
             >
-              <Link href="/play" className="btc-hero-cta">
-                Start today&apos;s quiz
+              <Link href="/play?action=daily" className="btc-hero-cta">
+                Start today&apos;s study
               </Link>
               <span
                 style={{
@@ -288,9 +288,9 @@ export default function HomePage() {
             margin: '18px 0 4px',
           }}
         >
-          <a href="/safety" style={{ color: 'var(--btc-text-mid)' }}>🔒 Child Safety</a>
+          <Link href="/safety" style={{ color: 'var(--btc-text-mid)' }}>🔒 Child Safety</Link>
           {' · '}
-          <a href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</a>
+          <Link href="/privacy" style={{ color: 'var(--btc-text-mid)' }}>Privacy Policy</Link>
         </p>
 
         <LiveTotalPromo />

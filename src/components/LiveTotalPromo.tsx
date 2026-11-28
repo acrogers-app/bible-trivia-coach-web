@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useIsAndroidNative, useIsIosNative } from "@/lib/iap";
+import {
+  isAndroidNative,
+  isIosNative,
+  useIsAndroidNative,
+  useIsIosNative,
+} from "@/lib/iap";
 
 /**
  * Portfolio cross-promo: live combined downloads+visits total across the whole
@@ -39,6 +44,8 @@ export function LiveTotalPromo() {
   const android = useIsAndroidNative();
 
   useEffect(() => {
+    // Hidden in both store apps, so don't request the total there either.
+    if (isIosNative() || isAndroidNative()) return;
     let cancelled = false;
 
     const cached = readFreshCache();

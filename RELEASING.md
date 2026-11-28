@@ -80,6 +80,8 @@ review.
 - [ ] `npm run cap:sync` run after the last web change
 - [ ] Version/build numbers bumped on the platform you're uploading
 - [ ] Tested on a real device (haptics + notifications)
-- [ ] Play data-safety / App Store privacy forms reflect the analytics
-      opt-out (anonymous quiz analytics via Langfuse, no PII)
+- [ ] Play data-safety / App Store privacy answers match
+      `ios/App/App/PrivacyInfo.xcprivacy` and the privacy policy. Quiz
+      analytics are off (`ANALYTICS_ENABLED=false`) and `/api/analytics`
+      is retired (410 Gone), so no quiz results are collected.
 - [ ] Store listing copy stays in the coach voice — warm, no guilt
