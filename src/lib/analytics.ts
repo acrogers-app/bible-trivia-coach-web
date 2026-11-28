@@ -2,14 +2,15 @@
  * Analytics — fire-and-forget, never throws, respects user opt-out.
  * No PII. Only questionId, correct/wrong, difficulty, refs.
  *
- * Offline support: payloads that can't be delivered (device offline or
- * the POST fails) are persisted to an IndexedDB outbox and replayed in
- * order when connectivity returns (see flushAnalyticsOutbox, called on
- * app start and on the window "online" event by OfflineBanner).
+ * Offline support (only while ANALYTICS_ENABLED): payloads that can't be
+ * delivered are persisted to an IndexedDB outbox and replayed by
+ * flushAnalyticsOutbox. With analytics disabled nothing calls the flush;
+ * OfflineBanner deletes the outbox on app start (analyticsOutboxCleanup.ts).
  */
 import { loadSettings } from './appSettings';
 import { isFamilyMode } from './familyMode';
 import { apiUrl } from './apiBase';
+import { ANALYTICS_OUTBOX_DB } from './analyticsOutboxCleanup';
 
 // Analytics DISABLED 2026-09-06 (Allen's directive: don't collect data without an
 // immediate use). Both entry points below hard no-op — nothing is sent or queued,
@@ -46,7 +47,7 @@ export function makeSessionId(): string {
 // IndexedDB outbox
 // ---------------------------------------------------------------------------
 
-const OUTBOX_DB = 'btc-outbox';
+const OUTBOX_DB = ANALYTICS_OUTBOX_DB;
 const OUTBOX_STORE = 'events';
 const OUTBOX_MAX = 200; // cap so the outbox can never grow unbounded
 

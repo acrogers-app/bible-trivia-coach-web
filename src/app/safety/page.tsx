@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import BackLink from '../../components/BackLink';
-import SafetyContactForm from './SafetyContactForm';
+import SafetyContact from './SafetyContact';
 
 export const metadata: Metadata = {
   title: 'Child Safety — Bible Study Coach',
@@ -47,9 +47,9 @@ export default function SafetyPage() {
             Bible Study Coach has no accounts, no chat, no messaging, and no
             social features, so other users cannot message a child through the
             app. Reading, listening, and quizzes need no personal information.
-            The one exception is the optional contact form at the bottom of this
-            page: whatever is typed into it, a free-text message and, if
-            entered, an email address, is sent to us.
+            The one exception is the optional contact form on this page of our
+            website (the apps link to it): whatever is typed into it, a
+            free-text message and, if entered, an email address, is sent to us.
           </p>
         </section>
 
@@ -59,8 +59,10 @@ export default function SafetyPage() {
             <strong>Not other users.</strong> There is no messaging, chat,
             comments, or friend lists between users. Family Night multiplayer is
             pass-and-play on one device in the same room — nothing is shared
-            online. The contact form sends a message to us only; if an email
-            address is included, we can reply to it.
+            online. The contact form on our website sends a message to us
+            only; if an email address is included, we can reply to it. The
+            iPhone and Android apps don&apos;t include the form; they link to
+            this page on the website instead.
           </p>
         </section>
 
@@ -74,12 +76,14 @@ export default function SafetyPage() {
           </ul>
           <p style={textStyle}>
             The app currently sends no quiz statistics. Data leaves the device
-            only to fetch Scripture or the home-page study total from our
-            servers, when someone uses the contact form below, when Pro is
-            bought on the website, or when Pro is bought in the iPhone app
+            only to fetch Scripture from our servers, to load the website
+            home page&apos;s Webeuseful portfolio total (downloads and visits
+            across our apps; the website only, not the iPhone or Android
+            apps), when someone uses the website&apos;s contact form, when Pro
+            is bought on the website, or when Pro is bought in the iPhone app
             (Apple handles that purchase). Each of these requests also carries standard
             technical information that any web server receives, such as the
-            device&apos;s IP address. The contact form sends four things to our
+            device&apos;s IP address. The website&apos;s contact form sends four things to our
             server at dashboard.webeuseful.com: your message, the email address
             you enter (optional), a label saying it came from this page, and
             the time it was sent. See the{' '}
@@ -125,7 +129,8 @@ export default function SafetyPage() {
             page, fetching Scripture (including from the iPhone app), or
             starting a website purchase, along with the standard request
             information described above; our
-            dashboard server for contact-form messages and the study total;
+            dashboard server for website contact-form messages and the
+            website&apos;s portfolio total;
             Stripe for purchases on the website; and Apple for purchases in the
             iPhone app. The{' '}
             <Link href="/privacy">privacy policy</Link> lists what each one
@@ -149,11 +154,7 @@ export default function SafetyPage() {
 
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Questions?</h2>
-          <p style={textStyle}>
-            Send us a question or concern using the form below. If you include
-            an email address, we can reply.
-          </p>
-          <SafetyContactForm />
+          <SafetyContact textStyle={textStyle} />
         </section>
       </main>
     </div>

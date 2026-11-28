@@ -47,9 +47,10 @@ export default function PrivacyPage() {
             Bible Study Coach is designed to work without knowing who you are.
             There are no accounts, no sign-in, and no ads. Your name, streaks,
             and scores stay on your device. Data leaves your device only when a
-            feature needs it: fetching Scripture or the home-page study total
-            from our servers, sending a message through the contact form, or
-            buying Pro. Each is described below.
+            feature needs it: fetching Scripture from our servers, loading the
+            website home page&apos;s portfolio total, sending a message through
+            the contact form on our website, or buying Pro. Each is described
+            below.
           </p>
         </section>
 
@@ -81,8 +82,16 @@ export default function PrivacyPage() {
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Quiz analytics</h2>
           <p style={textStyle}>
-            Quiz analytics are currently turned off in the app, so it sends no
-            quiz results. Your answers and scores stay on your device.
+            The website does not send quiz results. Starting with version
+            1.2.7, the iPhone app doesn&apos;t either: your answers and scores
+            stay on your device, and the app deletes, without sending, any
+            reports that earlier versions saved on the device. Versions 1.2.6
+            and earlier of the iPhone app sent quiz results unless analytics
+            were turned off in Settings (and not while Family Mode was on), and
+            could save unsent reports to send later. Our server no longer
+            accepts quiz results from any version.
+            {/* Release check: publish only with the backend deploy that makes /api/analytics return 410 (before 1.2.7 ships); confirm the version is 1.2.7.
+                OPEN (Allen/counsel): LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL are set on the current production project (names only, checked 2026-11-27), so reports from 1.2.6 and earlier were likely forwarded to Langfuse. Region and retention unverified; whether and how to disclose past forwarding is undecided. */}
           </p>
         </section>
 
@@ -90,7 +99,7 @@ export default function PrivacyPage() {
           <h2 style={headingStyle}>What the app doesn&apos;t ask for</h2>
           <ul style={listStyle}>
             <li>No accounts or passwords</li>
-            <li>No email address, unless you choose to give one (see below)</li>
+            <li>No email address in the app; the optional contact form on our website is described below</li>
             <li>No advertising identifiers, and no advertising code in the app</li>
             <li>No access to your location, contacts, photos, or files</li>
           </ul>
@@ -104,13 +113,16 @@ export default function PrivacyPage() {
         <section style={sectionStyle}>
           <h2 style={headingStyle}>Contact form</h2>
           <p style={textStyle}>
-            If you send a message through the form on our Child Safety page,
-            the app sends four things to our server at dashboard.webeuseful.com:
+            The contact form is on the Child Safety page of our website
+            (biblestudy.webeuseful.com). The iPhone and Android apps don&apos;t
+            include the form; they open that page in your browser. If you send
+            a message through the form, your browser sends four things to our
+            server at dashboard.webeuseful.com:
             your message, the email address you enter (optional), a label saying
             it came from this page, and the time it was sent. This lets us read
             your message; if you include an email address, we can reply. Like any web
             server, it also receives standard request information such as your
-            IP address. Please don&apos;t include anyone else&apos;s personal
+            IP address, and it stores your IP address with the message. Please don&apos;t include anyone else&apos;s personal
             information.
             {/* OPEN (Allen/counsel): how long messages and request logs are kept, and how deletion requests are handled. */}
           </p>
@@ -154,10 +166,13 @@ export default function PrivacyPage() {
             {/* Project-level settings check 2026-11-26, names only (NOT the release deployment, which doesn't exist yet; its settings are unverified): EMAILS_ENABLED, RESEND_API_KEY and RATELIMIT_JWT unset; RATELIMIT_SUPABASE_URL and RATELIMIT_SUPABASE_ANON_KEY present.
                 src/lib/rateLimit.ts uses Supabase only when all three RATELIMIT_* variables are set; otherwise it counts in server memory. If all three are set on the release deployment, disclose Supabase here.
                 OPEN (Allen): how long Vercel keeps request logs, and what Vercel itself does with them.
+                Checked 2026-11-27 (read-only, current production project, not the release deployment): Observability Plus is enabled for this project; Firewall traffic lists client IP addresses, user agents and request paths with ranges up to 30 days; request-log details show path, host and user agent. Actual retention per log type is not confirmed.
                 Verified 2026-11-26: the only IP use in src/ is the rate limiter (src/lib/rateLimit.ts). */}
-            {' '}The home page
-            also loads a public study total from dashboard.webeuseful.com,
-            which sees the same standard request information.
+            {' '}On the website, the home page
+            also loads a public total of downloads and visits across the
+            Webeuseful portfolio of apps from dashboard.webeuseful.com, which
+            sees the same standard request information. The iPhone and Android
+            apps don&apos;t load it.
           </p>
         </section>
 
@@ -167,9 +182,9 @@ export default function PrivacyPage() {
             Bible Study Coach is made for all ages, including families
             playing together. The app has no accounts, and reading, listening,
             and quizzes need no personal information. The optional contact form
-            is different: it sends a free-text message and, if one is entered,
-            an email address. Children should ask a parent before using the
-            contact form or buying Pro.
+            on our website is different: it sends a free-text message and, if
+            one is entered, an email address. Children should ask a parent
+            before using the contact form or buying Pro.
             {/* OPEN (counsel): children's-privacy (COPPA/GDPR-K) wording for the contact form. */}
             {' '}See our{' '}
             <Link href="/safety">Child Safety page</Link> for a plain-language guide
